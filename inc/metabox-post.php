@@ -107,37 +107,6 @@ class ThemeMetaBox
       }
       switch ($meta_field['type']) {
 
-        case 'users':
-          $input = wp_dropdown_users([
-            'selected'         => $meta_value,
-            'echo'             => 0,
-            'name'             => $meta_field['id'],
-            'id'               => $meta_field['id'],
-            'show_option_none' => __('选择一个用户', 'example-text'),
-          ]);
-          break;
-
-        case 'pages':
-          $input = wp_dropdown_pages([
-            'selected'         => $meta_value,
-            'name'             => $meta_field['id'],
-            'id'               => $meta_field['id'],
-            'show_option_none' => __('选择一个页面', 'example-text'),
-          ]);
-          break;
-
-        case 'categories':
-          $input = wp_dropdown_categories([
-            'selected'         => $meta_value,
-            'hide_empty'       => 0,
-            'echo'             => 0,
-            'name'             => $meta_field['id'],
-            'id'               => $meta_field['id'],
-            'show_option_none' => __('选择一个分类', 'example-text'),
-            'taxonomy'         => $meta_field['taxonomy'] ?: 'category',
-          ]);
-          break;
-
         case 'media':
           $meta_url = '';
           if ($meta_value) {
@@ -160,6 +129,38 @@ class ThemeMetaBox
             $meta_field['id'],
             $meta_field['id']
           );
+          break;
+
+        case 'categories':
+          $input = wp_dropdown_categories([
+            'selected'         => $meta_value,
+            'hide_empty'       => 0,
+            'echo'             => 0,
+            'name'             => $meta_field['id'],
+            'id'               => $meta_field['id'],
+            'show_option_none' => __('选择一个分类', 'example-text'),
+            'taxonomy'         => $meta_field['taxonomy'] ?: 'category',
+          ]);
+          break;
+
+        case 'pages':
+          $input = wp_dropdown_pages([
+            'selected'         => $meta_value,
+            'echo'             => 0,
+            'name'             => $meta_field['id'],
+            'id'               => $meta_field['id'],
+            'show_option_none' => __('选择一个页面', 'example-text'),
+          ]);
+          break;
+
+        case 'users':
+          $input = wp_dropdown_users([
+            'selected'         => $meta_value,
+            'echo'             => 0,
+            'name'             => $meta_field['id'],
+            'id'               => $meta_field['id'],
+            'show_option_none' => __('选择一个用户', 'example-text'),
+          ]);
           break;
 
         case 'select':
@@ -216,6 +217,19 @@ class ThemeMetaBox
             $meta_field['id'],
             $meta_value
           );
+          break;
+
+        case 'wysiwyg':
+          ob_start();
+          wp_editor($meta_value, $meta_field['id'], [
+            'textarea_name' => $meta_field['id'],
+            'textarea_rows' => $meta_field['rows'] ? $meta_field['rows'] : 5,
+            'media_buttons' => $meta_field['media_buttons'] ? true : false,
+            'quicktags'     => $meta_field['quicktags'] ? true : false,
+            'teeny'         => $meta_field['teeny'] ? true : false,
+          ]);
+          $input = ob_get_contents();
+          ob_end_clean();
           break;
 
         default:

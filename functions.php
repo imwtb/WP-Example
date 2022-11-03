@@ -115,7 +115,7 @@ $metabox->fields([
     // select
     [
       'label'   => __('单选', 'example-text'),
-      'type'    => 'radio',
+      'type'    => 'select',
       'id'      => 'radio_id',
       'default' => '2',
       'options' => [
@@ -131,9 +131,13 @@ $metabox->fields([
       'returnvalue' => 'id', // 可选id或url模式
     ],
     [
-      'label' => 'wysiwyg',
-      'type'  => 'wysiwyg',
-      'id'    => 'wysiwyg_id',
+      'label'         => 'wysiwyg',
+      'type'          => 'wysiwyg',
+      'id'            => 'wysiwyg_id',
+      'media_buttons' => false,
+      'textarea_rows' => 5,
+      'quicktags'     => false,
+      'teeny'         => false,
     ],
   ]
 ]);
