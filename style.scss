@@ -1,0 +1,25 @@
+/*
+Theme Name: example
+Theme URI: https://example.cn
+Author: example
+Author URI: https://example.cn
+Description: example
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: example-text
+Tags: example
+*/
+
+$base: #3858e9;
+$black: #1e1e1e;
+
+/* * {
+  margin: 0;
+  padding: 0;
+} */
+
+a {
+  color: $base;
+  text-decoration: none;
+}
