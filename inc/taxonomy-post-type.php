@@ -1,24 +1,16 @@
 <?php
 
+// Register Custom Post Type
 // supports: 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'comments', 'trackbacks', 'page-attributes', 'post-formats', 'custom-fields'
 // menu_icon @link https://developer.wordpress.org/resource/dashicons/#email
-add_action('init', function () {
-  register_custom_post_type(__('产品', 'example-text'), 'product', ['products', 'brands'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
-}, 0);
-
-add_action('init', function () {
-  register_custom_taxonomy(__('产品类别', 'example-text'), 'products', ['product']);
-}, 0);
-
-// Register Custom Post Type
-function register_custom_post_type($label, $key, $taxonomies, $menu_icon, $supports)
+function register_custom_post_type($label, $key, $taxonomies, $menu_icon, $supports, $description = '')
 {
 
   $labels = [
-    'name'                  => sprintf(_x('%s', '%s类型 通用名称', 'example-text'), $label),
-    'singular_name'         => sprintf(_x('%s', '%s类型 单数名称', 'example-text'), $label),
-    'menu_name'             => sprintf(_x('%s', '管理员菜单文本', 'example-text'), $label),
-    'name_admin_bar'        => sprintf(_x('%s', '工具栏上文本', 'example-text'), $label),
+    'name'                  => $label,
+    'singular_name'         => $label,
+    'menu_name'             => $label,
+    'name_admin_bar'        => $label,
     'archives'              => $label,
     'attributes'            => $label,
     'parent_item_colon'     => $label,
@@ -45,63 +37,58 @@ function register_custom_post_type($label, $key, $taxonomies, $menu_icon, $suppo
   ];
   $args = [
     'label'               => $label,
-    'description'         => sprintf(__('%s介绍', 'example-text'), $label),
+    'description'         => $description,
     'labels'              => $labels,
-    'supports'            => $supports, //模块支持
-    'taxonomies'          => $taxonomies, // 加入分类
-    'menu_icon'           => $menu_icon, // 图标
-    'hierarchical'        => false, // 分层
-    'exclude_from_search' => false, // 从搜索中排除
-    'publicly_queryable'  => true, // 可公开查询
-    'has_archive'         => true, // 加入存档
-    'public'              => true, // 公开
-    'show_ui'             => true, // 用户界面显示
-    'show_in_menu'        => true, // 菜单中显示
-    'show_in_admin_bar'   => true, // 管理栏显示
-    'can_export'          => true, // 可以导出
-    'show_in_nav_menus'   => true, // 导航菜单中显示
-    'menu_position'       => 5, // 位置
-    'capability_type'     => 'post', // 返回
-    'show_in_rest'        => true, // REST API 中显示
+    'supports'            => $supports,      //模块支持
+    'taxonomies'          => $taxonomies,    // 加入分类
+    'menu_icon'           => $menu_icon,     // 图标
+    'hierarchical'        => false,          // 分层
+    'exclude_from_search' => false,          // 从搜索中排除
+    'publicly_queryable'  => true,           // 可公开查询
+    'has_archive'         => true,           // 加入存档
+    'public'              => true,           // 公开
+    'show_ui'             => true,           // 用户界面显示
+    'show_in_menu'        => true,           // 菜单中显示
+    'show_in_admin_bar'   => true,           // 管理栏显示
+    'can_export'          => true,           // 可以导出
+    'show_in_nav_menus'   => true,           // 导航菜单中显示
+    'menu_position'       => 5,              // 位置
+    'capability_type'     => 'post',         // 返回
+    'show_in_rest'        => true,           // REST API 中显示
   ];
   register_post_type($key, $args);
 }
 
 // Register Custom Taxonomy
-function register_custom_taxonomy($label, $key, $post_type)
+function register_custom_taxonomy($label, $key, $post_type, $description = '')
 {
 
   $labels = [
-    'name'                       => sprintf(_x('%s', '%s 一般名称', 'example-text'), $label),
-    'singular_name'              => sprintf(_x('%s', '%s 单数名称', 'example-text'), $label),
-    'menu_name'                  => $label,
-    'all_items'                  => __('所有', 'example-text'),
-    'parent_item'                => __('父级', 'example-text'),
-    'parent_item_colon'          => __('父级：', 'example-text'),
-    'new_item_name'              => __('新的', 'example-text'),
-    'add_new_item'               => __('添加新的', 'example-text'),
-    'edit_item'                  => __('编辑', 'example-text'),
-    'update_item'                => __('更新', 'example-text'),
-    'view_item'                  => __('查看', 'example-text'),
-    'separate_items_with_commas' => __('用逗号分隔', 'example-text'),
-    'add_or_remove_items'        => __('添加或删除', 'example-text'),
-    'choose_from_most_used'      => __('从最常用的中选择', 'example-text'),
-    'popular_items'              => __('热门', 'example-text'),
-    'search_items'               => __('搜索', 'example-text'),
-    'not_found'                  => __('未找到', 'example-text'),
-    'no_terms'                   => __('未找到', 'example-text'),
-    'items_list'                 => __('列表', 'example-text'),
-    'items_list_navigation'      => __('列表分页', 'example-text'),
+    'name'              => $label,
+    'singular_name'     => $label,
+    /* 'search_items'      => __( 'Search Taxonomys', 'example-text' ),
+    'all_items'         => __( 'All Taxonomys', 'example-text' ),
+    'parent_item'       => __( 'Parent Taxonomy', 'example-text' ),
+    'parent_item_colon' => __( 'Parent Taxonomy:', 'example-text' ),
+    'edit_item'         => __( 'Edit Taxonomy', 'example-text' ),
+    'update_item'       => __( 'Update Taxonomy', 'example-text' ),
+    'add_new_item'      => __( 'Add New Taxonomy', 'example-text' ),
+    'new_item_name'     => __( 'New Taxonomy Name', 'example-text' ),
+    'menu_name'         => __( 'Taxonomy', 'example-text' ), */
   ];
   $args = [
-    'labels'                     => $labels,
-    'hierarchical'               => true,
-    'public'                     => true,
-    'show_ui'                    => true,
-    'show_admin_column'          => true,
-    'show_in_nav_menus'          => true,
-    'show_tagcloud'              => true,
-    'show_in_rest'               => true,
+    'labels'             => $labels,
+    'description'        => $description,
+    'hierarchical'       => true,           // 分层
+    'public'             => true,           // 公开
+    'publicly_queryable' => true,           // 可公开查询
+    'show_ui'            => true,           // 用户界面显示
+    'show_in_menu'       => true,           // 菜单中显示
+    'show_in_nav_menus'  => true,           // 导航菜单中显示
+    'show_tagcloud'      => true,           // 标签云中显示
+    'show_in_quick_edit' => true,           // 快速编辑中显示
+    'show_admin_column'  => true,           // 管理栏显示
+    'show_in_rest'       => true,           // REST API 中显示
   ];
   register_taxonomy($key, $post_type, $args);
 }

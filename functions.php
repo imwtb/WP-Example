@@ -9,7 +9,7 @@
 if (!isset($content_width)) $content_width = 768;
 
 add_action('after_setup_theme', function () {
-  load_theme_textdomain('example-text', get_template_directory() . '/lang');
+  load_theme_textdomain('example-text', get_template_directory() . '/languages');
   // add_theme_support('post-formats', ['link', 'aside', 'gallery', 'image', 'quote', 'status', 'video', 'audio', 'chat']);
   add_theme_support('html5', ['comment-list', 'comment-form', 'search-form', 'gallery', 'caption', 'style', 'script']);
   add_theme_support('customize-selective-refresh-widgets');
@@ -49,41 +49,6 @@ add_action('wp_enqueue_scripts',  function () {
   wp_add_inline_style('style', $custom_css); */
 });
 
-// 注册小工具
-add_action('widgets_init', function () {
-  register_sidebar([
-    'name'          => esc_html__('侧边栏', 'example-text'),
-    'description'   => esc_html__('默认侧边栏', 'example-text'),
-    'id'            => 'sidebar',
-    'class'         => 'class',
-    'before_widget' => '<section id="%1$s" class="widget %2$s">',
-    'after_widget'  => '</section>',
-    'before_title'  => '<h2 class="widget__title">',
-    'after_title'   => '</h2>',
-  ]);
-});
-require_once get_template_directory() . '/widgets/widget.php';
-
-// 引入一些文件
-require_once get_template_directory() . '/inc/optimize.php';
-require_once get_template_directory() . '/inc/hooks.php';
-require_once get_template_directory() . '/inc/options.php';
-
-require_once get_template_directory() . '/inc/taxonomy-post-type.php';
-require_once get_template_directory() . '/inc/schema-org.php';
-
-require_once get_template_directory() . '/inc/metabox-post.php';
-
-// 是否设置静态页面
-$front_page    = get_template_directory() . '/front-page.php';
-$no_front_page = get_template_directory() . '/no-front-page.php';
-
-if (get_option('show_on_front') == 'page' && file_exists($no_front_page)) {
-  rename($no_front_page, $front_page);
-} elseif (get_option('show_on_front') == 'posts' && file_exists($front_page)) {
-  rename($front_page, $no_front_page);
-}
-
 // wp_body_open
 if (!function_exists('wp_body_open')) {
   function wp_body_open()
@@ -96,6 +61,85 @@ if (!function_exists('wp_body_open')) {
 add_action('wp_body_open', function () {
   echo '<a class="skip-link screen-reader-text" href="#content">' . __('跳到内容', 'example-text') . '</a>';
 }, 10, 3);
+
+// 文章内容图片
+function the_content_thumbnails()
+{
+  global $post, $posts;
+
+  $image = '';
+  ob_start();
+  $output = preg_match_all('/<img.*?src=[\'|\"](.+?)[\'|\"].*?>/i', get_post($post)->post_content, $matches);
+  print_r($matches[1]);
+  $image = $matches[1];
+  ob_end_clean();
+  return $image;
+}
+
+function the_content_thumbnail($width = '300', $height = 'auto', $number = 1)
+{
+  foreach (the_content_thumbnails() as $key => $value) {
+    if ($key < $number) {
+      echo '<img width="' . $width . '" height="' . $height . '" src="' . $value . '">';
+    }
+  }
+}
+
+function get_the_content_thumbnail($number = 1)
+{
+  foreach (the_content_thumbnails() as $key => $value) {
+    if ($key < $number) {
+      return $value;
+    }
+  }
+}
+
+// 摘要字数
+add_filter('excerpt_length', function ($length) {
+  return 64;
+}, 999);
+
+// 归档标题
+add_filter('get_the_archive_title', function ($title) {
+  if (is_category()) {
+    $title = single_cat_title('', false);
+  } elseif (is_tag()) {
+    $title = single_tag_title('', false);
+  } elseif (is_search()) {
+    $title = sprintf(esc_html__('搜索 %s 结果如下', 'example-text'), get_search_query());
+  } elseif (is_author()) {
+    $title = get_the_author();
+  } elseif (is_year()) {
+    $title  = get_the_date('Y');
+  } elseif (is_month()) {
+    $title  = get_the_date('F Y');
+  } elseif (is_day()) {
+    $title  = get_the_date('F j, Y');
+  } elseif (is_post_type_archive()) {
+    $title = post_type_archive_title('', false);
+  } elseif (is_tax()) {
+    $title = single_term_title('', false);
+  }
+  return $title;
+});
+
+// 删除文章链接
+function delete_post_link($text = null, $before = '', $after = '', $id = 0, $class = 'post-delete-link')
+{
+  $post = get_post($id);
+  if (!$post) {
+    return;
+  }
+  $url = get_delete_post_link($post->ID);
+  if (!$url) {
+    return;
+  }
+  if (null === $text) {
+    $text = __('Delete This');
+  }
+  $link = '<a class="' . esc_attr($class) . '" href="' . esc_url($url) . '">' . $text . '</a>';
+  echo $before . apply_filters('delete_post_link', $link, $post->ID, $text) . $after;
+}
 
 // 添加维护模式
 /* function maintenance_mode()
@@ -129,3 +173,94 @@ add_action('get_header', 'maintenance_mode'); */
 }
 
 add_action('admin_notices', 'add_admin_notices'); */
+
+// 注册小工具
+add_action('widgets_init', function () {
+  register_sidebar([
+    'name'          => esc_html__('侧边栏', 'example-text'),
+    'description'   => esc_html__('默认侧边栏', 'example-text'),
+    'id'            => 'sidebar',
+    'class'         => 'class',
+    'before_widget' => '<section id="%1$s" class="widget %2$s">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h2 class="widget__title">',
+    'after_title'   => '</h2>',
+  ]);
+});
+require_once get_template_directory() . '/widgets/widget.php';
+
+// 引入一些文件
+require_once get_template_directory() . '/inc/optimize.php';
+require_once get_template_directory() . '/inc/schema-org.php';
+require_once get_template_directory() . '/inc/taxonomy-post-type.php';
+add_action('init', function () {
+  register_custom_post_type(__('产品', 'example-text'), 'product', ['products', 'brands'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
+}, 0);
+add_action('init', function () {
+  register_custom_taxonomy(__('产品类别', 'example-text'), 'products', ['product']);
+}, 0);
+
+require_once get_template_directory() . '/customize/options.php';
+$meta_post = new Theme_Options();
+require_once get_template_directory() . '/customize/metabox-tax.php';
+$meta_post = new MetaBoxTax();
+require_once get_template_directory() . '/customize/metabox-post.php';
+$meta_post = new MetaBoxPost();
+$meta_post->fields([
+  'fields' => [
+    // text
+    // email
+    // url
+    // number
+    // tel
+    // date
+    // time
+    // password
+    // textarea
+    // checkbox
+    // users
+    // pages
+    [
+      'label' => __('文本', 'example-text'),
+      'id'    => 'text_id',
+      'type'  => 'text',
+    ],
+    [
+      'label'    => __('分类', 'example-text'),
+      'id'       => 'categories_id',
+      'type'     => 'categories',
+      'taxonomy' => ['videos'],
+    ],
+    // radio
+    // select
+    // multiselect
+    [
+      'label'   => __('单选', 'example-text'),
+      'id'      => 'radio_id',
+      'type'    => 'select',
+      'default' => '2',
+      'options' => [
+        'one',
+        'two',
+        'other',
+      ]
+    ],
+    // media
+    [
+      'label'       => __('媒体', 'example-text'),
+      'id'          => 'media_id',
+      'type'        => 'media',
+      'returnvalue' => 'id', // 可选id或url模式
+    ],
+    // 文本编辑器
+    [
+      'label'         => 'wysiwyg',
+      'id'            => 'wysiwyg_id',
+      'type'          => 'wysiwyg',
+      'media_buttons' => false,
+      'textarea_rows' => 5,
+      'quicktags'     => false,
+      'teeny'         => false,
+    ],
+  ]
+]);
