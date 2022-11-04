@@ -6,8 +6,8 @@ class ThemeMetaBox
 {
 
   /**
-   * @param string $id
-   * @param string $title
+   * @param string $id          唯一ID
+   * @param string $title       标题
    * @param array $screen       显示在哪些页面：post、page、dashboard、link、afs、comment
    * @param string $context     上下文显示位置：normal、side、advanced
    * @param string $priority    上下文优先级：high、core、default、low
@@ -97,68 +97,71 @@ class ThemeMetaBox
   public function field_generator($post)
   {
     $output = '';
-    foreach ($this->fields as $meta_field) {
-      $label      = '<label for="' . $meta_field['id'] . '">' . $meta_field['label'] . '</label>';
-      $meta_value = get_post_meta($post->ID, $meta_field['id'], true);
-      if (empty($meta_value)) {
-        if (isset($meta_field['default'])) {
-          $meta_value = $meta_field['default'];
+    foreach ($this->fields as $field) {
+      $label      = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
+      $value = get_post_meta($post->ID, $field['id'], true);
+      if (empty($value)) {
+        if (isset($field['default'])) {
+          $value = $field['default'];
         }
       }
-      switch ($meta_field['type']) {
+      require_once get_template_directory() . '/inc/fields.php';
+      $theme_fields = new Theme_fields();
+      switch ($field['type']) {
 
         case 'media':
-          $meta_url = '';
-          if ($meta_value) {
-            if ($meta_field['returnvalue'] == 'url') {
-              $meta_url = $meta_value;
+          $input = $theme_fields->media($field, $value);
+          /* $meta_url = '';
+          if ($value) {
+            if ($field['returnvalue'] == 'url') {
+              $meta_url = $value;
             } else {
-              $meta_url = wp_get_attachment_url($meta_value);
+              $meta_url = wp_get_attachment_url($value);
             }
           }
           $input = sprintf(
             '<input style="display:none;" id="%s" name="%s" type="text" value="%s"  data-return="%s"><div id="preview%s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div><input style="width: 19%%;margin-right:5px;" class="button new-media" id="%s_button" name="%s_button" type="button" value="Select" /><input style="width: 19%%;" class="button remove-media" id="%s_buttonremove" name="%s_buttonremove" type="button" value="Clear" />',
-            $meta_field['id'],
-            $meta_field['id'],
-            $meta_value,
-            $meta_field['returnvalue'],
-            $meta_field['id'],
+            $field['id'],
+            $field['id'],
+            $value,
+            $field['returnvalue'],
+            $field['id'],
             $meta_url,
-            $meta_field['id'],
-            $meta_field['id'],
-            $meta_field['id'],
-            $meta_field['id']
-          );
+            $field['id'],
+            $field['id'],
+            $field['id'],
+            $field['id']
+          ); */
           break;
 
         case 'categories':
           $input = wp_dropdown_categories([
-            'selected'         => $meta_value,
+            'selected'         => $value,
             'hide_empty'       => 0,
             'echo'             => 0,
-            'name'             => $meta_field['id'],
-            'id'               => $meta_field['id'],
+            'name'             => $field['id'],
+            'id'               => $field['id'],
             'show_option_none' => __('选择一个分类', 'example-text'),
-            'taxonomy'         => $meta_field['taxonomy'] ?: 'category',
+            'taxonomy'         => $field['taxonomy'] ?: 'category',
           ]);
           break;
 
         case 'pages':
           $input = wp_dropdown_pages([
-            'selected'         => $meta_value,
+            'selected'         => $value,
             'echo'             => 0,
-            'name'             => $meta_field['id'],
-            'id'               => $meta_field['id'],
+            'name'             => $field['id'],
+            'id'               => $field['id'],
             'show_option_none' => __('选择一个页面', 'example-text'),
           ]);
           break;
 
         case 'users':
           $input = wp_dropdown_users([
-            'selected'         => $meta_value,
+            'selected'         => $value,
             'echo'             => 0,
-            'name'             => $meta_field['id'],
-            'id'               => $meta_field['id'],
+            'name'             => $field['id'],
+            'id'               => $field['id'],
             'show_option_none' => __('选择一个用户', 'example-text'),
           ]);
           break;
@@ -166,15 +169,15 @@ class ThemeMetaBox
         case 'select':
           $input = sprintf(
             '<select id="%s" name="%s">',
-            $meta_field['id'],
-            $meta_field['id']
+            $field['id'],
+            $field['id']
           );
-          foreach ($meta_field['options'] as $key => $value) {
-            $meta_field_value = !is_numeric($key) ? $key : $value;
+          foreach ($field['options'] as $key => $value) {
+            $field_value = !is_numeric($key) ? $key : $value;
             $input .= sprintf(
               '<option %s value="%s">%s</option>',
-              $meta_value === $meta_field_value ? 'selected' : '',
-              $meta_field_value,
+              $value === $field_value ? 'selected' : '',
+              $field_value,
               $value
             );
           }
@@ -183,18 +186,18 @@ class ThemeMetaBox
 
         case 'radio':
           $input = '<fieldset>';
-          $input .= '<legend class="screen-reader-text">' . $meta_field['label'] . '</legend>';
+          $input .= '<legend class="screen-reader-text">' . $field['label'] . '</legend>';
           $i = 0;
-          foreach ($meta_field['options'] as $key => $value) {
-            $meta_field_value = !is_numeric($key) ? $key : $value;
+          foreach ($field['options'] as $key => $value) {
+            $field_value = !is_numeric($key) ? $key : $value;
             $input .= sprintf(
               '<label><input %s id=" %s" name="%s" type="radio" value="%s"> %s</label>%s',
-              $meta_value === $meta_field_value ? 'checked' : '',
-              $meta_field['id'],
-              $meta_field['id'],
-              $meta_field_value,
+              $value === $field_value ? 'checked' : '',
+              $field['id'],
+              $field['id'],
+              $field_value,
               $value,
-              $i < count($meta_field['options']) - 1 ? '<br>' : ''
+              $i < count($field['options']) - 1 ? '<br>' : ''
             );
             $i++;
           }
@@ -204,29 +207,29 @@ class ThemeMetaBox
         case 'checkbox':
           $input = sprintf(
             '<input %s id=" %s" name="%s" type="checkbox" value="1">',
-            $meta_value === '1' ? 'checked' : '',
-            $meta_field['id'],
-            $meta_field['id']
+            $value === '1' ? 'checked' : '',
+            $field['id'],
+            $field['id']
           );
           break;
 
         case 'textarea':
           $input = sprintf(
             '<textarea style="" id="%s" name="%s" rows="5">%s</textarea>',
-            $meta_field['id'],
-            $meta_field['id'],
-            $meta_value
+            $field['id'],
+            $field['id'],
+            $value
           );
           break;
 
         case 'wysiwyg':
           ob_start();
-          wp_editor($meta_value, $meta_field['id'], [
-            'textarea_name' => $meta_field['id'],
-            'textarea_rows' => $meta_field['rows'] ? $meta_field['rows'] : 5,
-            'media_buttons' => $meta_field['media_buttons'] ? true : false,
-            'quicktags'     => $meta_field['quicktags'] ? true : false,
-            'teeny'         => $meta_field['teeny'] ? true : false,
+          wp_editor($value, $field['id'], [
+            'textarea_name' => $field['id'],
+            'textarea_rows' => $field['rows'] ? $field['rows'] : 5,
+            'media_buttons' => $field['media_buttons'] ? true : false,
+            'quicktags'     => $field['quicktags'] ? true : false,
+            'teeny'         => $field['teeny'] ? true : false,
           ]);
           $input = ob_get_contents();
           ob_end_clean();
@@ -235,11 +238,11 @@ class ThemeMetaBox
         default:
           $input = sprintf(
             '<input %s id="%s" name="%s" type="%s" value="%s">',
-            $meta_field['type'] !== 'color' ? 'style="width: auto"' : '',
-            $meta_field['id'],
-            $meta_field['id'],
-            $meta_field['type'],
-            $meta_value
+            $field['type'] !== 'color' ? 'style="width: auto"' : '',
+            $field['id'],
+            $field['id'],
+            $field['type'],
+            $value
           );
       }
       $output .= $this->format_rows($label, $input);
@@ -261,19 +264,19 @@ class ThemeMetaBox
       return $post_id;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
       return $post_id;
-    foreach ($this->fields as $meta_field) {
-      if (isset($_POST[$meta_field['id']])) {
-        switch ($meta_field['type']) {
+    foreach ($this->fields as $field) {
+      if (isset($_POST[$field['id']])) {
+        switch ($field['type']) {
           case 'email':
-            $_POST[$meta_field['id']] = sanitize_email($_POST[$meta_field['id']]);
+            $_POST[$field['id']] = sanitize_email($_POST[$field['id']]);
             break;
           case 'text':
-            $_POST[$meta_field['id']] = sanitize_text_field($_POST[$meta_field['id']]);
+            $_POST[$field['id']] = sanitize_text_field($_POST[$field['id']]);
             break;
         }
-        update_post_meta($post_id, $meta_field['id'], $_POST[$meta_field['id']]);
-      } else if ($meta_field['type'] === 'checkbox') {
-        update_post_meta($post_id, $meta_field['id'], '0');
+        update_post_meta($post_id, $field['id'], $_POST[$field['id']]);
+      } else if ($field['type'] === 'checkbox') {
+        update_post_meta($post_id, $field['id'], '0');
       }
     }
   }

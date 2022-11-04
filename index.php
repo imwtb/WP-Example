@@ -17,4 +17,9 @@ if ($main_query->have_posts()) :
 endif;
 wp_reset_postdata();
 
+echo get_option('text_id');
+echo get_option('text2_id');
+echo get_option('text3_id');
+echo get_option('text4_id');
+
 get_footer();
