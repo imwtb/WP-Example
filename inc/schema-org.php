@@ -110,10 +110,10 @@ add_action('wp_head', function () {
       "@context": "http://www.schema.org",
       "@type": "WebSite",
       "name": "' . get_bloginfo('name') . '",
-      "url": "' . HOME_URI . '",
+      "url": "' . home_url() . '",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "' . HOME_URI . '/?s={search_term_string}' . '",
+        "target": "' . home_url() . '/?s={search_term_string}' . '",
         "query-input": "required name=search_term_string"
       }
     }
@@ -141,7 +141,7 @@ function breadcrumblists()
 
   $list[] = [
     'title' => __('首页', 'example-text'),
-    'link'  => HOME_URI,
+    'link'  => home_url(),
   ];
 
   if (is_archive()) {

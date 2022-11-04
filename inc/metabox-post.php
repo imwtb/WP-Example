@@ -278,3 +278,69 @@ class ThemeMetaBox
     }
   }
 }
+
+if (class_exists('ThemeMetabox')) {
+  $metabox = new ThemeMetaBox();
+  $metabox->fields([
+    'options' => [
+      /* 'id'          => 'metabox',
+    'title'       => 'title',
+    'description' => 'description',
+    'screen'      => ['post'],
+    'context'     => 'advanced',
+    'priority'    => 'default', */],
+    'fields' => [
+      // text
+      // email
+      // url
+      // number
+      // tel
+      // date
+      // time
+      // password
+      // textarea
+      // checkbox
+      // users
+      // pages
+      [
+        'label' => __('文本', 'example-text'),
+        'id'    => 'text_id',
+        'type'  => 'text',
+      ],
+      [
+        'label'    => __('分类', 'example-text'),
+        'id'       => 'categories_id',
+        'type'     => 'categories',
+        'taxonomy' => ['videos'],
+      ],
+      // radio
+      // select
+      [
+        'label'   => __('单选', 'example-text'),
+        'id'      => 'radio_id',
+        'type'    => 'select',
+        'default' => '2',
+        'options' => [
+          'one',
+          'two',
+          'other',
+        ]
+      ],
+      [
+        'label'       => __('媒体', 'example-text'),
+        'id'          => 'media_id',
+        'type'        => 'media',
+        'returnvalue' => 'id', // 可选id或url模式
+      ],
+      [
+        'label'         => 'wysiwyg',
+        'id'            => 'wysiwyg_id',
+        'type'          => 'wysiwyg',
+        'media_buttons' => false,
+        'textarea_rows' => 5,
+        'quicktags'     => false,
+        'teeny'         => false,
+      ],
+    ]
+  ]);
+}

@@ -1,4 +1,3 @@
 <?php get_header(); ?>
-静态首页
-<?php get_sidebar(); ?>
+静态页面
 <?php get_footer(); ?>

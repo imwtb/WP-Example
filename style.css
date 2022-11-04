@@ -1,14 +1,71 @@
+@charset "UTF-8";
 /*
-Theme Name: example
-Theme URI: https://example.cn
-Author: example
-Author URI: https://example.cn
-Description: example
+Theme Name: news
+Theme URI: https://news.cn
+Author: news
+Author URI: https://news.cn
+Description: news
 Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: example-text
-Tags: example
+Tags: news
 */
-/* * { margin: 0; padding: 0; } */
-a { color: #3858e9; text-decoration: none; }
+/*------------------------------ 重置 ------------------------------*/
+*, *:before, *:after { box-sizing: inherit; margin: 0; padding: 0; }
+
+:root { position: relative; font-family: -apple-system, 'Helvetica Neue', Helvetica, 'Nimbus Sans L', Arial, 'Liberation Sans', 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN', 'Source Han Sans SC', 'Microsoft YaHei', 'Wenquanyi Micro Hei', 'WenQuanYi Zen Hei', 'ST Heiti', SimHei, 'WenQuanYi Zen Hei Sharp', sans-serif; min-height: 100%; box-sizing: border-box; text-size-adjust: none; }
+
+input, textarea, button { font-size: inherit; font-family: inherit; }
+
+body { position: relative; height: 100%; min-height: 100vh; font-size: 100%; line-height: 1.5; }
+
+h1, h2, h3, h4, h5, h6 { line-height: 1.35; }
+
+h3 { font-size: 1.125em; }
+
+h5 { font-size: .875em; }
+
+a { text-decoration: none; }
+
+img { max-width: 100%; max-height: 100%; image-rendering: crisp-edges; }
+
+video, iframe { width: 100%; aspect-ratio: 16/9; }
+
+a, img, video, iframe, input, textarea, select, button { vertical-align: middle; }
+
+a, input, textarea, select, button { outline-color: transparent; transition: color 0.3s ease-in-out, background 0.3s ease-in-out, border 0.3s ease-in-out, outline 0.3s ease-in-out; }
+
+a:focus, input:focus, textarea:focus, select:focus, button:focus { outline-color: #3858e9; }
+
+input:not([type="color"], [type="file"]), textarea, select, button { padding: 0.5rem; }
+
+input:not([type="radio"], [type="checkbox"]), textarea, select { min-width: 4.5rem; }
+
+input:not([type="color"], [type="image"], [type="file"]), textarea, select { border: 0.0625rem solid rgba(30, 30, 30, 0.3); border-radius: 0.5rem; }
+
+input[type="submit"], input[type="reset"], input[type="button"] { color: #ffffff; background: #3858e9; border: none; cursor: pointer; }
+
+input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover { background: #1e1e1e; }
+
+button { background: transparent; border: none; cursor: pointer; }
+
+/*------------------------------ 基本 ------------------------------*/
+body { display: flex; flex-direction: column; }
+
+body.active { overflow: hidden; }
+
+main { flex-grow: 1; }
+
+/*------------------------------ 搜索表单 ------------------------------*/
+/*------------------------------ 跳到内容 ------------------------------*/
+.screen-reader-text { position: absolute !important; width: 0.0625rem; height: 0.0625rem; overflow: hidden; border: 0; outline: 0; word-wrap: normal !important; word-break: normal; clip: rect(0.0625rem, 0.0625rem, 0.0625rem, 0.0625rem); clip-path: inset(50%); }
+
+.skip-link:focus { display: block; top: 1rem; left: 1rem; z-index: 100000; width: auto; height: auto; padding: 0.5rem 1.5rem; font-size: .875rem; color: #ffffff; font-weight: 700; line-height: normal; background-color: #3858e9; border-radius: 6.25rem; clip: auto !important; clip-path: none; }
+
+/*------------------------------ 滚动条 ------------------------------*/
+::-webkit-scrollbar { width: 0.5rem; height: 0.25rem; background: transparent; }
+
+::-webkit-scrollbar-corner, ::-webkit-scrollbar-track { background: rgba(30, 30, 30, 0.1); border-radius: 6.25rem; }
+
+::-webkit-scrollbar-thumb { background: #3858e9; border-radius: 6.25rem; }

@@ -11,10 +11,8 @@
 
   <?php wp_body_open(); ?>
 
-  <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('跳到内容', 'example-text'); ?></a>
-
-  <figure class="heading__logo">
-    <a href="<?php echo HOME_URI; ?>">
+  <h1 class="logo">
+    <a href="<?php home_url(); ?>">
       <?php if (has_custom_logo()) : ?>
         <img src="<?php echo esc_url(wp_get_attachment_url(get_theme_mod('custom_logo'))); ?>" alt="">
       <?php endif; ?>
@@ -22,27 +20,19 @@
         <span><?php bloginfo('name'); ?></span>
       <?php endif; ?>
     </a>
-  </figure>
+  </h1>
 
-  <?php if (has_nav_menu('primary')) : ?>
-    <nav id="heading__nav" class="heading__nav">
-      <button id="heading__nav--mobile--menu" class="heading__nav--mobile">
-        <span class="heading__nav--mobile--open">Open</span>
-        <span class="heading__nav--mobile--close">Close</span>
-      </button>
-      <?php
-      wp_nav_menu(array(
-        'container'       => 'nav',
-        'container_class' => 'mainnav',
-        'theme_location'  => 'primary',
-        'depth'           => '1',
-        'fallback_cb'     => false,
-      ));
-      ?>
-    </nav>
-  <?php endif; ?>
+  <?php
+  if (has_nav_menu('primary')) {
+    wp_nav_menu([
+      'container'            => 'nav',
+      'container_class'      => 'topnav',
+      'container_aria_label' => '',
+      'theme_location'       => 'primary',
+    ]);
+  }
+  ?>
 
   <?php get_search_form(); ?>
 
-  <div>
-    <?php do_action('breadcrumblist'); ?>
+  <?php do_action('breadcrumblist'); ?>
