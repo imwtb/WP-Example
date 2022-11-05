@@ -10,9 +10,9 @@ class MetaBoxPost
   /**
    * @param string $id          唯一ID
    * @param string $title       标题
-   * @param array $screen       显示在哪些页面：post、page、dashboard、link、afs、comment
-   * @param string $context     上下文显示位置：normal、side、advanced
-   * @param string $priority    上下文优先级：high、core、default、low
+   * @param array $screen       显示在哪些页面：post | page | dashboard | link | afs | comment
+   * @param string $context     上下文显示位置：normal | side | advanced
+   * @param string $priority    上下文优先级：high | core | default | low
    * @return void
    * @link https://developer.wordpress.org/reference/functions/add_meta_box/
    */
@@ -56,7 +56,7 @@ class MetaBoxPost
 
   public function meta_box_callback($post)
   {
-    wp_nonce_field('Theme_data', 'Theme_nonce');
+    wp_nonce_field('meta_post_data', 'meta_post_nonce');
     echo $this->menus['description'];
     $this->field_generator($post);
   }
@@ -131,10 +131,10 @@ class MetaBoxPost
 
   public function metabox_save_fields($post_id)
   {
-    if (!isset($_POST['Theme_nonce']))
+    if (!isset($_POST['meta_post_nonce']))
       return $post_id;
-    $nonce = $_POST['Theme_nonce'];
-    if (!wp_verify_nonce($nonce, 'Theme_data'))
+    $nonce = $_POST['meta_post_nonce'];
+    if (!wp_verify_nonce($nonce, 'meta_post_data'))
       return $post_id;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
       return $post_id;

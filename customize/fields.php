@@ -6,11 +6,12 @@ class Theme_Fields
   function text($field, $value, $placeholder)
   {
     $input = sprintf(
-      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
+      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" %5$s/>',
       $field['id'],
       $field['type'],
       $placeholder,
-      $value
+      $value,
+      $field['type'] !== 'color' ? 'style="min-width: 32%;"' : '',
     );
     return $input;
   }
@@ -143,7 +144,7 @@ class Theme_Fields
       }
     }
     $input = sprintf(
-      '<input style="display:none;" id="%1$s" name="%1$s" type="text" value="%2$s" data-return="%3$s"><div id="preview%1$s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%4$s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div><div><input style="width: 19%%;margin-right:5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="width: 19%%;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></div>',
+      '<input style="display:none;" id="%1$s" name="%1$s" type="text" value="%2$s" data-return="%3$s"><div id="preview%1$s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%4$s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div><span><input style="width: 19%%;margin-right:5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="width: 19%%;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></span>',
       $field['id'],
       $value,
       $field['returnvalue'],

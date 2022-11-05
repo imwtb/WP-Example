@@ -2,7 +2,7 @@
 
 // Register Custom Post Type
 // supports: 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'comments', 'trackbacks', 'page-attributes', 'post-formats', 'custom-fields'
-// menu_icon @link https://developer.wordpress.org/resource/dashicons/#email
+// menu_icon @link https://developer.wordpress.org/resource/dashicons
 function register_custom_post_type($label, $key, $taxonomies, $menu_icon, $supports, $description = '')
 {
 

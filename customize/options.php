@@ -12,8 +12,9 @@ class Theme_Options
    * @param string capability   权限
    * @param string slug         唯一名称
    * @param string icon         图标
-   * @param string position     位置
+   * @param string position     位置 2仪表盘 | 4分隔符 | 5文章 10媒体 15链接 20页面 25评论 59分隔符 60外观 65插件 70用户 75工具 80设置 99分隔符
    * @return void
+   * @link https://developer.wordpress.org/resource/dashicons
    * @link https://developer.wordpress.org/reference/functions/add_menu_page/
    */
   public function __construct()
