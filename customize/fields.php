@@ -26,32 +26,6 @@ class Theme_Fields
     return $input;
   }
 
-  function media($field, $value)
-  {
-    $meta_url = '';
-    if ($value) {
-      if ($field['returnvalue'] == 'url') {
-        $meta_url = $value;
-      } else {
-        $meta_url = wp_get_attachment_url($value);
-      }
-    }
-    $input = sprintf(
-      '<input style="display:none;" id="%s" name="%s" type="text" value="%s" data-return="%s"><div id="preview%s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div><div><input style="width: 19%%;margin-right:5px;" class="button new-media" id="%s_button" name="%s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="width: 19%%;" class="button remove-media" id="%s_buttonremove" name="%s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></div>',
-      $field['id'],
-      $field['id'],
-      $value,
-      $field['returnvalue'],
-      $field['id'],
-      $meta_url,
-      $field['id'],
-      $field['id'],
-      $field['id'],
-      $field['id']
-    );
-    return $input;
-  }
-
   function categories($field, $value)
   {
     $input = wp_dropdown_categories([
@@ -155,6 +129,26 @@ class Theme_Fields
     ]);
     $input = ob_get_contents();
     ob_end_clean();
+    return $input;
+  }
+
+  function media($field, $value)
+  {
+    $meta_url = '';
+    if ($value) {
+      if ($field['returnvalue'] == 'url') {
+        $meta_url = $value;
+      } else {
+        $meta_url = wp_get_attachment_url($value);
+      }
+    }
+    $input = sprintf(
+      '<input style="display:none;" id="%1$s" name="%1$s" type="text" value="%2$s" data-return="%3$s"><div id="preview%1$s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%4$s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div><div><input style="width: 19%%;margin-right:5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="width: 19%%;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></div>',
+      $field['id'],
+      $value,
+      $field['returnvalue'],
+      $meta_url,
+    );
     return $input;
   }
 
