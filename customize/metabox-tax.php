@@ -12,20 +12,35 @@ class MetaBoxTax
     if (is_admin()) {
       $terms = is_array($this->terms) ?: explode(',', $this->terms);
       foreach ($terms as $value) {
-        add_action($value . '_add_form_fields', [$this, 'metabox_create_fields'], 10, 2);
-        add_action($value . '_edit_form_fields', [$this, 'metabox_edit_fields'],  10, 2);
-        add_action('created_' . $value, [$this, 'metabox_save_fields'], 10, 1);
-        add_action('edited_' . $value,  [$this, 'metabox_save_fields'], 10, 1);
+        add_action($value . '_add_form_fields', [$this, 'meta_tax_create_fields'], 10, 2);
+        add_action($value . '_edit_form_fields', [$this, 'meta_tax_edit_fields'],  10, 2);
+        add_action('created_' . $value, [$this, 'meta_tax_save_fields'], 10, 1);
+        add_action('edited_' . $value,  [$this, 'meta_tax_save_fields'], 10, 1);
       }
-      add_action('admin_footer', [$this, 'metabox_media_fields']);
-      add_action('admin_enqueue_scripts', 'wp_enqueue_media');
+      add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
+      add_action('admin_footer', [$this, 'metabox_footer_scripts']);
     }
   }
 
-  public function metabox_media_fields()
+  public function meta_post_enqueue_scripts()
   {
-    $theme_fields = new Theme_fields();
-    return $theme_fields->media_script();
+    global $typenow;
+    $terms = is_array($this->terms) ?: explode(',', $this->terms);
+    if (in_array($typenow,  $terms)) {
+      wp_enqueue_media();
+      wp_enqueue_script('wp-color-picker');
+      wp_enqueue_style('wp-color-picker');
+    }
+  }
+
+  public function metabox_footer_scripts()
+  {
+    global $typenow;
+    $terms = is_array($this->terms) ?: explode(',', $this->terms);
+    if (in_array($typenow,  $terms)) {
+      $theme_fields = new Theme_fields();
+      return $theme_fields->footer_script();
+    }
   }
 
   public function fields($fields = [])
@@ -34,7 +49,7 @@ class MetaBoxTax
     $this->fields = $fields['fields'];
   }
 
-  public function metabox_create_fields($taxonomy)
+  public function meta_tax_create_fields($taxonomy)
   {
     $output      = '';
     $placeholder = '';
@@ -57,7 +72,8 @@ class MetaBoxTax
     }
     echo $output;
   }
-  public function metabox_edit_fields($term, $taxonomy)
+
+  public function meta_tax_edit_fields($term, $taxonomy)
   {
     $output       = '';
     $placeholder  = '';
@@ -119,15 +135,20 @@ class MetaBoxTax
     }
     echo '<div class="form-field">' . $output . '</div>';
   }
+
   public function format_rows($label, $input)
   {
     return '<tr class="form-field"><th>' . $label . '</th><td>' . $input . '</td></tr>';
   }
-  public function metabox_save_fields($term_id)
+
+  public function meta_tax_save_fields($term_id)
   {
     foreach ($this->fields as $field) {
-      if (isset($_POST[$field['id']])) {
+      if (isset($_POST[$field['id']]) && $_POST[$field['id']] !== '') {
         switch ($field['type']) {
+          case 'url':
+            $_POST[$field['id']] = sanitize_url($_POST[$field['id']]);
+            break;
           case 'email':
             $_POST[$field['id']] = sanitize_email($_POST[$field['id']]);
             break;
@@ -138,6 +159,8 @@ class MetaBoxTax
         update_term_meta($term_id, $field['id'], $_POST[$field['id']]);
       } else if ($field['type'] === 'checkbox') {
         update_term_meta($term_id, $field['id'], '0');
+      } else {
+        delete_term_meta($term_id, $field['id'], $_POST[$field['id']]);
       }
     }
   }

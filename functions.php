@@ -194,49 +194,84 @@ require_once get_template_directory() . '/inc/optimize.php';
 require_once get_template_directory() . '/inc/schema-org.php';
 require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
-  register_custom_post_type(__('产品', 'example-text'), 'product', ['products', 'brands'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
+  register_custom_post_type(__('产品', 'example-text'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
 }, 0);
 add_action('init', function () {
   register_custom_taxonomy(__('产品类别', 'example-text'), 'products', ['product']);
 }, 0);
 
 require_once get_template_directory() . '/customize/options.php';
-$meta_post = new Theme_Options();
+$theme_option = new Theme_Options();
 require_once get_template_directory() . '/customize/metabox-tax.php';
-$meta_post = new MetaBoxTax();
+$meta_tax = new MetaBoxTax();
 require_once get_template_directory() . '/customize/metabox-post.php';
 $meta_post = new MetaBoxPost();
+
 $meta_post->fields([
+
+  // textarea
+  // text
+  // - - email
+  // - - url
+  // - - number
+  // - - tel
+  // - - password
+  // - - date
+  // - - time
+  // - checkbox
+  // - pages
+  // - users
+  // - categories ['taxonomy' => ['category']]
+  // select
+  // radio
+  // media ['returnvalue' => 'id' or 'returnvalue' => 'url']
+  //
+  // wp_editor
+
   'fields' => [
-    // text
-    // email
-    // url
-    // number
-    // tel
-    // date
-    // time
-    // password
-    // textarea
-    // checkbox
-    // users
-    // pages
+    [
+      'label' => __('多行文本', 'example-text'),
+      'id'    => 'color_id',
+      'type'  => 'color',
+    ],
+    [
+      'label' => __('多行文本', 'example-text'),
+      'id'    => 'textarea_id',
+      'type'  => 'textarea',
+    ],
     [
       'label' => __('文本', 'example-text'),
       'id'    => 'text_id',
       'type'  => 'text',
     ],
     [
-      'label'    => __('分类', 'example-text'),
-      'id'       => 'categories_id',
-      'type'     => 'categories',
-      'taxonomy' => ['videos'],
+      'label' => __('网站', 'example-text'),
+      'id'    => 'url_id',
+      'type'  => 'url',
     ],
-    // radio
-    // select
-    // multiselect
     [
-      'label'   => __('单选', 'example-text'),
-      'id'      => 'radio_id',
+      'label' => __('选框', 'example-text'),
+      'id'    => 'checkbox_id',
+      'type'  => 'checkbox',
+    ],
+    [
+      'label' => __('页面', 'example-text'),
+      'id'    => 'pages_id',
+      'type'  => 'pages',
+    ],
+    [
+      'label' => __('用户', 'example-text'),
+      'id'    => 'users_id',
+      'type'  => 'users',
+    ],
+    [
+      'label' => __('分类', 'example-text'),
+      'id'    => 'categories_id',
+      'type'  => 'categories',
+    ],
+    [
+      'label'   => __('下拉框', 'example-text'),
+      'id'      => 'select_id',
       'type'    => 'select',
       'default' => '2',
       'options' => [
@@ -245,16 +280,25 @@ $meta_post->fields([
         'other',
       ]
     ],
-    // media
+    [
+      'label'   => __('单选', 'example-text'),
+      'id'      => 'radio_id',
+      'type'    => 'radio',
+      'default' => '2',
+      'options' => [
+        'one',
+        'two',
+        'other',
+      ]
+    ],
     [
       'label'       => __('媒体', 'example-text'),
       'id'          => 'media_id',
       'type'        => 'media',
-      'returnvalue' => 'id', // 可选id或url模式
+      'returnvalue' => 'id',
     ],
-    // 文本编辑器
     [
-      'label'         => 'wysiwyg',
+      'label'         => __('文本编辑器', 'example-text'),
       'id'            => 'wysiwyg_id',
       'type'          => 'wysiwyg',
       'media_buttons' => false,

@@ -4,7 +4,7 @@ add_action('init', function () {
 
   add_filter('pre_option_link_manager_enabled', '__return_true');                                 // 添加 友情链接
   add_filter('use_widgets_block_editor', '__return_false');                                       // 使用 旧版小工具
-  //add_filter('use_block_editor_for_post', '__return_false');                                      // 使用 旧版文章编辑器
+  add_filter('use_block_editor_for_post', '__return_false');                                      // 使用 旧版文章编辑器
   add_filter('show_admin_bar', '__return_false');                                                 // 禁止 工具栏
   add_filter('automatic_updater_disabled', '__return_true');                                      // 禁止 核心自动更新
   add_filter('auto_update_plugin', '__return_false');                                             // 禁止 插件自动更新

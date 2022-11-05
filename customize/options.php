@@ -19,32 +19,47 @@ class Theme_Options
    */
   public function __construct()
   {
-    add_action('admin_menu', [$this, 'options_create_settings']);
-    add_action('admin_init', [$this, 'options_setup_sections']);
-    add_action('admin_init', [$this, 'options_setup_fields']);
-    add_action('admin_footer', [$this, 'options_media_fields']);
-    add_action('admin_enqueue_scripts', 'wp_enqueue_media');
+    add_action('admin_menu', [$this, 'option_create_settings']);
+    add_action('admin_init', [$this, 'option_setup_sections']);
+    add_action('admin_init', [$this, 'option_setup_fields']);
+
+    add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
+    add_action('admin_footer', [$this, 'option_footer_scripts']);
   }
 
-  public function options_media_fields()
+  public function meta_post_enqueue_scripts()
   {
-    $theme_fields = new Theme_fields();
-    return $theme_fields->media_script();
+    global $typenow;
+    $slugs = is_array($this->slug) ?: explode(',', $this->slug);
+    if (in_array($typenow, $slugs)) {
+      wp_enqueue_media();
+      wp_enqueue_script('wp-color-picker');
+      wp_enqueue_style('wp-color-picker');
+    }
+  }
+
+  public function option_footer_scripts()
+  {
+    global $typenow;
+    $slugs = is_array($this->slug) ?: explode(',', $this->slug);
+    if (in_array($typenow, $slugs)) {
+      $theme_fields = new Theme_fields();
+      return $theme_fields->footer_script();
+    }
   }
 
   public function fields($fields = [])
   {
-    $this->menus      = $fields;
     $this->fields     = $fields['fields'];
-    $this->title      = $this->menus['title'] ?: __('主题设置', 'example-text');
-    $this->escription = $this->menus['escription'] ?: '';
-    $this->capability = $this->menus['capability'] ?: 'manage_options';
-    $this->slug       = $this->menus['slug'] ?: 'theme-options';
-    $this->icon       = $this->menus['icon'] ?: 'dashicons-admin-settings';
-    $this->position   = $this->menus['position'] ?: 99;
+    $this->title      = $fields['title'] ?: __('主题设置', 'example-text');
+    $this->escription = $fields['escription'] ?: '';
+    $this->capability = $fields['capability'] ?: 'manage_options';
+    $this->slug       = $fields['slug'] ?: 'theme-options';
+    $this->icon       = $fields['icon'] ?: 'dashicons-admin-settings';
+    $this->position   = $fields['position'] ?: 99;
   }
 
-  public function options_create_settings()
+  public function option_create_settings()
   {
     add_menu_page($this->title, $this->title, $this->capability, $this->slug, [$this, 'settings_content'], $this->icon, $this->position);
   }
@@ -66,12 +81,12 @@ class Theme_Options
 <?php
   }
 
-  public function options_setup_sections()
+  public function option_setup_sections()
   {
     add_settings_section($this->slug, $this->escription, [], $this->slug);
   }
 
-  public function options_setup_fields()
+  public function option_setup_fields()
   {
     $fields = $this->fields;
     if ($fields) {
@@ -81,6 +96,7 @@ class Theme_Options
       }
     }
   }
+
   public function field_callback($field)
   {
     $theme_fields = new Theme_fields();

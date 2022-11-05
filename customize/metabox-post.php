@@ -18,15 +18,31 @@ class MetaBoxPost
    */
   public function __construct()
   {
-    add_action('add_meta_boxes', [$this, 'metabox_add_boxes']);
-    add_action('admin_footer', [$this, 'metabox_media_fields']);
-    add_action('save_post', [$this, 'metabox_save_fields']);
+    add_action('add_meta_boxes', [$this, 'meta_post_add_boxes']);
+
+    add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
+    add_action('admin_footer', [$this, 'meta_post_footer_scripts']);
+
+    add_action('save_post', [$this, 'meta_post_save_fields']);
   }
 
-  public function metabox_media_fields()
+  public function meta_post_enqueue_scripts()
   {
-    $theme_fields = new Theme_fields();
-    return $theme_fields->media_script();
+    global $typenow;
+    if (in_array($typenow, $this->screens)) {
+      wp_enqueue_media();
+      wp_enqueue_script('wp-color-picker');
+      wp_enqueue_style('wp-color-picker');
+    }
+  }
+
+  public function meta_post_footer_scripts()
+  {
+    global $typenow;
+    if (in_array($typenow, $this->screens)) {
+      $theme_fields = new Theme_fields();
+      return $theme_fields->footer_script();
+    }
   }
 
   public function fields($fields = [])
@@ -35,14 +51,14 @@ class MetaBoxPost
     $this->fields   = $fields['fields'];
     $this->id       = $this->menus['meta_id'] ?: 'metabox';
     $this->title    = $this->menus['title'] ?: __('元框', 'example-text');
-    $this->screen   = $this->menus['screen'] ?: ['post'];
+    $this->screens  = $this->menus['screen'] ?: ['post'];
     $this->context  = $this->menus['context'] ?: 'advanced';
     $this->priority = $this->menus['priority'] ?: 'high';
   }
 
-  public function metabox_add_boxes()
+  public function meta_post_add_boxes()
   {
-    foreach ($this->screen as $single_screen) {
+    foreach ($this->screens as $single_screen) {
       add_meta_box(
         $this->id,
         $this->title,
@@ -129,7 +145,7 @@ class MetaBoxPost
     return '<tr><th>' . $label . '</th><td>' . $input . '</td></tr>';
   }
 
-  public function metabox_save_fields($post_id)
+  public function meta_post_save_fields($post_id)
   {
     if (!isset($_POST['meta_post_nonce']))
       return $post_id;
@@ -139,8 +155,11 @@ class MetaBoxPost
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
       return $post_id;
     foreach ($this->fields as $field) {
-      if (isset($_POST[$field['id']])) {
+      if (isset($_POST[$field['id']]) && $_POST[$field['id']] !== '') {
         switch ($field['type']) {
+          case 'url':
+            $_POST[$field['id']] = sanitize_url($_POST[$field['id']]);
+            break;
           case 'email':
             $_POST[$field['id']] = sanitize_email($_POST[$field['id']]);
             break;
@@ -149,8 +168,10 @@ class MetaBoxPost
             break;
         }
         update_post_meta($post_id, $field['id'], $_POST[$field['id']]);
-      } else if ($field['type'] === 'checkbox') {
+      } elseif ($field['type'] === 'checkbox') {
         update_post_meta($post_id, $field['id'], '0');
+      } else {
+        delete_post_meta($post_id, $field['id'], $_POST[$field['id']]);
       }
     }
   }

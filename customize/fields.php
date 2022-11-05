@@ -3,19 +3,7 @@
 class Theme_Fields
 {
 
-  function text($field, $value, $placeholder)
-  {
-    $input = sprintf(
-      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" %5$s/>',
-      $field['id'],
-      $field['type'],
-      $placeholder,
-      $value,
-      $field['type'] !== 'color' ? 'style="min-width: 32%;"' : '',
-    );
-    return $input;
-  }
-
+  // 多行文本
   function textarea($field, $value, $placeholder)
   {
     $input = sprintf(
@@ -27,58 +15,95 @@ class Theme_Fields
     return $input;
   }
 
-  function categories($field, $value)
-  {
-    $input = wp_dropdown_categories([
-      'selected'         => $value,
-      'hide_empty'       => 0,
-      'echo'             => 0,
-      'name'             => $field['id'],
-      'id'               => $field['id'],
-      'show_option_none' => __('选择分类', 'example-text'),
-      'taxonomy'         => $field['taxonomy'] ?: 'category',
-    ]);
-    return $input;
-  }
-
-  function pages($field, $value)
-  {
-    $input = wp_dropdown_pages([
-      'selected'         => $value,
-      'echo'             => 0,
-      'name'             => $field['id'],
-      'id'               => $field['id'],
-      'show_option_none' => __('选择页面', 'example-text'),
-    ]);
-    return $input;
-  }
-
-  function users($field, $value)
-  {
-    $input = wp_dropdown_users([
-      'selected'         => $value,
-      'echo'             => 0,
-      'name'             => $field['id'],
-      'id'               => $field['id'],
-      'show_option_none' => __('选择用户', 'example-text'),
-    ]);
-    return $input;
-  }
-
-  function checkbox($field, $value)
+  // 文本
+  function text($field, $value, $placeholder)
   {
     $input = sprintf(
-      '<input %s id=" %s" name="%s" type="checkbox" value="1">',
-      $value === '1' ? 'checked' : '',
+      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" %5$s/>',
       $field['id'],
-      $field['id']
+      $field['type'],
+      $placeholder,
+      $value,
+      $field['type'] === 'color' ? 'class="text-color-picker" hidden' : 'style="min-width: 32%;"',
     );
     return $input;
   }
 
+  // 选框
+  function checkbox($field, $value)
+  {
+    $input = sprintf(
+      '<input id="%1$s" name="%1$s" %2$s type="checkbox" value="1">',
+      $field['id'],
+      $value === '1' ? 'checked' : '',
+    );
+    return $input;
+  }
+
+  // 页面
+  function pages($field, $value)
+  {
+    $input = wp_dropdown_pages([
+      'show_option_none' => __('选择页面', 'example-text'),
+      'id'               => $field['id'],
+      'name'             => $field['id'],
+      'selected'         => $value,
+      'echo'             => 0,
+    ]);
+    return $input;
+  }
+
+  // 用户
+  function users($field, $value)
+  {
+    $input = wp_dropdown_users([
+      'show_option_none' => __('选择用户', 'example-text'),
+      'id'               => $field['id'],
+      'name'             => $field['id'],
+      'selected'         => $value,
+      'echo'             => 0,
+    ]);
+    return $input;
+  }
+
+  // 分类
+  function categories($field, $value)
+  {
+    $input = wp_dropdown_categories([
+      'show_option_none' => __('选择分类', 'example-text'),
+      'id'               => $field['id'],
+      'name'             => $field['id'],
+      'selected'         => $value,
+      'taxonomy'         => $field['taxonomy'] ?: 'category',
+      'hide_empty'       => 0,
+      'echo'             => 0,
+    ]);
+    return $input;
+  }
+
+  // 下拉框
+  function selects($field, $value)
+  {
+    $input = sprintf(
+      '<select name="%1$s" id="%1$s">',
+      $field['id'],
+    );
+    foreach ($field['options'] as $key => $label) {
+      $input .= sprintf(
+        '<option value="%s" %s>%s</option>',
+        $key,
+        selected($value, $key, false),
+        $label
+      );
+    }
+    $input .= '</select>';
+    return $input;
+  }
+
+  // 单选
   function radio($field, $value)
   {
-    $input = '<fieldset>';
+    $input    = '<fieldset>';
     $iterator = 0;
     foreach ($field['options'] as $key => $label) {
       $iterator++;
@@ -96,43 +121,7 @@ class Theme_Fields
     return $input;
   }
 
-  function selects($field, $value)
-  {
-    if ($field['type'] === 'multiselect') {
-      $attr = ' multiple="multiple" ';
-    }
-    $input = sprintf(
-      '<select name="%1$s" id="%1$s" %2$s>',
-      $field['id'],
-      $attr,
-    );
-    foreach ($field['options'] as $key => $label) {
-      $input .= sprintf(
-        '<option value="%s" %s>%s</option>',
-        $key,
-        selected($value, $key, false),
-        $label
-      );
-    }
-    $input .= '</select>';
-    return $input;
-  }
-
-  function wysiwyg($field, $value)
-  {
-    ob_start();
-    wp_editor($value, $field['id'], [
-      'textarea_name' => $field['id'],
-      'textarea_rows' => $field['rows'] ? $field['rows'] : 5,
-      'media_buttons' => $field['media_buttons'] ? true : false,
-      'quicktags'     => $field['quicktags'] ? true : false,
-      'teeny'         => $field['teeny'] ? true : false,
-    ]);
-    $input = ob_get_contents();
-    ob_end_clean();
-    return $input;
-  }
-
+  // 媒体
   function media($field, $value)
   {
     $meta_url = '';
@@ -153,10 +142,10 @@ class Theme_Fields
     return $input;
   }
 
-  function media_script()
+  function footer_script()
   {
 ?>
-    <script>
+    <script class="footer_scripts">
       jQuery(document).ready(function($) {
         if (typeof wp.media !== 'undefined') {
           var _custom_media = true,
@@ -190,8 +179,25 @@ class Theme_Fields
             parent.find('div').css('background-image', 'url()');
           });
         }
+        $('.text-color-picker').wpColorPicker();
       });
     </script>
 <?php
+  }
+
+  // 文本编辑器
+  function wysiwyg($field, $value)
+  {
+    ob_start();
+    wp_editor($value, $field['id'], [
+      'textarea_name' => $field['id'],
+      'textarea_rows' => $field['rows'] ? $field['rows'] : 5,
+      'media_buttons' => $field['media_buttons'] ? true : false,
+      'quicktags'     => $field['quicktags'] ? true : false,
+      'teeny'         => $field['teeny'] ? true : false,
+    ]);
+    $input = ob_get_contents();
+    ob_end_clean();
+    return $input;
   }
 }
