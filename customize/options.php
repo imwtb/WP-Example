@@ -99,8 +99,9 @@ class Theme_Options
 
   public function field_callback($field)
   {
-    $theme_fields = new Theme_fields();
+    $input        = '';
     $placeholder  = '';
+    $theme_fields = new Theme_fields();
     $value        = get_option($field['id']);
     if (empty($value)) {
       if (isset($field['default'])) {
@@ -112,46 +113,60 @@ class Theme_Options
     }
     switch ($field['type']) {
 
-      case 'media':
-        printf('%s', $theme_fields->media($field, $value));
+      case 'textarea':
+        $input = $theme_fields->textarea($field, $value, $placeholder);
         break;
 
-      case 'categories':
-        printf('%s', $theme_fields->categories($field, $value));
-        break;
-
-      case 'pages':
-        printf('%s', $theme_fields->pages($field, $value));
-        break;
-
-      case 'users':
-        printf('%s', $theme_fields->users($field, $value));
+      case 'range':
+      case 'number':
+      case 'month':
+      case 'date':
+      case 'week':
+      case 'time':
+        $input = $theme_fields->text_minmax($field, $value, $placeholder);
         break;
 
       case 'checkbox':
-        printf('%s', $theme_fields->checkbox($field, $value));
+        $input = $theme_fields->checkbox($field, $value);
+        break;
+
+      case 'pages':
+        $input = $theme_fields->pages($field, $value);
+        break;
+
+      case 'users':
+        $input = $theme_fields->users($field, $value);
+        break;
+
+      case 'categories':
+        $input = $theme_fields->categories($field, $value);
         break;
 
       case 'select':
-      case 'multiselect':
-        printf('%s', $theme_fields->selects($field, $value));
+        $input = $theme_fields->selects($field, $value);
         break;
 
       case 'radio':
-        printf('%s', $theme_fields->radio($field, $value));
+        $input = $theme_fields->radio($field, $value);
+        break;
+
+      case 'file':
+        $input = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
+        break;
+
+      case 'image':
+        $input = $theme_fields->image($field, $value) . $theme_fields->button($field);
         break;
 
       case 'wysiwyg':
-        printf('%s', $theme_fields->wysiwyg($field, $value));
-        break;
-
-      case 'textarea':
-        printf('%s', $theme_fields->textarea($field, $value, $placeholder));
+        $input = $theme_fields->wysiwyg($field, $value);
         break;
 
       default:
-        printf('%s', $theme_fields->text($field, $value, $placeholder));
+        $input = $theme_fields->text($field, $value, $placeholder);
     }
+    echo $input;
+
     if (isset($field['desc'])) {
       if ($desc = $field['desc']) {
         printf('<p class="description">%s </p>', $desc);

@@ -152,7 +152,7 @@ class Title_Widget extends WP_Widget
           $output .= '</p>';
           break;
 
-        case 'media':
+        case 'image':
           $media_url = '';
           if ($widget_value) {
             $media_url = wp_get_attachment_url($widget_value);

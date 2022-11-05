@@ -7,7 +7,7 @@ class Theme_Fields
   function textarea($field, $value, $placeholder)
   {
     $input = sprintf(
-      '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>',
+      '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50" style="min-width:64%%;">%3$s</textarea>',
       $field['id'],
       $placeholder,
       $value
@@ -19,12 +19,28 @@ class Theme_Fields
   function text($field, $value, $placeholder)
   {
     $input = sprintf(
-      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" %5$s/>',
+      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" %5$s />',
       $field['id'],
       $field['type'],
       $placeholder,
       $value,
-      $field['type'] === 'color' ? 'class="text-color-picker" hidden' : 'style="min-width: 32%;"',
+      $field['type'] == 'color' ? 'class="text-color-picker" style="display:none;"' : 'style="min-width:64%;"',
+    );
+    return $input;
+  }
+
+  // 滑块
+  function text_minmax($field, $value, $placeholder)
+  {
+    $input = sprintf(
+      '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" %5$s %6$s %7$s />',
+      $field['id'],
+      $field['type'],
+      $placeholder,
+      $value,
+      $field['max'] ? 'max="' . $field['max'] . '"' : '',
+      $field['min'] ? 'min="' . $field['min'] . '"' : '',
+      $field['step'] ? 'step="' . $field['step'] . '"' : '',
     );
     return $input;
   }
@@ -33,9 +49,10 @@ class Theme_Fields
   function checkbox($field, $value)
   {
     $input = sprintf(
-      '<input id="%1$s" name="%1$s" %2$s type="checkbox" value="1">',
+      '<label><input id="%1$s" name="%1$s" %2$s type="checkbox" value="1" />%3$s</label>',
       $field['id'],
-      $value === '1' ? 'checked' : '',
+      checked($value, 1, false),
+      $field['label'],
     );
     return $input;
   }
@@ -90,7 +107,7 @@ class Theme_Fields
     );
     foreach ($field['options'] as $key => $label) {
       $input .= sprintf(
-        '<option value="%s" %s>%s</option>',
+        '<option value="%1$s" %2$s>%3$s</option>',
         $key,
         selected($value, $key, false),
         $label
@@ -108,7 +125,7 @@ class Theme_Fields
     foreach ($field['options'] as $key => $label) {
       $iterator++;
       $input .= sprintf(
-        '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>',
+        '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s" type="%2$s" value="%3$s" %4$s /> %5$s</label>&nbsp;&nbsp;&nbsp;&nbsp;',
         $field['id'],
         $field['type'],
         $key,
@@ -121,8 +138,8 @@ class Theme_Fields
     return $input;
   }
 
-  // 媒体
-  function media($field, $value)
+  // 文件
+  function file($field, $value, $placeholder)
   {
     $meta_url = '';
     if ($value) {
@@ -133,11 +150,42 @@ class Theme_Fields
       }
     }
     $input = sprintf(
-      '<input style="display:none;" id="%1$s" name="%1$s" type="text" value="%2$s" data-return="%3$s"><div id="preview%1$s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%4$s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div><span><input style="width: 19%%;margin-right:5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="width: 19%%;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></span>',
+      '<input name="%1$s" id="%1$s" type="text" placeholder="%3$s" value="%2$s" data-return="%4$s" />',
+      $field['id'],
+      $meta_url,
+      $placeholder,
+      $field['returnvalue'],
+    );
+    return $input;
+  }
+
+  // 图片
+  function image($field, $value)
+  {
+    $meta_url = '';
+    if ($value) {
+      if ($field['returnvalue'] == 'url') {
+        $meta_url = $value;
+      } else {
+        $meta_url = wp_get_attachment_url($value);
+      }
+    }
+    $input = sprintf(
+      '<input style="display:none;" id="%1$s" name="%1$s" type="text" value="%2$s" data-return="%3$s" /><div id="preview%1$s" style="margin-right:10px;border:1px solid #e2e4e7;background-color:#fafafa;display:inline-block;width: 100px;height:100px;background-image:url(%4$s);background-size:cover;background-repeat:no-repeat;background-position:center;"></div>',
       $field['id'],
       $value,
       $field['returnvalue'],
       $meta_url,
+    );
+    return $input;
+  }
+
+  // 添加删除按钮
+  function button($field)
+  {
+    $input = sprintf(
+      '<span><input style="margin:0px 5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="margin:0px 5px;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></span>',
+      $field['id']
     );
     return $input;
   }
@@ -179,6 +227,7 @@ class Theme_Fields
             parent.find('div').css('background-image', 'url()');
           });
         }
+
         $('.text-color-picker').wpColorPicker();
       });
     </script>

@@ -95,12 +95,21 @@ class MetaBoxPost
       }
       switch ($field['type']) {
 
-        case 'media':
-          $input = $theme_fields->media($field, $value);
+        case 'textarea':
+          $input = $theme_fields->textarea($field, $value, $placeholder);
           break;
 
-        case 'categories':
-          $input = $theme_fields->categories($field, $value);
+        case 'range':
+        case 'number':
+        case 'month':
+        case 'date':
+        case 'week':
+        case 'time':
+          $input = $theme_fields->text_minmax($field, $value, $placeholder);
+          break;
+
+        case 'checkbox':
+          $input = $theme_fields->checkbox($field, $value);
           break;
 
         case 'pages':
@@ -111,12 +120,11 @@ class MetaBoxPost
           $input = $theme_fields->users($field, $value);
           break;
 
-        case 'checkbox':
-          $input = $theme_fields->checkbox($field, $value);
+        case 'categories':
+          $input = $theme_fields->categories($field, $value);
           break;
 
         case 'select':
-        case 'multiselect':
           $input = $theme_fields->selects($field, $value);
           break;
 
@@ -124,12 +132,16 @@ class MetaBoxPost
           $input = $theme_fields->radio($field, $value);
           break;
 
-        case 'wysiwyg':
-          $input = $theme_fields->wysiwyg($field, $value);
+        case 'file':
+          $input = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
           break;
 
-        case 'textarea':
-          $input = $theme_fields->textarea($field, $value, $placeholder);
+        case 'image':
+          $input = $theme_fields->image($field, $value) . $theme_fields->button($field);
+          break;
+
+        case 'wysiwyg':
+          $input = $theme_fields->wysiwyg($field, $value);
           break;
 
         default:
@@ -155,7 +167,7 @@ class MetaBoxPost
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
       return $post_id;
     foreach ($this->fields as $field) {
-      if (isset($_POST[$field['id']]) && $_POST[$field['id']] !== '') {
+      if (!empty($_POST[$field['id']]) && $_POST[$field['id']] !== '' && $_POST[$field['id']] !== '-1') {
         switch ($field['type']) {
           case 'url':
             $_POST[$field['id']] = sanitize_url($_POST[$field['id']]);
@@ -163,15 +175,14 @@ class MetaBoxPost
           case 'email':
             $_POST[$field['id']] = sanitize_email($_POST[$field['id']]);
             break;
-          case 'text':
+          default:
             $_POST[$field['id']] = sanitize_text_field($_POST[$field['id']]);
-            break;
         }
         update_post_meta($post_id, $field['id'], $_POST[$field['id']]);
-      } elseif ($field['type'] === 'checkbox') {
-        update_post_meta($post_id, $field['id'], '0');
+      } elseif ($field['type'] === 'checkbox' && $_POST[$field['id']] != 0) {
+        update_post_meta($post_id, $field['id'], 0);
       } else {
-        delete_post_meta($post_id, $field['id'], $_POST[$field['id']]);
+        delete_post_meta($post_id, $field['id']);
       }
     }
   }

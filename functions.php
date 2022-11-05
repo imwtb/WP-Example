@@ -207,16 +207,20 @@ $meta_tax = new MetaBoxTax();
 require_once get_template_directory() . '/customize/metabox-post.php';
 $meta_post = new MetaBoxPost();
 
-$meta_post->fields([
+/* $meta_post->fields([
 
   // textarea
   // text
   // - - email
   // - - url
-  // - - number
   // - - tel
   // - - password
+  // - - color
+  // - - range
+  // - - number
+  // - - month
   // - - date
+  // - - week
   // - - time
   // - checkbox
   // - pages
@@ -224,16 +228,11 @@ $meta_post->fields([
   // - categories ['taxonomy' => ['category']]
   // select
   // radio
-  // media ['returnvalue' => 'id' or 'returnvalue' => 'url']
-  //
+  // file ['returnvalue' => 'id' or 'returnvalue' => 'url']
+  // image ['returnvalue' => 'id' or 'returnvalue' => 'url']
   // wp_editor
 
   'fields' => [
-    [
-      'label' => __('多行文本', 'example-text'),
-      'id'    => 'color_id',
-      'type'  => 'color',
-    ],
     [
       'label' => __('多行文本', 'example-text'),
       'id'    => 'textarea_id',
@@ -245,9 +244,17 @@ $meta_post->fields([
       'type'  => 'text',
     ],
     [
-      'label' => __('网站', 'example-text'),
-      'id'    => 'url_id',
-      'type'  => 'url',
+      'label' => __('颜色', 'example-text'),
+      'id'    => 'color_id',
+      'type'  => 'color',
+    ],
+    [
+      'label' => __('滑块', 'example-text'),
+      'id'    => 'range_id',
+      'type'  => 'range',
+      'max'   => '10',
+      'min'   => '1',
+      'step'  => '1',
     ],
     [
       'label' => __('选框', 'example-text'),
@@ -273,29 +280,35 @@ $meta_post->fields([
       'label'   => __('下拉框', 'example-text'),
       'id'      => 'select_id',
       'type'    => 'select',
-      'default' => '2',
+      'default' => '1',
       'options' => [
-        'one',
-        'two',
-        'other',
+        '下拉框1',
+        '下拉框2',
+        '下拉框3',
       ]
     ],
     [
       'label'   => __('单选', 'example-text'),
       'id'      => 'radio_id',
       'type'    => 'radio',
-      'default' => '2',
+      'default' => '1',
       'options' => [
-        'one',
-        'two',
-        'other',
+        '单选1',
+        '单选2',
+        '单选3',
       ]
     ],
     [
-      'label'       => __('媒体', 'example-text'),
-      'id'          => 'media_id',
-      'type'        => 'media',
-      'returnvalue' => 'id',
+      'label'       => __('文件', 'example-text'),
+      'id'          => 'file_id',
+      'type'        => 'file',
+      'returnvalue' => 'url',
+    ],
+    [
+      'label'       => __('图片', 'example-text'),
+      'id'          => 'image_id',
+      'type'        => 'image',
+      'returnvalue' => 'url',
     ],
     [
       'label'         => __('文本编辑器', 'example-text'),
@@ -307,4 +320,4 @@ $meta_post->fields([
       'teeny'         => false,
     ],
   ]
-]);
+]); */
