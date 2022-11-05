@@ -2,24 +2,27 @@
 
 require_once get_template_directory() . '/customize/fields.php';
 
+// Meta Box Class: MetaBoxTax
+// Get the field value: $metavalue = get_term_meta( $post_id, $field_id, true );
 class MetaBoxTax
 {
 
   public function __construct()
   {
     if (is_admin()) {
-      foreach ($this->terms as $value) {
-        add_action($value . '_add_form_fields', [$this, 'create_fields'], 10, 2);
-        add_action($value . '_edit_form_fields', [$this, 'edit_fields'],  10, 2);
-        add_action('created_' . $value, [$this, 'save_fields'], 10, 1);
-        add_action('edited_' . $value,  [$this, 'save_fields'], 10, 1);
+      $terms = is_array($this->terms) ?: explode(',', $this->terms);
+      foreach ($terms as $value) {
+        add_action($value . '_add_form_fields', [$this, 'metabox_create_fields'], 10, 2);
+        add_action($value . '_edit_form_fields', [$this, 'metabox_edit_fields'],  10, 2);
+        add_action('created_' . $value, [$this, 'metabox_save_fields'], 10, 1);
+        add_action('edited_' . $value,  [$this, 'metabox_save_fields'], 10, 1);
       }
-      add_action('admin_footer', [$this, 'media_fields']);
+      add_action('admin_footer', [$this, 'metabox_media_fields']);
       add_action('admin_enqueue_scripts', 'wp_enqueue_media');
     }
   }
 
-  public function media_fields()
+  public function metabox_media_fields()
   {
     $theme_fields = new Theme_fields();
     return $theme_fields->media_script();
@@ -27,12 +30,11 @@ class MetaBoxTax
 
   public function fields($fields = [])
   {
-    $this->term   = $fields['term'] ?: 'category';
-    $this->terms  = is_array($this->term) ?: explode(',', $this->term);
+    $this->terms  = $fields['term'] ?: 'category';
     $this->fields = $fields['fields'];
   }
 
-  public function create_fields($taxonomy)
+  public function metabox_create_fields($taxonomy)
   {
     $output      = '';
     $placeholder = '';
@@ -55,7 +57,7 @@ class MetaBoxTax
     }
     echo $output;
   }
-  public function edit_fields($term, $taxonomy)
+  public function metabox_edit_fields($term, $taxonomy)
   {
     $output       = '';
     $placeholder  = '';
@@ -121,7 +123,7 @@ class MetaBoxTax
   {
     return '<tr class="form-field"><th>' . $label . '</th><td>' . $input . '</td></tr>';
   }
-  public function save_fields($term_id)
+  public function metabox_save_fields($term_id)
   {
     foreach ($this->fields as $field) {
       if (isset($_POST[$field['id']])) {

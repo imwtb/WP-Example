@@ -2,7 +2,7 @@
 
 require_once get_template_directory() . '/customize/fields.php';
 
-// Settings Page: options
+// Settings Page: theme-options
 // Retrieving values: get_option( 'your_field_id' )
 class Theme_Options
 {
@@ -18,14 +18,14 @@ class Theme_Options
    */
   public function __construct()
   {
-    add_action('admin_menu', [$this, 'create_settings']);
-    add_action('admin_init', [$this, 'setup_sections']);
-    add_action('admin_init', [$this, 'setup_fields']);
-    add_action('admin_footer', [$this, 'media_fields']);
+    add_action('admin_menu', [$this, 'options_create_settings']);
+    add_action('admin_init', [$this, 'options_setup_sections']);
+    add_action('admin_init', [$this, 'options_setup_fields']);
+    add_action('admin_footer', [$this, 'options_media_fields']);
     add_action('admin_enqueue_scripts', 'wp_enqueue_media');
   }
 
-  public function media_script()
+  public function options_media_fields()
   {
     $theme_fields = new Theme_fields();
     return $theme_fields->media_script();
@@ -43,7 +43,7 @@ class Theme_Options
     $this->position   = $this->menus['position'] ?: 99;
   }
 
-  public function create_settings()
+  public function options_create_settings()
   {
     add_menu_page($this->title, $this->title, $this->capability, $this->slug, [$this, 'settings_content'], $this->icon, $this->position);
   }
@@ -65,16 +65,19 @@ class Theme_Options
 <?php
   }
 
-  public function setup_sections()
+  public function options_setup_sections()
   {
     add_settings_section($this->slug, $this->escription, [], $this->slug);
   }
 
-  public function setup_fields()
+  public function options_setup_fields()
   {
-    foreach ($this->fields as $field) {
-      add_settings_field($field['id'], $field['label'], [$this, 'field_callback'], $this->slug, $this->slug, $field);
-      register_setting($this->slug, $field['id']);
+    $fields = $this->fields;
+    if ($fields) {
+      foreach ($fields as $field) {
+        add_settings_field($field['id'], $field['label'], [$this, 'field_callback'], $this->slug, $this->slug, $field);
+        register_setting($this->slug, $field['id']);
+      }
     }
   }
   public function field_callback($field)

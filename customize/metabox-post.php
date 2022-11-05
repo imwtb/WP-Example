@@ -18,12 +18,12 @@ class MetaBoxPost
    */
   public function __construct()
   {
-    add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
-    add_action('admin_footer', array($this, 'media_fields'));
-    add_action('save_post', array($this, 'save_fields'));
+    add_action('add_meta_boxes', [$this, 'metabox_add_boxes']);
+    add_action('admin_footer', [$this, 'metabox_media_fields']);
+    add_action('save_post', [$this, 'metabox_save_fields']);
   }
 
-  public function media_fields()
+  public function metabox_media_fields()
   {
     $theme_fields = new Theme_fields();
     return $theme_fields->media_script();
@@ -40,7 +40,7 @@ class MetaBoxPost
     $this->priority = $this->menus['priority'] ?: 'high';
   }
 
-  public function add_meta_boxes()
+  public function metabox_add_boxes()
   {
     foreach ($this->screen as $single_screen) {
       add_meta_box(
@@ -129,7 +129,7 @@ class MetaBoxPost
     return '<tr><th>' . $label . '</th><td>' . $input . '</td></tr>';
   }
 
-  public function save_fields($post_id)
+  public function metabox_save_fields($post_id)
   {
     if (!isset($_POST['Theme_nonce']))
       return $post_id;
