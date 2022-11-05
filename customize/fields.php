@@ -60,7 +60,7 @@ class Theme_Fields
       'echo'             => 0,
       'name'             => $field['id'],
       'id'               => $field['id'],
-      'show_option_none' => __('选择一个分类', 'example-text'),
+      'show_option_none' => __('选择分类', 'example-text'),
       'taxonomy'         => $field['taxonomy'] ?: 'category',
     ]);
     return $input;
@@ -73,7 +73,7 @@ class Theme_Fields
       'echo'             => 0,
       'name'             => $field['id'],
       'id'               => $field['id'],
-      'show_option_none' => __('选择一个页面', 'example-text'),
+      'show_option_none' => __('选择页面', 'example-text'),
     ]);
     return $input;
   }
@@ -85,7 +85,7 @@ class Theme_Fields
       'echo'             => 0,
       'name'             => $field['id'],
       'id'               => $field['id'],
-      'show_option_none' => __('选择一个用户', 'example-text'),
+      'show_option_none' => __('选择用户', 'example-text'),
     ]);
     return $input;
   }
