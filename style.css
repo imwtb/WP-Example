@@ -55,9 +55,27 @@ body { display: flex; flex-direction: column; }
 
 body.active { overflow: hidden; }
 
+header, footer, main { padding: 2rem; }
+
+header, footer { background: rgba(30, 30, 30, 0.1); }
+
 main { flex-grow: 1; }
 
+/*------------------------------ 导航 ------------------------------*/
+.topnav > ul { display: flex; align-items: center; gap: 2rem; }
+
+.topnav > ul li { list-style: none; display: inline-block; }
+
 /*------------------------------ 搜索表单 ------------------------------*/
+/*------------------------------ 面包屑 ------------------------------*/
+.breadcrumblist { padding: 0.5rem; background: rgba(30, 30, 30, 0.1); }
+
+.breadcrumblist ol { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+
+.breadcrumblist ol li { list-style: none; }
+
+.breadcrumblist ol li, .breadcrumblist ol li a { font-size: .875em; }
+
 /*------------------------------ 跳到内容 ------------------------------*/
 .screen-reader-text { position: absolute !important; width: 0.0625rem; height: 0.0625rem; overflow: hidden; border: 0; outline: 0; word-wrap: normal !important; word-break: normal; clip: rect(0.0625rem, 0.0625rem, 0.0625rem, 0.0625rem); clip-path: inset(50%); }
 

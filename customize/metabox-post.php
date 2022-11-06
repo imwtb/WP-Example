@@ -29,7 +29,8 @@ class MetaBoxPost
   public function meta_post_enqueue_scripts()
   {
     global $typenow;
-    if (in_array($typenow, $this->screens)) {
+    $screens = is_array($this->screens) ?: explode(',', $this->screens);
+    if (in_array($typenow, $screens)) {
       wp_enqueue_media();
       wp_enqueue_script('wp-color-picker');
       wp_enqueue_style('wp-color-picker');
@@ -39,7 +40,8 @@ class MetaBoxPost
   public function meta_post_footer_scripts()
   {
     global $typenow;
-    if (in_array($typenow, $this->screens)) {
+    $screens = is_array($this->screens) ?: explode(',', $this->screens);
+    if (in_array($typenow, $screens)) {
       $theme_fields = new Theme_fields();
       return $theme_fields->footer_script();
     }
@@ -51,19 +53,20 @@ class MetaBoxPost
     $this->fields   = $fields['fields'];
     $this->id       = $this->menus['meta_id'] ?: 'metabox';
     $this->title    = $this->menus['title'] ?: __('元框', 'example-text');
-    $this->screens  = $this->menus['screen'] ?: ['post'];
+    $this->screens  = $this->menus['screen'] ?: 'post';
     $this->context  = $this->menus['context'] ?: 'advanced';
     $this->priority = $this->menus['priority'] ?: 'high';
   }
 
   public function meta_post_add_boxes()
   {
-    foreach ($this->screens as $single_screen) {
+    $screens = is_array($this->screens) ?: explode(',', $this->screens);
+    foreach ($screens as $screen) {
       add_meta_box(
         $this->id,
         $this->title,
         [$this, 'meta_box_callback'],
-        $single_screen,
+        $screen,
         $this->context,
         $this->priority,
       );

@@ -6,39 +6,58 @@
 // 移除所有特色图像
 //delete_post_meta_by_key('_thumbnail_id');
 
-if (!isset($content_width)) $content_width = 768;
+if (!isset($content_width)) $content_width = 960;
 
 add_action('after_setup_theme', function () {
   load_theme_textdomain('example-text', get_template_directory() . '/languages');
-  // add_theme_support('post-formats', ['link', 'aside', 'gallery', 'image', 'quote', 'status', 'video', 'audio', 'chat']);
-  add_theme_support('html5', ['comment-list', 'comment-form', 'search-form', 'gallery', 'caption', 'style', 'script']);
-  add_theme_support('customize-selective-refresh-widgets');
-  add_theme_support('title-tag');
-  add_theme_support('custom-logo');
+  //add_theme_support('post-formats', ['aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat']);
   add_theme_support('post-thumbnails');
-  register_nav_menus(['primary' => __('主菜单', 'example-text'), 'secondary' => __('次级菜单', 'example-text')]);
+  //add_theme_support('custom-background');
+  //add_theme_support('custom-header');
+  add_theme_support('custom-logo');
+  //add_theme_support('automatic-feed-links');
+  add_theme_support('html5', ['comment-list', 'comment-form', 'search-form', 'gallery', 'caption', 'style', 'script']);
+  add_theme_support('title-tag');
+  add_theme_support('customize-selective-refresh-widgets');
+
+  /*----- Gutenberg -----*/
+  // @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/
+  //add_theme_support('wp-block-styles');
+  add_theme_support('align-wide');
+  //add_theme_support('editor-color-palette');
+  //add_theme_support('editor-gradient-presets');
+  //add_theme_support('editor-font-sizes');
+  add_theme_support('disable-custom-font-sizes');
+  //add_theme_support('disable-custom-colors');
+  //add_theme_support('disable-custom-gradients');
+  //add_theme_support('disable-layout-styles');
+  add_theme_support('custom-line-height');
+  add_theme_support('custom-units');
+  add_theme_support('custom-spacing');
+  add_theme_support('responsive-embeds');
+  //add_theme_support('editor-styles');
+  //add_editor_style('/assets/css/style-editor.css');
+  remove_theme_support('core-block-patterns');
 });
 
-// 禁止生成图片尺寸
-add_action('intermediate_image_sizes_advanced', function ($sizes) {
-  unset($sizes['thumbnail']);     // 150
-  // unset($sizes['medium']);        // 300
-  // unset($sizes['medium_large']);  // 768
-  // unset($sizes['large']);         // 1024
-  unset($sizes['1536x1536']);
-  unset($sizes['2048x2048']);
-  return $sizes;
-}, 10);
+// 注册菜单
+register_nav_menus([
+  'primary'   => __('主菜单', 'example-text'),
+  'secondary' => __('次级菜单', 'example-text')
+]);
 
 // 引入样式脚本
 add_action('wp_enqueue_scripts',  function () {
+
+  $version = wp_get_theme()->get('Version');
+
   wp_enqueue_style('style', get_stylesheet_uri(), [], filemtime(get_template_directory() . '/style.css'), 'all');
-  wp_enqueue_style('iconoir', get_template_directory_uri() . '/assets/css/iconoir.css', [], null, 'all');
+  wp_enqueue_style('iconoir', get_template_directory_uri() . '/assets/css/iconoir.css', [], '5.4', 'all');
 
   wp_enqueue_script('jquery');
-  wp_enqueue_script('qrcode.min', get_template_directory_uri() . '/assets/js/qrcode.min.js', [], null, true);
-  wp_enqueue_script('resizesensor.min', get_template_directory_uri() . '/assets/js/resizesensor.min.js', [], null, true);
-  wp_enqueue_script('stickysidebar.min', get_template_directory_uri() . '/assets/js/stickysidebar.min.js', [], null, true);
+  wp_enqueue_script('qrcode-min', get_template_directory_uri() . '/assets/js/qrcode.min.js', [], null, true);
+  wp_enqueue_script('resizesensor-min', get_template_directory_uri() . '/assets/js/resizesensor.min.js', [], '1.2.2', true);
+  wp_enqueue_script('stickysidebar-min', get_template_directory_uri() . '/assets/js/stickysidebar.min.js', [], '3.3.1', true);
   wp_enqueue_script('scripts', get_template_directory_uri() . '/assets/js/scripts.js', [], filemtime(get_template_directory() . '/assets/js/scripts.js'), true);
   if (is_singular() && comments_open() && get_option('thread_comments')) {
     wp_enqueue_script('comment-reply');
@@ -106,7 +125,7 @@ add_filter('get_the_archive_title', function ($title) {
   } elseif (is_tag()) {
     $title = single_tag_title('', false);
   } elseif (is_search()) {
-    $title = sprintf(esc_html__('搜索 %s 结果如下', 'example-text'), get_search_query());
+    $title = sprintf(esc_html__('搜索%s结果如下', 'example-text'), '<span>' . get_search_query() . '</span>');
   } elseif (is_author()) {
     $title = get_the_author();
   } elseif (is_year()) {
@@ -135,27 +154,24 @@ function delete_post_link($text = null, $before = '', $after = '', $id = 0, $cla
     return;
   }
   if (null === $text) {
-    $text = __('Delete This');
+    $text = esc_html__('删除', 'example-text');
   }
   $link = '<a class="' . esc_attr($class) . '" href="' . esc_url($url) . '">' . $text . '</a>';
   echo $before . apply_filters('delete_post_link', $link, $post->ID, $text) . $after;
 }
 
 // 添加维护模式
-/* function maintenance_mode()
-{
+/* add_action('get_header', function () {
   if (!current_user_can('edit_themes') || !is_user_logged_in()) {
     $logo            = 'https://www.itbulu.com';     // 请将此图片地址换为自己站点的 logo 图片地址
     $blogname        = get_bloginfo('name');
     $blogdescription = get_bloginfo('description');
     wp_die('<div style="text-align:center"><img src="' . $logo . '" alt="' . $blogname . '" /><br /><br />' . $blogname . '正在例行维护中，请稍候...</div>', '站点维护中 - ' . $blogname . ' - ' . $blogdescription, ['response' => '503']);
   }
-}
-add_action('get_header', 'maintenance_mode'); */
+}); */
 
 // 面板信息
-/* function add_admin_notices()
-{
+/* add_action('admin_notices', function () {
 ?>
   <div className="notice notice-success is-dismissible">
     <p><?php _e('这是success信息！', 'example-text'); ?></p>
@@ -170,9 +186,7 @@ add_action('get_header', 'maintenance_mode'); */
     <p><?php _e('这是info信息！', 'example-text'); ?></p>
   </div>
 <?php
-}
-
-add_action('admin_notices', 'add_admin_notices'); */
+}); */
 
 // 注册小工具
 add_action('widgets_init', function () {
@@ -191,7 +205,7 @@ require_once get_template_directory() . '/widgets/widget.php';
 
 // 引入一些文件
 require_once get_template_directory() . '/inc/optimize.php';
-require_once get_template_directory() . '/inc/schema-org.php';
+//require_once get_template_directory() . '/inc/schema-org.php';
 require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
   register_custom_post_type(__('产品', 'example-text'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);

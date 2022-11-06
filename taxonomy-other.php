@@ -10,6 +10,11 @@ $main_query = new WP_Query([
   'post__not_in'        => get_option('sticky_posts'),
   'posts_per_page'      => get_option('posts_per_page'),
   'paged'               => (get_query_var('paged')) ? get_query_var('paged') : 1,
+  'post_type'           => 'post',
+  'tax_query'           => [
+    'taxonomy' => 'taxonomys',
+    'terms'    => get_query_var('term'),
+  ],
 ]);
 if ($main_query->have_posts()) :
   while ($main_query->have_posts()) : $main_query->the_post();

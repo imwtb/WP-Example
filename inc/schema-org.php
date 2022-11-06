@@ -123,7 +123,7 @@ add_action('wp_head', function () {
 
 add_action('breadcrumblist', function () {
   if (!is_home() && !is_front_page()) {
-    echo '<nav class="breadcrumblist"><ul>';
+    echo '<nav class="breadcrumblist"><ol>';
     foreach (breadcrumblists() as $value) {
       if ($value['link'] == '#') {
         echo '<li>' . $value['title'] . '</li>';
@@ -131,7 +131,7 @@ add_action('breadcrumblist', function () {
         echo '<li><a href="' . $value['link'] . '">' . $value['title'] . '</a></li>';
       }
     }
-    echo '</ul></nav>';
+    echo '</ol></nav>';
   }
 }, 10, 3);
 
@@ -245,6 +245,11 @@ function breadcrumblists()
   } elseif (is_attachment()) {
     $list[] = [
       'title' => __('附件', 'example-text'),
+      'link'  => '#',
+    ];
+  } else {
+    $list[] = [
+      'title' => get_the_title(),
       'link'  => '#',
     ];
   }

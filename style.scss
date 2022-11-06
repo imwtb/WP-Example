@@ -177,11 +177,56 @@ body {
   }
 }
 
+header,
+footer,
+main {
+  padding: toRem(32px);
+}
+
+header,
+footer {
+  background: rgba($black, .1);
+}
+
 main {
   flex-grow: 1;
 }
 
+/*------------------------------ 导航 ------------------------------*/
+.topnav > ul {
+  display: flex;
+  align-items: center;
+  gap: toRem(32px);
+
+  li {
+    list-style: none;
+    display: inline-block;
+  }
+}
+
 /*------------------------------ 搜索表单 ------------------------------*/
+
+/*------------------------------ 面包屑 ------------------------------*/
+.breadcrumblist {
+  padding: toRem(8px);
+  background: rgba($black, .1);
+
+  ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: toRem(8px) toRem(24px);
+
+    li {
+      list-style: none;
+    }
+
+    li,
+    li a {
+      font-size: .875em;
+    }
+  }
+}
 
 /*------------------------------ 跳到内容 ------------------------------*/
 .screen-reader-text {
