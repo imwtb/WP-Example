@@ -95,7 +95,7 @@ function the_content_thumbnails()
   return $image;
 }
 
-function the_content_thumbnail($width = '300', $height = 'auto', $number = 1)
+function the_content_thumbnail($width = '768', $height = 'auto', $number = 1)
 {
   foreach (the_content_thumbnails() as $key => $value) {
     if ($key < $number) {
