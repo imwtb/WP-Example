@@ -1,21 +1,24 @@
 <?php $current_url = set_url_scheme('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>
 
 </main>
-<footer>
+<footer class="fooing">
 
-  <div id="qrcode"></div>
+  <div class="fooing__max max__1200">
+    <div id="qrcode"></div>
 
-  <?php
-  if (has_nav_menu('secondary')) {
-    wp_nav_menu([
-      'container'       => 'nav',
-      'container_class' => 'bottomnav',
-      'theme_location'  => 'secondary',
-    ]);
-  }
-  ?>
+    <?php
+    if (has_nav_menu('secondary')) {
+      wp_nav_menu([
+        'container'       => 'nav',
+        'container_class' => 'bottomnav',
+        'theme_location'  => 'secondary',
+      ]);
+    }
+    ?>
 
-  Copyright &copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> <a href="<?php echo esc_url('https://beian.miit.gov.cn/'); ?>"><?php esc_html_e('京ICP备2022018789号'); ?></a> <?php the_privacy_policy_link(); ?>
+    Copyright &copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> <a href="<?php echo esc_url('https://beian.miit.gov.cn/'); ?>"><?php esc_html_e('京ICP备2022018789号'); ?></a> <?php the_privacy_policy_link(); ?>
+  </div>
+
 </footer>
 
 <?php wp_footer(); ?>

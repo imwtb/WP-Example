@@ -192,7 +192,47 @@ main {
   flex-grow: 1;
 }
 
-/*------------------------------ 导航 ------------------------------*/
+.max {
+  &__1200 {
+    margin: 0 3vw;
+  }
+
+  @media screen and (min-width: #{$max1200}) {
+    &__1200 {
+      max-width: $max1200;
+      margin: 0 auto;
+    }
+  }
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: toRem(32px);
+
+  &__center {
+    flex: 1;
+  }
+
+  &__right {
+    background: rgba($black, .1);
+  }
+
+  @media screen and (min-width: #{$max1200}) {
+    &__right {
+      flex: 0 1 toRem(400px);
+    }
+  }
+}
+
+/*------------------------------ 头部 ------------------------------*/
+.heading {
+  &__max {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 .topnav > ul {
   display: flex;
   align-items: center;
@@ -201,6 +241,13 @@ main {
   li {
     list-style: none;
     display: inline-block;
+  }
+}
+
+/*------------------------------ 底部 ------------------------------*/
+.fooing {
+  &__max {
+    text-align: center;
   }
 }
 

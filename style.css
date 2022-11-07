@@ -61,10 +61,27 @@ header, footer { background: rgba(30, 30, 30, 0.1); }
 
 main { flex-grow: 1; }
 
-/*------------------------------ 导航 ------------------------------*/
+.max__1200 { margin: 0 3vw; }
+
+@media screen and (min-width: 75rem) { .max__1200 { max-width: 75rem; margin: 0 auto; } }
+
+.layout { display: flex; flex-wrap: wrap; gap: 2rem; }
+
+.layout__center { flex: 1; }
+
+.layout__right { background: rgba(30, 30, 30, 0.1); }
+
+@media screen and (min-width: 75rem) { .layout__right { flex: 0 1 25rem; } }
+
+/*------------------------------ 头部 ------------------------------*/
+.heading__max { display: flex; justify-content: space-between; }
+
 .topnav > ul { display: flex; align-items: center; gap: 2rem; }
 
 .topnav > ul li { list-style: none; display: inline-block; }
+
+/*------------------------------ 底部 ------------------------------*/
+.fooing__max { text-align: center; }
 
 /*------------------------------ 搜索表单 ------------------------------*/
 .search__form label { display: none; }
