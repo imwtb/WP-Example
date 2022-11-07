@@ -67,6 +67,8 @@ main { flex-grow: 1; }
 .topnav > ul li { list-style: none; display: inline-block; }
 
 /*------------------------------ 搜索表单 ------------------------------*/
+.search__form label { display: none; }
+
 /*------------------------------ 面包屑 ------------------------------*/
 .breadcrumblist { padding: 0.5rem; background: rgba(30, 30, 30, 0.1); }
 
