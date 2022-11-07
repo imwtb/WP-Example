@@ -19,11 +19,11 @@ class MetaBoxPost
   public function __construct()
   {
     add_action('add_meta_boxes', [$this, 'meta_post_add_boxes']);
+    add_action('save_post', [$this, 'meta_post_save_fields']);
 
     add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
     add_action('admin_footer', [$this, 'meta_post_footer_scripts']);
 
-    add_action('save_post', [$this, 'meta_post_save_fields']);
   }
 
   public function meta_post_enqueue_scripts()
@@ -51,11 +51,11 @@ class MetaBoxPost
   {
     $this->menus    = $fields;
     $this->fields   = $fields['fields'];
-    $this->id       = $this->menus['meta_id'] ?: 'metabox';
-    $this->title    = $this->menus['title'] ?: __('元框', 'example-text');
-    $this->screens  = $this->menus['screen'] ?: 'post';
-    $this->context  = $this->menus['context'] ?: 'advanced';
-    $this->priority = $this->menus['priority'] ?: 'high';
+    $this->id       = isset($this->menus['meta_id']) ?: 'metabox_id';
+    $this->title    = isset($this->menus['title']) ?: __('元框', 'example-text');
+    $this->screens  = isset($this->menus['screen']) ?: 'post';
+    $this->context  = isset($this->menus['context']) ?: 'advanced';
+    $this->priority = isset($this->menus['priority']) ?: 'high';
   }
 
   public function meta_post_add_boxes()
@@ -76,7 +76,7 @@ class MetaBoxPost
   public function meta_box_callback($post)
   {
     wp_nonce_field('meta_post_data', 'meta_post_nonce');
-    echo $this->menus['description'];
+    if (isset($this->menus['description'])) echo $this->menus['description'];
     $this->field_generator($post);
   }
 

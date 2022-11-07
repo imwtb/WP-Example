@@ -7,7 +7,7 @@ class Theme_Fields
   function textarea($field, $value, $placeholder)
   {
     $input = sprintf(
-      '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50" style="min-width:64%%;">%3$s</textarea>',
+      '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>',
       $field['id'],
       $placeholder,
       $value
@@ -24,7 +24,7 @@ class Theme_Fields
       $field['type'],
       $placeholder,
       $value,
-      $field['type'] == 'color' ? 'class="text-color-picker" style="display:none;"' : 'style="min-width:64%;"',
+      $field['type'] == 'color' ? 'class="text-color-picker" style="display:none;"' : '',
     );
     return $input;
   }
@@ -91,7 +91,7 @@ class Theme_Fields
       'id'               => $field['id'],
       'name'             => $field['id'],
       'selected'         => $value,
-      'taxonomy'         => $field['taxonomy'] ?: 'category',
+      'taxonomy'         => isset($field['taxonomy']) ?: ['category'],
       'hide_empty'       => 0,
       'echo'             => 0,
     ]);
@@ -240,10 +240,10 @@ class Theme_Fields
     ob_start();
     wp_editor($value, $field['id'], [
       'textarea_name' => $field['id'],
-      'textarea_rows' => $field['rows'] ? $field['rows'] : 5,
-      'media_buttons' => $field['media_buttons'] ? true : false,
-      'quicktags'     => $field['quicktags'] ? true : false,
-      'teeny'         => $field['teeny'] ? true : false,
+      'textarea_rows' => isset($field['rows']) ? $field['rows'] : 5,
+      'media_buttons' => isset($field['media_buttons']) ? true : false,
+      'quicktags'     => isset($field['quicktags']) ? true : false,
+      'teeny'         => isset($field['teeny']) ? true : false,
     ]);
     $input = ob_get_contents();
     ob_end_clean();

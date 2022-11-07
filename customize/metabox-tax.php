@@ -7,26 +7,26 @@ require_once get_template_directory() . '/customize/fields.php';
 class MetaBoxTax
 {
 
-  public function __construct()
+  public function __construct($terms = ['category'])
   {
+    $this->terms = is_array($terms) ? $terms : explode(',', $terms);
     if (is_admin()) {
-      $terms = is_array($this->terms) ?: explode(',', $this->terms);
-      foreach ($terms as $value) {
+      foreach ($this->terms as $value) {
         add_action($value . '_add_form_fields', [$this, 'meta_tax_create_fields'], 10, 2);
-        add_action($value . '_edit_form_fields', [$this, 'meta_tax_edit_fields'],  10, 2);
+        add_action($value . '_edit_form_fields', [$this, 'meta_tax_edit_fields'], 10, 2);
         add_action('created_' . $value, [$this, 'meta_tax_save_fields'], 10, 1);
-        add_action('edited_' . $value,  [$this, 'meta_tax_save_fields'], 10, 1);
+        add_action('edited_' . $value, [$this, 'meta_tax_save_fields'], 10, 1);
+
+        add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
+        add_action('admin_footer', [$this, 'metabox_footer_scripts']);
       }
-      add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
-      add_action('admin_footer', [$this, 'metabox_footer_scripts']);
     }
   }
 
   public function meta_post_enqueue_scripts()
   {
     global $typenow;
-    $terms = is_array($this->terms) ?: explode(',', $this->terms);
-    if (in_array($typenow,  $terms)) {
+    if (in_array($typenow, $this->terms)) {
       wp_enqueue_media();
       wp_enqueue_script('wp-color-picker');
       wp_enqueue_style('wp-color-picker');
@@ -36,8 +36,7 @@ class MetaBoxTax
   public function metabox_footer_scripts()
   {
     global $typenow;
-    $terms = is_array($this->terms) ?: explode(',', $this->terms);
-    if (in_array($typenow,  $terms)) {
+    if (in_array($typenow, $this->terms)) {
       $theme_fields = new Theme_fields();
       return $theme_fields->footer_script();
     }
@@ -45,26 +44,68 @@ class MetaBoxTax
 
   public function fields($fields = [])
   {
-    $this->terms  = $fields['term'] ?: 'category';
     $this->fields = $fields['fields'];
   }
 
   public function meta_tax_create_fields($taxonomy)
   {
-    $output      = '';
-    $placeholder = '';
+    $output       = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
-      $label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
-      if (empty($value)) {
-        if (isset($field['default'])) {
-          $value = $field['default'];
-        }
-        if (isset($field['placeholder'])) {
-          $placeholder = $field['placeholder'];
-        }
-      }
+      $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
+      $value       = isset($field['default']) ?: '';
+      $placeholder = isset($field['placeholder']) ?: '';
       switch ($field['type']) {
+
+        case 'textarea':
+          $input = $theme_fields->textarea($field, $value, $placeholder);
+          break;
+
+        case 'range':
+        case 'number':
+        case 'month':
+        case 'date':
+        case 'week':
+        case 'time':
+          $input = $theme_fields->text_minmax($field, $value, $placeholder);
+          break;
+
+        case 'checkbox':
+          $input = $theme_fields->checkbox($field, $value);
+          break;
+
+        case 'pages':
+          $input = $theme_fields->pages($field, $value);
+          break;
+
+        case 'users':
+          $input = $theme_fields->users($field, $value);
+          break;
+
+        case 'categories':
+          $input = $theme_fields->categories($field, $value);
+          break;
+
+        case 'select':
+          $input = $theme_fields->selects($field, $value);
+          break;
+
+        case 'radio':
+          $input = $theme_fields->radio($field, $value);
+          break;
+
+        case 'file':
+          $input = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
+          break;
+
+        case 'image':
+          $input = $theme_fields->image($field, $value) . $theme_fields->button($field);
+          break;
+
+        case 'wysiwyg':
+          $input = $theme_fields->wysiwyg($field, $value);
+          break;
+
         default:
           $input = $theme_fields->text($field, $value, $placeholder);
       }
@@ -76,19 +117,14 @@ class MetaBoxTax
   public function meta_tax_edit_fields($term, $taxonomy)
   {
     $output       = '';
-    $placeholder  = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
-      $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
-      $value       = get_term_meta($term->term_id, $field['id'], true);
+      $label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
+      $value = get_term_meta($term->term_id, $field['id'], true);
       if (empty($value)) {
-        if (isset($field['default'])) {
-          $value = $field['default'];
-        }
-        if (isset($field['placeholder'])) {
-          $placeholder = $field['placeholder'];
-        }
+        $value = isset($field['default']) ?: '';
       }
+      $placeholder = isset($field['placeholder']) ?: '';
       switch ($field['type']) {
 
         case 'textarea':

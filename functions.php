@@ -215,13 +215,13 @@ add_action('init', function () {
 }, 0);
 
 require_once get_template_directory() . '/customize/options.php';
-$theme_option = new Theme_Options();
+//$theme_option = new Theme_Options();
 require_once get_template_directory() . '/customize/metabox-tax.php';
-$meta_tax = new MetaBoxTax();
+//$meta_tax = new MetaBoxTax();
 require_once get_template_directory() . '/customize/metabox-post.php';
-$meta_post = new MetaBoxPost();
+//$meta_post = new MetaBoxPost();
 
-/* $meta_post->fields([
+/* $theme_option->fields([
 
   // textarea
   // text

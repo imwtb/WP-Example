@@ -19,12 +19,14 @@ class Theme_Options
    */
   public function __construct()
   {
-    add_action('admin_menu', [$this, 'option_create_settings']);
-    add_action('admin_init', [$this, 'option_setup_sections']);
-    add_action('admin_init', [$this, 'option_setup_fields']);
+    if (is_admin()) {
+      add_action('admin_menu', [$this, 'option_create_settings']);
+      add_action('admin_init', [$this, 'option_setup_sections']);
+      add_action('admin_init', [$this, 'option_setup_fields']);
 
-    add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
-    add_action('admin_footer', [$this, 'option_footer_scripts']);
+      add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
+      add_action('admin_footer', [$this, 'option_footer_scripts']);
+    }
   }
 
   public function meta_post_enqueue_scripts()
@@ -51,12 +53,12 @@ class Theme_Options
   public function fields($fields = [])
   {
     $this->fields     = $fields['fields'];
-    $this->title      = $fields['title'] ?: __('主题设置', 'example-text');
-    $this->escription = $fields['escription'] ?: '';
-    $this->capability = $fields['capability'] ?: 'manage_options';
-    $this->slug       = $fields['slug'] ?: 'theme-options';
-    $this->icon       = $fields['icon'] ?: 'dashicons-admin-settings';
-    $this->position   = $fields['position'] ?: 99;
+    $this->title      = isset($fields['title']) ?: __('主题设置', 'example-text');
+    $this->escription = isset($fields['escription']) ?: '';
+    $this->capability = isset($fields['capability']) ?: 'manage_options';
+    $this->slug       = isset($fields['slug']) ?: 'theme-options';
+    $this->icon       = isset($fields['icon']) ?: 'dashicons-admin-settings';
+    $this->position   = isset($fields['position']) ?: 99;
   }
 
   public function option_create_settings()
