@@ -7,7 +7,7 @@ Description: example
 Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: example-text
+Text Domain: imwtb
 Tags: example
 */
 
@@ -65,6 +65,7 @@ body {
   height: 100%;
   min-height: 100vh;
   font-size: 100%;
+  color: $black;
   line-height: 1.5;
 }
 
@@ -92,6 +93,7 @@ a {
 img {
   max-width: 100%;
   max-height: 100%;
+  height: auto;
   image-rendering: crisp-edges;
 }
 
@@ -129,7 +131,7 @@ input:not([type="color"], [type="file"]),
 textarea,
 select,
 button {
-  padding: toRem(8px);
+  padding: toRem(10px);
 }
 
 input:not([type="color"], [type="image"], [type="file"]),
@@ -137,6 +139,10 @@ textarea,
 select {
   border: toRem(1px) solid rgba($black, .3);
   border-radius: toRem(8px);
+
+  &::placeholder {
+    color: rgba($black, .5);
+  }
 }
 
 input {
@@ -177,13 +183,13 @@ body {
   }
 }
 
-header,
-footer {
-  background: rgba($black, .1);
-}
-
 main {
   flex-grow: 1;
+}
+
+.heading,
+.fooing {
+  background: rgba($black, .05);
 }
 
 .max {
@@ -209,6 +215,7 @@ main {
   }
 
   &__right {
+    flex: 0 1 100%;
     background: rgba($black, .1);
   }
 
@@ -257,6 +264,7 @@ main {
 
   &__catag a {
     display: inline-block;
+    margin: 0 toRem(8px) toRem(8px) 0;
     padding: toRem(4px) toRem(8px);
     font-size: .875em;
     color: rgba($black, .5);
@@ -267,27 +275,132 @@ main {
 /*------------------------------ 评论 ------------------------------*/
 .comment {
   &__title {
-    margin-bottom: toRem(24px);
+    margin-bottom: toRem(16px);
+
+    small {
+      margin-left: toRem(8px);
+    }
   }
 
-  &-respond {
+  &__respond {
     margin-bottom: toRem(32px);
   }
 
-  &-form {
+  &__form {
     display: flex;
     flex-wrap: wrap;
+    gap: toRem(8px);
 
-
+    textarea,
+    input {
+      font-size: .875em;
+    }
   }
 
-  &-notes,
-  &-form-cookies-consent {
+  &__notes,
+  &__comment,
+  &__cookies,
+  &__submit {
     flex: 0 1 100%;
   }
 
-  &-list {
+  &__comment,
+  &__author,
+  &__email,
+  &__url {
+
+    textarea,
+    input {
+      width: 100%;
+    }
+  }
+
+  &__comment textarea {
+    min-height: toRem(128px);
+  }
+
+  &__author,
+  &__email,
+  &__url {
+    flex: 1;
+  }
+
+  &__notes,
+  &__cookies label {
+    font-size: .875em;
+    color: rgba($black, .7);
+  }
+
+  &__notes span {
+    color: $red;
+  }
+
+  &__cookies label {
+    display: flex;
+    align-items: center;
+    gap: toRem(4px);
+    cursor: pointer;
+
+    input {
+      transform: translateY(toRemF(1px));
+    }
+  }
+
+  &__list {
     list-style: none;
+  }
+
+  &__body {
+    display: flex;
+    align-items: flex-start;
+    gap: toRem(8px);
+  }
+
+  &__vcard {
+    flex: 0 1 toRem(30px);
+    overflow: hidden;
+    border-radius: toRem(100px);
+  }
+
+  &__box {
+    flex: 1;
+  }
+
+  &__head a {
+    font-size: .875em;
+    color: rgba($black, .7);
+  }
+
+  &__foo {
+
+    > a,
+    > time,
+    > span {
+      margin-right: toRem(8px);
+      font-size: .75em;
+      color: rgba($black, .5);
+    }
+
+    span a {
+      padding: toRem(4px) toRem(8px);
+      color: rgba($base, .7);
+      background: rgba($base, .1);
+      border-radius: toRem(8px);
+
+      &:hover {
+        color: $base;
+      }
+    }
+  }
+
+  &__content {
+    margin: toRem(8px) 0;
+  }
+
+  @media screen and (min-width: #{$max576}) {
+    &__vcard {
+      flex: 0 1 toRem(40px);
+    }
   }
 }
 
@@ -298,12 +411,43 @@ main {
   }
 }
 
+/*------------------------------ 数字分页 ------------------------------*/
+.navigation {
+  margin-top: toRem(32px);
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: toRem(8px);
+
+    a,
+    span {
+      padding: toRem(8px) toRem(13.55px);
+      color: rgba($black, .5);
+      line-height: 1.25;
+      background: rgba($black, .05);
+      border-radius: toRem(8px);
+    }
+
+    a:hover,
+    .current {
+      color: $white;
+      background: $base;
+    }
+  }
+}
+
 /*------------------------------ 搜索表单 ------------------------------*/
 .search {
   &__form {
     label {
       display: none;
     }
+  }
+
+  &__field {
+    font-size: .875em;
   }
 }
 

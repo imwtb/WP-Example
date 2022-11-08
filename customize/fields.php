@@ -61,7 +61,7 @@ class Theme_Fields
   function pages($field, $value)
   {
     $input = wp_dropdown_pages([
-      'show_option_none' => __('选择页面', 'example-text'),
+      'show_option_none' => __('选择页面', 'imwtb'),
       'id'               => $field['id'],
       'name'             => $field['id'],
       'selected'         => $value,
@@ -74,7 +74,7 @@ class Theme_Fields
   function users($field, $value)
   {
     $input = wp_dropdown_users([
-      'show_option_none' => __('选择用户', 'example-text'),
+      'show_option_none' => __('选择用户', 'imwtb'),
       'id'               => $field['id'],
       'name'             => $field['id'],
       'selected'         => $value,
@@ -87,7 +87,7 @@ class Theme_Fields
   function categories($field, $value)
   {
     $input = wp_dropdown_categories([
-      'show_option_none' => __('选择分类', 'example-text'),
+      'show_option_none' => __('选择分类', 'imwtb'),
       'id'               => $field['id'],
       'name'             => $field['id'],
       'selected'         => $value,
@@ -184,7 +184,7 @@ class Theme_Fields
   function button($field)
   {
     $input = sprintf(
-      '<span><input style="margin:0px 5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . esc_html__('选择', 'example-text') . '" /><input style="margin:0px 5px;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . esc_html__('移除', 'example-text') . '" /></span>',
+      '<span><input style="margin:0px 5px;" class="button new-media" id="%1$s_button" name="%1$s_button" type="button" value="' . __('选择', 'imwtb') . '" /><input style="margin:0px 5px;" class="button remove-media" id="%1$s_buttonremove" name="%1$s_buttonremove" type="button" value="' . __('移除', 'imwtb') . '" /></span>',
       $field['id']
     );
     return $input;

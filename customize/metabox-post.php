@@ -52,7 +52,7 @@ class MetaBoxPost
     $this->menus    = $fields;
     $this->fields   = $fields['fields'];
     $this->id       = isset($this->menus['meta_id']) ?: 'metabox_id';
-    $this->title    = isset($this->menus['title']) ?: __('元框', 'example-text');
+    $this->title    = isset($this->menus['title']) ?: __('元框', 'imwtb');
     $this->screens  = isset($this->menus['screen']) ?: 'post';
     $this->context  = isset($this->menus['context']) ?: 'advanced';
     $this->priority = isset($this->menus['priority']) ?: 'high';

@@ -53,7 +53,7 @@ class Theme_Options
   public function fields($fields = [])
   {
     $this->fields     = $fields['fields'];
-    $this->title      = isset($fields['title']) ?: __('主题设置', 'example-text');
+    $this->title      = isset($fields['title']) ?: __('主题设置', 'imwtb');
     $this->escription = isset($fields['escription']) ?: '';
     $this->capability = isset($fields['capability']) ?: 'manage_options';
     $this->slug       = isset($fields['slug']) ?: 'theme-options';

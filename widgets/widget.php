@@ -7,7 +7,7 @@ class Title_Widget extends WP_Widget
   // Register widget with WordPress
   function __construct()
   {
-    parent::__construct('title_widget', esc_html__('自定义小工具', 'example-text'), ['description' => esc_html__('自定义小工具描述', 'example-text')]);
+    parent::__construct('title_widget', __('自定义小工具', 'imwtb'), ['description' => __('自定义小工具描述', 'imwtb')]);
     add_action('admin_footer', [$this, 'media_fields']);
     add_action('customize_controls_print_footer_scripts', [$this, 'media_fields']);
   }
@@ -27,7 +27,7 @@ class Title_Widget extends WP_Widget
       // tel
       // date
       [
-        'label'   => esc_html__('文本', 'example-text'),
+        'label'   => __('文本', 'imwtb'),
         'id'      => 'text_id',
         'type'    => 'text',
       ],
@@ -121,7 +121,7 @@ class Title_Widget extends WP_Widget
       if (isset($widget_field['default'])) {
         $default = $widget_field['default'];
       }
-      $widget_value = !empty($instance[$widget_field['id']]) ? $instance[$widget_field['id']] : esc_html__($default, 'Text-Domain');
+      $widget_value = !empty($instance[$widget_field['id']]) ? $instance[$widget_field['id']] : __($default, 'Text-Domain');
       switch ($widget_field['type']) {
         case 'textarea':
           $output .= '<p>';
@@ -178,7 +178,7 @@ class Title_Widget extends WP_Widget
 
   public function form($instance)
   {
-    $title = !empty($instance['title']) ? $instance['title'] : esc_html__('', 'Text-Domain');
+    $title = !empty($instance['title']) ? $instance['title'] : __('', 'Text-Domain');
   ?>
     <p>
       <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_attr_e('Title:', 'Text-Domain'); ?></label>

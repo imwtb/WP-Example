@@ -4,7 +4,7 @@
   <div class="layout__center">
 
     <?php
-    the_archive_title('<h2>', '</h2>' . edit_term_link(__('编辑', 'example-text'), '', '', get_query_var('cat'), false));
+    the_archive_title('<h2>', '</h2>' . edit_term_link(__('编辑', 'imwtb'), '', '', get_query_var('cat'), false));
     the_archive_description();
 
     $main_query = new WP_Query([

@@ -9,7 +9,7 @@
 if (!isset($content_width)) $content_width = 960;
 
 add_action('after_setup_theme', function () {
-  load_theme_textdomain('example-text', get_template_directory() . '/languages');
+  load_theme_textdomain('imwtb', get_template_directory() . '/languages');
   //add_theme_support('post-formats', ['aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat']);
   add_theme_support('post-thumbnails');
   //add_theme_support('custom-background');
@@ -42,8 +42,8 @@ add_action('after_setup_theme', function () {
 
 // 注册菜单
 register_nav_menus([
-  'primary'   => __('主菜单', 'example-text'),
-  'secondary' => __('次级菜单', 'example-text')
+  'primary'   => __('主菜单', 'imwtb'),
+  'secondary' => __('次级菜单', 'imwtb')
 ]);
 
 // 引入样式脚本
@@ -78,7 +78,7 @@ if (!function_exists('wp_body_open')) {
 
 // 跳到内容
 add_action('wp_body_open', function () {
-  echo '<a class="skip-link screen-reader-text" href="#content">' . __('跳到内容', 'example-text') . '</a>';
+  echo '<a class="skip-link screen-reader-text" href="#content">' . __('跳到内容', 'imwtb') . '</a>';
 }, 10, 3);
 
 // 文章内容图片
@@ -125,7 +125,7 @@ add_filter('get_the_archive_title', function ($title) {
   } elseif (is_tag()) {
     $title = single_tag_title('', false);
   } elseif (is_search()) {
-    $title = sprintf(esc_html__('搜索%s结果如下', 'example-text'), '<span>' . get_search_query() . '</span>');
+    $title = sprintf(__('搜索%s结果如下', 'imwtb'), '<span>' . get_search_query() . '</span>');
   } elseif (is_author()) {
     $title = get_the_author();
   } elseif (is_year()) {
@@ -154,7 +154,7 @@ function delete_post_link($text = null, $before = '', $after = '', $id = 0, $cla
     return;
   }
   if (null === $text) {
-    $text = esc_html__('删除', 'example-text');
+    $text = __('删除', 'imwtb');
   }
   $link = '<a class="' . esc_attr($class) . '" href="' . esc_url($url) . '">' . $text . '</a>';
   echo $before . apply_filters('delete_post_link', $link, $post->ID, $text) . $after;
@@ -165,11 +165,12 @@ function delete_post_link($text = null, $before = '', $after = '', $id = 0, $cla
 add_filter('the_date', 'post_time_ago', 10, 1);
 add_filter('get_the_time', 'post_time_ago', 10, 1); */
 add_filter('the_time', 'post_time_ago', 10, 1);
+add_filter('get_comment_date', 'post_time_ago', 10, 1);
 function post_time_ago($time)
 {
   global $post;
   $time = strtotime($post->post_date);
-  return human_time_diff($time, current_time('timestamp')) . esc_html__('前', 'example-text');
+  return human_time_diff($time, current_time('timestamp')) . __('前', 'imwtb');
 }
 
 // 添加维护模式
@@ -186,16 +187,16 @@ function post_time_ago($time)
 /* add_action('admin_notices', function () {
 ?>
   <div className="notice notice-success is-dismissible">
-    <p><?php _e('这是success信息！', 'example-text'); ?></p>
+    <p><?php _e('这是success信息！', 'imwtb'); ?></p>
   </div>
   <div className="notice notice-danger is-dismissible">
-    <p><?php _e('这是danger信息！', 'example-text'); ?></p>
+    <p><?php _e('这是danger信息！', 'imwtb'); ?></p>
   </div>
   <div className="notice notice-warning is-dismissible">
-    <p><?php _e('这是warning信息！', 'example-text'); ?></p>
+    <p><?php _e('这是warning信息！', 'imwtb'); ?></p>
   </div>
   <div className="notice notice-info is-dismissible">
-    <p><?php _e('这是info信息！', 'example-text'); ?></p>
+    <p><?php _e('这是info信息！', 'imwtb'); ?></p>
   </div>
 <?php
 }); */
@@ -203,8 +204,8 @@ function post_time_ago($time)
 // 注册小工具
 add_action('widgets_init', function () {
   register_sidebar([
-    'name'          => esc_html__('侧边栏', 'example-text'),
-    'description'   => esc_html__('默认侧边栏', 'example-text'),
+    'name'          => __('侧边栏', 'imwtb'),
+    'description'   => __('默认侧边栏', 'imwtb'),
     'id'            => 'sidebar',
     'class'         => 'class',
     'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -217,13 +218,14 @@ require_once get_template_directory() . '/widgets/widget.php';
 
 // 引入一些文件
 require_once get_template_directory() . '/inc/optimize.php';
+require_once get_template_directory() . '/inc/comments.php';
 //require_once get_template_directory() . '/inc/schema-org.php';
 require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
-  register_custom_post_type(__('产品', 'example-text'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
+  register_custom_post_type(__('产品', 'imwtb'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
 }, 0);
 add_action('init', function () {
-  register_custom_taxonomy(__('产品类别', 'example-text'), 'products', ['product']);
+  register_custom_taxonomy(__('产品类别', 'imwtb'), 'products', ['product']);
 }, 0);
 
 require_once get_template_directory() . '/customize/options.php';
@@ -260,22 +262,22 @@ require_once get_template_directory() . '/customize/metabox-post.php';
 
   'fields' => [
     [
-      'label' => __('多行文本', 'example-text'),
+      'label' => __('多行文本', 'imwtb'),
       'id'    => 'textarea_id',
       'type'  => 'textarea',
     ],
     [
-      'label' => __('文本', 'example-text'),
+      'label' => __('文本', 'imwtb'),
       'id'    => 'text_id',
       'type'  => 'text',
     ],
     [
-      'label' => __('颜色', 'example-text'),
+      'label' => __('颜色', 'imwtb'),
       'id'    => 'color_id',
       'type'  => 'color',
     ],
     [
-      'label' => __('滑块', 'example-text'),
+      'label' => __('滑块', 'imwtb'),
       'id'    => 'range_id',
       'type'  => 'range',
       'max'   => '10',
@@ -283,27 +285,27 @@ require_once get_template_directory() . '/customize/metabox-post.php';
       'step'  => '1',
     ],
     [
-      'label' => __('选框', 'example-text'),
+      'label' => __('选框', 'imwtb'),
       'id'    => 'checkbox_id',
       'type'  => 'checkbox',
     ],
     [
-      'label' => __('页面', 'example-text'),
+      'label' => __('页面', 'imwtb'),
       'id'    => 'pages_id',
       'type'  => 'pages',
     ],
     [
-      'label' => __('用户', 'example-text'),
+      'label' => __('用户', 'imwtb'),
       'id'    => 'users_id',
       'type'  => 'users',
     ],
     [
-      'label' => __('分类', 'example-text'),
+      'label' => __('分类', 'imwtb'),
       'id'    => 'categories_id',
       'type'  => 'categories',
     ],
     [
-      'label'   => __('下拉框', 'example-text'),
+      'label'   => __('下拉框', 'imwtb'),
       'id'      => 'select_id',
       'type'    => 'select',
       'default' => '1',
@@ -314,7 +316,7 @@ require_once get_template_directory() . '/customize/metabox-post.php';
       ]
     ],
     [
-      'label'   => __('单选', 'example-text'),
+      'label'   => __('单选', 'imwtb'),
       'id'      => 'radio_id',
       'type'    => 'radio',
       'default' => '1',
@@ -325,19 +327,19 @@ require_once get_template_directory() . '/customize/metabox-post.php';
       ]
     ],
     [
-      'label'       => __('文件', 'example-text'),
+      'label'       => __('文件', 'imwtb'),
       'id'          => 'file_id',
       'type'        => 'file',
       'returnvalue' => 'url',
     ],
     [
-      'label'       => __('图片', 'example-text'),
+      'label'       => __('图片', 'imwtb'),
       'id'          => 'image_id',
       'type'        => 'image',
       'returnvalue' => 'url',
     ],
     [
-      'label'         => __('文本编辑器', 'example-text'),
+      'label'         => __('文本编辑器', 'imwtb'),
       'id'            => 'wysiwyg_id',
       'type'          => 'wysiwyg',
       'media_buttons' => false,

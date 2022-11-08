@@ -8,7 +8,7 @@ Description: example
 Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: example-text
+Text Domain: imwtb
 Tags: example
 */
 /*------------------------------ 重置 ------------------------------*/
@@ -18,7 +18,7 @@ Tags: example
 
 input, textarea, button { font-size: inherit; font-family: inherit; }
 
-body { position: relative; height: 100%; min-height: 100vh; font-size: 100%; line-height: 1.5; }
+body { position: relative; height: 100%; min-height: 100vh; font-size: 100%; color: #1e1e1e; line-height: 1.5; }
 
 h1, h2, h3, h4, h5, h6 { line-height: 1.35; }
 
@@ -28,7 +28,7 @@ h5 { font-size: .875em; }
 
 a { text-decoration: none; }
 
-img { max-width: 100%; max-height: 100%; image-rendering: crisp-edges; }
+img { max-width: 100%; max-height: 100%; height: auto; image-rendering: crisp-edges; }
 
 video, iframe { width: 100%; aspect-ratio: 16/9; }
 
@@ -38,9 +38,11 @@ a, input, textarea, select, button { outline-color: transparent; transition: col
 
 a:focus, input:focus, textarea:focus, select:focus, button:focus { outline-color: #3858e9; }
 
-input:not([type="color"], [type="file"]), textarea, select, button { padding: 0.5rem; }
+input:not([type="color"], [type="file"]), textarea, select, button { padding: 0.625rem; }
 
 input:not([type="color"], [type="image"], [type="file"]), textarea, select { border: 0.0625rem solid rgba(30, 30, 30, 0.3); border-radius: 0.5rem; }
+
+input:not([type="color"], [type="image"], [type="file"])::placeholder, textarea::placeholder, select::placeholder { color: rgba(30, 30, 30, 0.5); }
 
 input[type="submit"], input[type="reset"], input[type="button"] { color: #ffffff; background: #3858e9; border: none; cursor: pointer; }
 
@@ -55,9 +57,9 @@ body { display: flex; flex-direction: column; }
 
 body.active { overflow: hidden; }
 
-header, footer { background: rgba(30, 30, 30, 0.1); }
-
 main { flex-grow: 1; }
+
+.heading, .fooing { background: rgba(30, 30, 30, 0.05); }
 
 .max__1200 { margin: 0 3vw; }
 
@@ -67,7 +69,7 @@ main { flex-grow: 1; }
 
 .layout__center { flex: 1; }
 
-.layout__right { background: rgba(30, 30, 30, 0.1); }
+.layout__right { flex: 0 1 100%; background: rgba(30, 30, 30, 0.1); }
 
 @media screen and (min-width: 75rem) { .layout__right { flex: 0 1 25rem; } }
 
@@ -85,24 +87,71 @@ main { flex-grow: 1; }
 
 .post__content p { margin: 0.5rem 0; }
 
-.post__catag a { display: inline-block; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); }
+.post__catag a { display: inline-block; margin: 0 0.5rem 0.5rem 0; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); }
 
 /*------------------------------ 评论 ------------------------------*/
-.comment__title { margin-bottom: 1.5rem; }
+.comment__title { margin-bottom: 1rem; }
 
-.comment-respond { margin-bottom: 2rem; }
+.comment__title small { margin-left: 0.5rem; }
 
-.comment-form { display: flex; flex-wrap: wrap; }
+.comment__respond { margin-bottom: 2rem; }
 
-.comment-notes, .comment-form-cookies-consent { flex: 0 1 100%; }
+.comment__form { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
-.comment-list { list-style: none; }
+.comment__form textarea, .comment__form input { font-size: .875em; }
+
+.comment__notes, .comment__comment, .comment__cookies, .comment__submit { flex: 0 1 100%; }
+
+.comment__comment textarea, .comment__comment input, .comment__author textarea, .comment__author input, .comment__email textarea, .comment__email input, .comment__url textarea, .comment__url input { width: 100%; }
+
+.comment__comment textarea { min-height: 8rem; }
+
+.comment__author, .comment__email, .comment__url { flex: 1; }
+
+.comment__notes, .comment__cookies label { font-size: .875em; color: rgba(30, 30, 30, 0.7); }
+
+.comment__notes span { color: #e93838; }
+
+.comment__cookies label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
+
+.comment__cookies label input { transform: translateY(-0.0625rem); }
+
+.comment__list { list-style: none; }
+
+.comment__body { display: flex; align-items: flex-start; gap: 0.5rem; }
+
+.comment__vcard { flex: 0 1 1.875rem; overflow: hidden; border-radius: 6.25rem; }
+
+.comment__box { flex: 1; }
+
+.comment__head a { font-size: .875em; color: rgba(30, 30, 30, 0.7); }
+
+.comment__foo > a, .comment__foo > time, .comment__foo > span { margin-right: 0.5rem; font-size: .75em; color: rgba(30, 30, 30, 0.5); }
+
+.comment__foo span a { padding: 0.25rem 0.5rem; color: rgba(56, 88, 233, 0.7); background: rgba(56, 88, 233, 0.1); border-radius: 0.5rem; }
+
+.comment__foo span a:hover { color: #3858e9; }
+
+.comment__content { margin: 0.5rem 0; }
+
+@media screen and (min-width: 36rem) { .comment__vcard { flex: 0 1 2.5rem; } }
 
 /*------------------------------ 底部 ------------------------------*/
 .fooing__max { text-align: center; }
 
+/*------------------------------ 数字分页 ------------------------------*/
+.navigation { margin-top: 2rem; }
+
+.navigation .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+
+.navigation .nav-links a, .navigation .nav-links span { padding: 0.5rem 0.84688rem; color: rgba(30, 30, 30, 0.5); line-height: 1.25; background: rgba(30, 30, 30, 0.05); border-radius: 0.5rem; }
+
+.navigation .nav-links a:hover, .navigation .nav-links .current { color: #ffffff; background: #3858e9; }
+
 /*------------------------------ 搜索表单 ------------------------------*/
 .search__form label { display: none; }
+
+.search__field { font-size: .875em; }
 
 /*------------------------------ 面包屑 ------------------------------*/
 .breadcrumblist { padding: 0.5rem; background: rgba(30, 30, 30, 0.1); }

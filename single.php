@@ -17,13 +17,13 @@
         <?php echo $excerpt; ?>
 
         <div class="post__meta">
-          <time datetime="<?php the_date('Y-m-d H:s'); ?>"><?php the_time('Y/m/d'); ?></time>
+          <time datetime="<?php the_date('Y-m-d H:s'); ?>"><?php the_time(); ?></time>
           <span><?php comments_number(0, 1, '%'); ?></span>
           <a href="<?php echo get_author_posts_url($post->post_author); ?>"><?php the_author_meta('display_name'); ?></a>
           <?php
           if (current_user_can('manage_options')) {
-            edit_post_link(esc_html__('编辑', 'example-text'), '', '', get_the_ID(), '');
-            delete_post_link(esc_html__('删除', 'example-text'), '', '', get_the_ID(), '');
+            edit_post_link(__('编辑', 'imwtb'), '', '', get_the_ID(), '');
+            delete_post_link(__('删除', 'imwtb'), '', '', get_the_ID(), '');
           }
           ?>
         </div>

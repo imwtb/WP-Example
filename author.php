@@ -8,17 +8,17 @@
     global $post;
     $author_id = $post->post_author;
     echo get_avatar($author_id) . '<br>';
-    echo esc_html__('ID：', 'example-text') . get_the_author_meta('ID', $author_id) . '<br>';
-    echo esc_html__('用户名：', 'example-text') . get_the_author_meta('user_login', $author_id) . '<br>';
-    echo esc_html__('注册时间：', 'example-text') . get_the_author_meta('user_registered', $author_id) . '<br>';
-    echo esc_html__('等级：', 'example-text') . get_the_author_meta('user_level', $author_id) . '<br>';
-    echo esc_html__('名字：', 'example-text') . get_the_author_meta('first_name', $author_id) . '<br>';
-    echo esc_html__('姓氏：', 'example-text') . get_the_author_meta('last_name', $author_id) . '<br>';
-    echo esc_html__('昵称：', 'example-text') . get_the_author_meta('nickname', $author_id) . '<br>';
-    echo esc_html__('公开显示：', 'example-text') . get_the_author_meta('display_name', $author_id) . '<br>';
-    echo esc_html__('邮箱：', 'example-text') . get_the_author_meta('user_email', $author_id) . '<br>';
-    echo esc_html__('网址：', 'example-text') . get_the_author_meta('user_url', $author_id) . '<br>';
-    echo esc_html__('简介：', 'example-text') . get_the_author_meta('description', $author_id) . '<br>';
+    echo __('ID：', 'imwtb') . get_the_author_meta('ID', $author_id) . '<br>';
+    echo __('用户名：', 'imwtb') . get_the_author_meta('user_login', $author_id) . '<br>';
+    echo __('注册时间：', 'imwtb') . get_the_author_meta('user_registered', $author_id) . '<br>';
+    echo __('等级：', 'imwtb') . get_the_author_meta('user_level', $author_id) . '<br>';
+    echo __('名字：', 'imwtb') . get_the_author_meta('first_name', $author_id) . '<br>';
+    echo __('姓氏：', 'imwtb') . get_the_author_meta('last_name', $author_id) . '<br>';
+    echo __('昵称：', 'imwtb') . get_the_author_meta('nickname', $author_id) . '<br>';
+    echo __('公开显示：', 'imwtb') . get_the_author_meta('display_name', $author_id) . '<br>';
+    echo __('邮箱：', 'imwtb') . get_the_author_meta('user_email', $author_id) . '<br>';
+    echo __('网址：', 'imwtb') . get_the_author_meta('user_url', $author_id) . '<br>';
+    echo __('简介：', 'imwtb') . get_the_author_meta('description', $author_id) . '<br>';
 
     $main_query = new WP_Query([
       'fields'              => 'ids',

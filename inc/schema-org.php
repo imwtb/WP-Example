@@ -140,7 +140,7 @@ function breadcrumblists()
   $list = array();
 
   $list[] = [
-    'title' => __('首页', 'example-text'),
+    'title' => __('首页', 'imwtb'),
     'link'  => home_url(),
   ];
 
@@ -239,12 +239,12 @@ function breadcrumblists()
     ];
   } elseif (is_404()) {
     $list[] = [
-      'title' => __('404', 'example-text'),
+      'title' => __('404', 'imwtb'),
       'link'  => '#',
     ];
   } elseif (is_attachment()) {
     $list[] = [
-      'title' => __('附件', 'example-text'),
+      'title' => __('附件', 'imwtb'),
       'link'  => '#',
     ];
   } else {
