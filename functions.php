@@ -160,6 +160,18 @@ function delete_post_link($text = null, $before = '', $after = '', $id = 0, $cla
   echo $before . apply_filters('delete_post_link', $link, $post->ID, $text) . $after;
 }
 
+// 改为多少时间前
+/* add_filter('get_the_date', 'post_time_ago', 10, 1);
+add_filter('the_date', 'post_time_ago', 10, 1);
+add_filter('get_the_time', 'post_time_ago', 10, 1); */
+add_filter('the_time', 'post_time_ago', 10, 1);
+function post_time_ago($time)
+{
+  global $post;
+  $time = strtotime($post->post_date);
+  return human_time_diff($time, current_time('timestamp')) . esc_html__('前', 'example-text');
+}
+
 // 添加维护模式
 /* add_action('get_header', function () {
   if (!current_user_can('edit_themes') || !is_user_logged_in()) {

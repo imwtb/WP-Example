@@ -132,12 +132,6 @@ button {
   padding: toRem(8px);
 }
 
-input:not([type="radio"], [type="checkbox"]),
-textarea,
-select {
-  min-width: toRem(72px);
-}
-
 input:not([type="color"], [type="image"], [type="file"]),
 textarea,
 select {
@@ -159,6 +153,12 @@ input {
       background: $black;
     }
   }
+
+  &[type="submit"],
+  &[type="reset"] {
+    padding-left: toRem(16px);
+    padding-right: toRem(16px);
+  }
 }
 
 button {
@@ -175,12 +175,6 @@ body {
   &.active {
     overflow: hidden;
   }
-}
-
-header,
-footer,
-main {
-  padding: toRem(32px);
 }
 
 header,
@@ -241,6 +235,59 @@ main {
   li {
     list-style: none;
     display: inline-block;
+  }
+}
+
+/*------------------------------ 文章内容页 ------------------------------*/
+.post {
+
+  &__content,
+  &__catag,
+  &__precnext {
+    margin-bottom: toRem(32px);
+  }
+
+  &__content {
+    line-height: 1.8;
+
+    p {
+      margin: toRem(8px) 0;
+    }
+  }
+
+  &__catag a {
+    display: inline-block;
+    padding: toRem(4px) toRem(8px);
+    font-size: .875em;
+    color: rgba($black, .5);
+    background: rgba($black, .05);
+  }
+}
+
+/*------------------------------ 评论 ------------------------------*/
+.comment {
+  &__title {
+    margin-bottom: toRem(24px);
+  }
+
+  &-respond {
+    margin-bottom: toRem(32px);
+  }
+
+  &-form {
+    display: flex;
+    flex-wrap: wrap;
+
+
+  }
+
+  &-notes,
+  &-form-cookies-consent {
+    flex: 0 1 100%;
+  }
+
+  &-list {
+    list-style: none;
   }
 }
 

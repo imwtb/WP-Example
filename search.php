@@ -1,7 +1,7 @@
 <?php
 get_header();
 
-the_archive_title('<h2>',   '</h2>');
+the_archive_title('<h2>', '</h2>');
 
 $main_query = new WP_Query([
   'post_type'           => 'any',                                                   // 默认 post 设置为 any 包含自定义文章类型

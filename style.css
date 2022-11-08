@@ -40,13 +40,13 @@ a:focus, input:focus, textarea:focus, select:focus, button:focus { outline-color
 
 input:not([type="color"], [type="file"]), textarea, select, button { padding: 0.5rem; }
 
-input:not([type="radio"], [type="checkbox"]), textarea, select { min-width: 4.5rem; }
-
 input:not([type="color"], [type="image"], [type="file"]), textarea, select { border: 0.0625rem solid rgba(30, 30, 30, 0.3); border-radius: 0.5rem; }
 
 input[type="submit"], input[type="reset"], input[type="button"] { color: #ffffff; background: #3858e9; border: none; cursor: pointer; }
 
 input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover { background: #1e1e1e; }
+
+input[type="submit"], input[type="reset"] { padding-left: 1rem; padding-right: 1rem; }
 
 button { background: transparent; border: none; cursor: pointer; }
 
@@ -54,8 +54,6 @@ button { background: transparent; border: none; cursor: pointer; }
 body { display: flex; flex-direction: column; }
 
 body.active { overflow: hidden; }
-
-header, footer, main { padding: 2rem; }
 
 header, footer { background: rgba(30, 30, 30, 0.1); }
 
@@ -79,6 +77,26 @@ main { flex-grow: 1; }
 .topnav > ul { display: flex; align-items: center; gap: 2rem; }
 
 .topnav > ul li { list-style: none; display: inline-block; }
+
+/*------------------------------ 文章内容页 ------------------------------*/
+.post__content, .post__catag, .post__precnext { margin-bottom: 2rem; }
+
+.post__content { line-height: 1.8; }
+
+.post__content p { margin: 0.5rem 0; }
+
+.post__catag a { display: inline-block; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); }
+
+/*------------------------------ 评论 ------------------------------*/
+.comment__title { margin-bottom: 1.5rem; }
+
+.comment-respond { margin-bottom: 2rem; }
+
+.comment-form { display: flex; flex-wrap: wrap; }
+
+.comment-notes, .comment-form-cookies-consent { flex: 0 1 100%; }
+
+.comment-list { list-style: none; }
 
 /*------------------------------ 底部 ------------------------------*/
 .fooing__max { text-align: center; }
