@@ -1,5 +1,4 @@
 <?php
-
 if (!class_exists('Theme_Walker_Comment')) {
   class Theme_Walker_Comment extends Walker_Comment
   {

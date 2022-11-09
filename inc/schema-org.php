@@ -79,6 +79,16 @@ add_action('wp_head', function () {
           "ratingCount": "' . $ratingCount . '"
       }';
     } elseif (is_singular('video')) {
+    } else {
+      echo '
+      "@type": "WebSite",
+      "name": "' . get_bloginfo('name') . '",
+      "url": "' . home_url() . '",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "' . home_url() . '/?s={search_term_string}' . '",
+        "query-input": "required name=search_term_string"
+      }';
     }
     echo '}</script>';
   }
@@ -104,20 +114,6 @@ add_action('wp_head', function () {
     }
     echo ']
     }</script>';
-  } else {
-    echo '<script type="application/ld+json">
-    {
-      "@context": "http://www.schema.org",
-      "@type": "WebSite",
-      "name": "' . get_bloginfo('name') . '",
-      "url": "' . home_url() . '",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "' . home_url() . '/?s={search_term_string}' . '",
-        "query-input": "required name=search_term_string"
-      }
-    }
-     </script>';
   }
 }, 10, 3);
 

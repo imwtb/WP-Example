@@ -207,7 +207,6 @@ add_action('widgets_init', function () {
     'name'          => __('侧边栏', 'imwtb'),
     'description'   => __('默认侧边栏', 'imwtb'),
     'id'            => 'sidebar',
-    'class'         => 'class',
     'before_widget' => '<section id="%1$s" class="widget %2$s">',
     'after_widget'  => '</section>',
     'before_title'  => '<h2 class="widget__title">',
@@ -216,10 +215,11 @@ add_action('widgets_init', function () {
 });
 require_once get_template_directory() . '/widgets/widget.php';
 
-// 引入一些文件
+// 引入文件
 require_once get_template_directory() . '/inc/optimize.php';
 require_once get_template_directory() . '/inc/comments.php';
-//require_once get_template_directory() . '/inc/schema-org.php';
+require_once get_template_directory() . '/inc/schema-org.php';
+
 require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
   register_custom_post_type(__('产品', 'imwtb'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
