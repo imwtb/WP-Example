@@ -26,14 +26,10 @@
       'posts_per_page'      => get_option('posts_per_page'),
       'paged'               => (get_query_var('paged')) ? get_query_var('paged') : 1,
     ]);
-    if ($main_query->have_posts()) :
-      while ($main_query->have_posts()) : $main_query->the_post();
-        //get_template_part('template-parts/content', 'posts');
-        //print_r($main_query);
-        the_title('<h3><a href="' . get_permalink() . '">', '</a></h3>');
-      endwhile;
-      the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
-    endif;
+    while ($main_query->have_posts()) : $main_query->the_post();
+      get_template_part('template-parts/content', 'post');
+    endwhile;
+    the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
     wp_reset_postdata();
 
     ?>

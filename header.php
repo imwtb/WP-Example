@@ -39,5 +39,5 @@
     </div>
   </header>
 
-  <main>
+  <main class="maing">
     <?php do_action('breadcrumblist'); ?>

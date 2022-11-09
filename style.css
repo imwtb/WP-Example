@@ -34,7 +34,7 @@ video, iframe { width: 100%; aspect-ratio: 16/9; }
 
 a, img, video, iframe, input, textarea, select, button { vertical-align: middle; }
 
-a, input, textarea, select, button { outline-color: transparent; transition: color 0.3s ease-in-out, background 0.3s ease-in-out, border 0.3s ease-in-out, outline 0.3s ease-in-out; }
+a, input, textarea, select, button { outline-color: transparent; transition: color .3s ease-in-out, background .3s ease-in-out, border .3s ease-in-out, outline .3s ease-in-out; }
 
 a:focus, input:focus, textarea:focus, select:focus, button:focus { outline-color: #3858e9; }
 
@@ -57,13 +57,21 @@ body { display: flex; flex-direction: column; }
 
 body.active { overflow: hidden; }
 
-main { flex-grow: 1; }
+main { flex-grow: 1; margin: 2rem 0; }
 
 .heading, .fooing { background: rgba(30, 30, 30, 0.05); }
 
-.max__1200 { margin: 0 3vw; }
+.heading__max, .fooing__max { padding: 0.5rem 0; }
+
+.max__1200, .max__960, .max__768, .max__576 { margin: 0 3vw; }
 
 @media screen and (min-width: 75rem) { .max__1200 { max-width: 75rem; margin: 0 auto; } }
+
+@media screen and (min-width: 60rem) { .max__960 { max-width: 60rem; margin: 0 auto; } }
+
+@media screen and (min-width: 48rem) { .max__768 { max-width: 48rem; margin: 0 auto; } }
+
+@media screen and (min-width: 36rem) { .max__576 { max-width: 36rem; margin: 0 auto; } }
 
 .layout { display: flex; flex-wrap: wrap; gap: 2rem; }
 
@@ -73,14 +81,28 @@ main { flex-grow: 1; }
 
 @media screen and (min-width: 75rem) { .layout__right { flex: 0 1 25rem; } }
 
+.sticky__left, .sticky__right { height: auto !important; will-change: min-height; }
+
+.inner-wrapper-sticky { transform: translate(0, 0); transform: translate3d(0, 0, 0); will-change: position, transform; }
+
 /*------------------------------ 头部 ------------------------------*/
-.heading__max { display: flex; justify-content: space-between; }
+.heading__max { display: flex; justify-content: space-between; align-items: center; }
 
 .topnav > ul { display: flex; align-items: center; gap: 2rem; }
 
 .topnav > ul li { list-style: none; display: inline-block; }
 
 /*------------------------------ 文章内容页 ------------------------------*/
+.post__title, .post__meta, .post__excerpt { margin-bottom: 1rem; }
+
+.post__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1rem; }
+
+.post__meta a, .post__meta time, .post__meta span { display: inline-flex; align-items: center; gap: 0.25rem; font-size: .875em; }
+
+.post__meta a i, .post__meta time i, .post__meta span i { font-size: 1em; }
+
+.post__excerpt { padding: 0.5rem 1rem; font-size: .75em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); border-radius: 0.5rem; }
+
 .post__content, .post__catag, .post__precnext { margin-bottom: 2rem; }
 
 .post__content { line-height: 1.8; }
@@ -89,6 +111,20 @@ main { flex-grow: 1; }
 
 .post__catag a { display: inline-block; margin: 0 0.5rem 0.5rem 0; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); }
 
+/*------------------------------ 侧面 ------------------------------*/
+.widget:not(:last-child) { margin-bottom: 2rem; }
+
+.widget ul { list-style: none; }
+
+/*------------------------------ 底部 ------------------------------*/
+.fooing__max { text-align: center; }
+
+.fooing__copyright { font-size: .875em; color: rgba(30, 30, 30, 0.5); }
+
+.fooing__copyright a { color: rgba(30, 30, 30, 0.7); }
+
+.bottomnav ul li { display: inline-block; list-style: none; }
+
 /*------------------------------ 评论 ------------------------------*/
 .comment__title { margin-bottom: 1rem; }
 
@@ -96,17 +132,13 @@ main { flex-grow: 1; }
 
 .comment__respond { margin-bottom: 2rem; }
 
-.comment__form { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.comment__form { display: flex; flex-wrap: wrap; gap: 1rem 0.5rem; }
 
-.comment__form textarea, .comment__form input { font-size: .875em; }
-
-.comment__notes, .comment__comment, .comment__cookies, .comment__submit { flex: 0 1 100%; }
+.comment__notes, .comment__comment, .comment__author, .comment__email, .comment__url, .comment__cookies, .comment__submit { flex: 0 1 100%; }
 
 .comment__comment textarea, .comment__comment input, .comment__author textarea, .comment__author input, .comment__email textarea, .comment__email input, .comment__url textarea, .comment__url input { width: 100%; }
 
 .comment__comment textarea { min-height: 8rem; }
-
-.comment__author, .comment__email, .comment__url { flex: 1; }
 
 .comment__notes, .comment__cookies label { font-size: .875em; color: rgba(30, 30, 30, 0.7); }
 
@@ -115,6 +147,10 @@ main { flex-grow: 1; }
 .comment__cookies label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
 
 .comment__cookies label input { transform: translateY(-0.0625rem); }
+
+.comment__cookies label a { color: #3858e9; }
+
+@media screen and (min-width: 36rem) { .comment__author, .comment__email, .comment__url { flex: 1; } }
 
 .comment__list { list-style: none; }
 
@@ -134,10 +170,9 @@ main { flex-grow: 1; }
 
 .comment__content { margin: 0.5rem 0; }
 
-@media screen and (min-width: 36rem) { .comment__vcard { flex: 0 1 2.5rem; } }
+.comment__awaiting { display: block; margin-bottom: 0.5rem; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(233, 56, 56, 0.7); background: rgba(233, 56, 56, 0.1); border-radius: 0.5rem; }
 
-/*------------------------------ 底部 ------------------------------*/
-.fooing__max { text-align: center; }
+@media screen and (min-width: 36rem) { .comment__vcard { flex: 0 1 2.5rem; } }
 
 /*------------------------------ 数字分页 ------------------------------*/
 .navigation { margin-top: 2rem; }
@@ -149,9 +184,15 @@ main { flex-grow: 1; }
 .navigation .nav-links a:hover, .navigation .nav-links .current { color: #ffffff; background: #3858e9; }
 
 /*------------------------------ 搜索表单 ------------------------------*/
+.search__form { display: flex; align-items: center; position: relative; }
+
 .search__form label { display: none; }
 
-.search__field { font-size: .875em; }
+.search__form input { flex: 1; }
+
+.search__form input:focus ~ button { color: #3858e9; }
+
+.search__form button { position: absolute; right: 0; z-index: 5; font-size: 1.75em; color: rgba(30, 30, 30, 0.5); }
 
 /*------------------------------ 面包屑 ------------------------------*/
 .breadcrumblist { padding: 0.5rem; background: rgba(30, 30, 30, 0.1); }

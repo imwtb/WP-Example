@@ -99,7 +99,7 @@ function the_content_thumbnail($width = '768', $height = 'auto', $number = 1)
 {
   foreach (the_content_thumbnails() as $key => $value) {
     if ($key < $number) {
-      echo '<img width="' . $width . '" height="' . $height . '" src="' . $value . '">';
+      echo '<img width="' . $width . '" height="' . $height . '" src="' . esc_url($value) . '">';
     }
   }
 }
@@ -226,6 +226,7 @@ add_action('init', function () {
 }, 0);
 add_action('init', function () {
   register_custom_taxonomy(__('产品类别', 'imwtb'), 'products', ['product']);
+  register_custom_taxonomy(__('测试', 'imwtb'), 'ceshis', ['post']);
 }, 0);
 
 require_once get_template_directory() . '/customize/options.php';

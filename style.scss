@@ -120,7 +120,7 @@ textarea,
 select,
 button {
   outline-color: transparent;
-  transition: color .3s ease-in-out, background .3s ease-in-out, border.3s ease-in-out, outline .3s ease-in-out;
+  transition: color .3s ease-in-out, background .3s ease-in-out, border .3s ease-in-out, outline .3s ease-in-out;
 
   &:focus {
     outline-color: $base;
@@ -185,21 +185,51 @@ body {
 
 main {
   flex-grow: 1;
+  margin: toRem(32px) 0;
 }
 
 .heading,
 .fooing {
   background: rgba($black, .05);
+
+  &__max {
+    padding: toRem(8px) 0;
+  }
 }
 
 .max {
-  &__1200 {
+
+  &__1200,
+  &__960,
+  &__768,
+  &__576 {
     margin: 0 3vw;
   }
 
   @media screen and (min-width: #{$max1200}) {
     &__1200 {
       max-width: $max1200;
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (min-width: #{$max960}) {
+    &__960 {
+      max-width: $max960;
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (min-width: #{$max768}) {
+    &__768 {
+      max-width: $max768;
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (min-width: #{$max576}) {
+    &__576 {
+      max-width: $max576;
       margin: 0 auto;
     }
   }
@@ -226,11 +256,27 @@ main {
   }
 }
 
+.sticky {
+
+  &__left,
+  &__right {
+    height: auto !important;
+    will-change: min-height;
+  }
+}
+
+.inner-wrapper-sticky {
+  transform: translate(0, 0);
+  transform: translate3d(0, 0, 0);
+  will-change: position, transform;
+}
+
 /*------------------------------ 头部 ------------------------------*/
 .heading {
   &__max {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -247,6 +293,40 @@ main {
 
 /*------------------------------ 文章内容页 ------------------------------*/
 .post {
+
+  &__title,
+  &__meta,
+  &__excerpt {
+    margin-bottom: toRem(16px);
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: toRem(8px) toRem(16px);
+
+    a,
+    time,
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: toRem(4px);
+      font-size: .875em;
+
+      i {
+        font-size: 1em;
+      }
+    }
+  }
+
+  &__excerpt {
+    padding: toRem(8px) toRem(16px);
+    font-size: .75em;
+    color: rgba($black, .5);
+    background: rgba($black, .05);
+    border-radius: toRem(8px);
+  }
 
   &__content,
   &__catag,
@@ -272,6 +352,39 @@ main {
   }
 }
 
+/*------------------------------ 侧面 ------------------------------*/
+.widget {
+  &:not(:last-child) {
+    margin-bottom: toRem(32px);
+  }
+
+  ul {
+    list-style: none;
+  }
+}
+
+/*------------------------------ 底部 ------------------------------*/
+.fooing {
+  &__max {
+    text-align: center;
+  }
+
+  &__copyright {
+    font-size: .875em;
+    color: rgba($black, .5);
+
+    a {
+      color: rgba($black, .7);
+    }
+  }
+}
+
+.bottomnav ul li {
+  display: inline-block;
+  list-style: none;
+}
+
+
 /*------------------------------ 评论 ------------------------------*/
 .comment {
   &__title {
@@ -289,16 +402,14 @@ main {
   &__form {
     display: flex;
     flex-wrap: wrap;
-    gap: toRem(8px);
-
-    textarea,
-    input {
-      font-size: .875em;
-    }
+    gap: toRem(16px) toRem(8px);
   }
 
   &__notes,
   &__comment,
+  &__author,
+  &__email,
+  &__url,
   &__cookies,
   &__submit {
     flex: 0 1 100%;
@@ -319,12 +430,6 @@ main {
     min-height: toRem(128px);
   }
 
-  &__author,
-  &__email,
-  &__url {
-    flex: 1;
-  }
-
   &__notes,
   &__cookies label {
     font-size: .875em;
@@ -343,6 +448,19 @@ main {
 
     input {
       transform: translateY(toRemF(1px));
+    }
+
+    a {
+      color: $base;
+    }
+  }
+
+  @media screen and (min-width: #{$max576}) {
+
+    &__author,
+    &__email,
+    &__url {
+      flex: 1;
     }
   }
 
@@ -397,17 +515,20 @@ main {
     margin: toRem(8px) 0;
   }
 
+  &__awaiting {
+    display: block;
+    margin-bottom: toRem(8px);
+    padding: toRem(4px) toRem(8px);
+    font-size: .875em;
+    color: rgba($red, .7);
+    background: rgba($red, .1);
+    border-radius: toRem(8px);
+  }
+
   @media screen and (min-width: #{$max576}) {
     &__vcard {
       flex: 0 1 toRem(40px);
     }
-  }
-}
-
-/*------------------------------ 底部 ------------------------------*/
-.fooing {
-  &__max {
-    text-align: center;
   }
 }
 
@@ -441,13 +562,29 @@ main {
 /*------------------------------ 搜索表单 ------------------------------*/
 .search {
   &__form {
+    display: flex;
+    align-items: center;
+    position: relative;
+
     label {
       display: none;
     }
-  }
 
-  &__field {
-    font-size: .875em;
+    input {
+      flex: 1;
+
+      &:focus ~ button {
+        color: $base;
+      }
+    }
+
+    button {
+      position: absolute;
+      right: 0;
+      z-index: 5;
+      font-size: 1.75em;
+      color: rgba($black, .5);
+    }
   }
 }
 
