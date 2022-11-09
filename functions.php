@@ -84,7 +84,7 @@ add_action('wp_body_open', function () {
 // 文章内容图片
 function the_content_thumbnails()
 {
-  global $post, $posts;
+  global $post;
 
   $image = '';
   ob_start();

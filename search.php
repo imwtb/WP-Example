@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="max__960">
+<div class="maing__max max__960">
 
   <?php the_archive_title('<h2>', '</h2>');
 

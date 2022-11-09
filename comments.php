@@ -2,7 +2,6 @@
 if (post_password_required()) {
 	return;
 }
-$comment_count = get_comments_number();
 ?>
 
 <div id="comments" class="comments__area">
@@ -17,8 +16,7 @@ $comment_count = get_comments_number();
 		$name    = $user->exists() ? $user->display_name : '';
 		$req     = get_option('require_name_email') ? '*' : '';
 		$consent = !empty($comment['comment_author_email']) ? 'checked' : '';
-		$text    = sprintf(__('必需的地方已用 %s 做标记', 'imwtb'), '<span>*</span>');
-
+		$text    = sprintf(__(' 必需的地方已用 %s 做标记', 'imwtb'), '<span>*</span>');
 
 		comment_form([
 			'fields' => [
@@ -30,7 +28,7 @@ $comment_count = get_comments_number();
 			'comment_field'        => '<p class="comment__comment"><textarea id="comment" name="comment" placeholder="' . esc_attr__('评论', 'imwtb') . ' *" required></textarea></p>',
 			'must_log_in'          => '<p class="comment__mustlogin"><a href="' . wp_login_url(apply_filters('the_permalink', get_the_permalink($id), $id)) . '">' . __('登录', 'imwtb') . '</a>' . __('后发表评论！', 'imwtb') . '</p>',
 			'comment_notes_before' => '<p class="comment__notes">' . __('您的电子邮件地址不会被公开。', 'imwtb') . $text . '</p>',
-			'logged_in_as'         => '<p class="comment__loggedinas"><a href="' . get_edit_user_link() . '">' . __('登录为', 'imwtb') . $name . '</a>. <a href="' . wp_logout_url(apply_filters('the_permalink', get_the_permalink($id), $id)) . '">' . __('退出?', 'imwtb') . '</a>' . $text . '</p>',
+			'logged_in_as'         => '<p class="comment__loggedinas">' . __('登录为', 'imwtb') . '<a href="' . get_edit_user_link() . '">' . $name . '</a>. <a href="' . wp_logout_url(apply_filters('the_permalink', get_the_permalink($id), $id)) . '">' . __('退出?', 'imwtb') . '</a>' . $text . '</p>',
 			'class_container'      => 'comment__respond',
 			'class_form'           => 'comment__form',
 			'title_reply_before'   => '<h2 id="reply-title" class="comment__title">',

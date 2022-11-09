@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="max__1200 layout">
+<div class="maing__max max__1200 layout">
 
   <div class="layout__center">
     <?php

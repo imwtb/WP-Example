@@ -40,4 +40,4 @@
   </header>
 
   <main class="maing">
-    <?php do_action('breadcrumblist'); ?>
+    <?php if (!is_home() && !is_front_page()) echo breadcrumblist('<nav class="breadcrumblist"><ol class="max__1200">', '</ol></nav>'); ?>

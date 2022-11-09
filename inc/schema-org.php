@@ -1,6 +1,20 @@
 <?php
 
 add_action('wp_head', function () {
+  echo '<script type="application/ld+json">{"@context": "https://schema.org/","@graph": [';
+
+  $items = breadcrumblists();
+  $count = count($items);
+  $num   = 1;
+  echo '{"@type": "BreadcrumbList","itemListElement": [';
+  foreach ($items as $value) {
+    echo '{"@type": "ListItem", "position": ' . $num . ', "name": "' . $value['title'] . '", "item": "' . $value['link'] . '"}';
+    if ($num < $count) echo ',';
+    $num++;
+  }
+  echo ']},';
+
+  echo '{"@type": "WebSite", "name": "' . get_bloginfo('name') . '", "url": "' . home_url() . '", "potentialAction": { "@type": "SearchAction", "target": "' . home_url() . '/?s={search_term_string}", "query-input": "required name=search_term_string"}},';
 
   if (is_singular()) {
     global $post;
@@ -8,128 +22,35 @@ add_action('wp_head', function () {
     $author_id = $post->post_author;
     $thumbnail = has_post_thumbnail() ? get_the_post_thumbnail_url($post->ID, 'full') : '';
 
-    echo '<script type="application/ld+json">{"@context": "https://schema.org/",';
-    if (is_singular('post')) {
-      echo '"@type": "Article",
-        "headline": "' . get_the_title() . '",
-        "description": "' . $excerpt . '",
-        "datePublished": "' . get_the_time('Y-m-d') . '",
-        "dateModified": "' . get_the_modified_time('Y-m-d') . '",
-        "image": [';
-      foreach (the_content_thumbnails() as  $value) {
-        echo '"' . $value . '",';
-      }
-      echo '"' . $thumbnail . '"],
-        "author": [
-          {
-            "@type": "Person",
-            "name": "' . get_the_author_meta('display_name', $author_id) . '",
-            "url": "' . get_author_posts_url($author_id) . '",
-          }
-        ],
-        "mainEntityOfPage": {
-          "@type": "webPage",
-          "id": "' . get_the_permalink() . '"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "' . get_the_author_meta('display_name', $author_id) . '",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "' . get_avatar_url($author_id) . '"
-          }
-        }';
-    } elseif (is_singular('product')) {
-      $ratingCount = wp_count_comments($post->ID)->approved;
-      $code        = preg_replace('/( |　|\s)*/', '', get_post_meta($post->ID, 'product_barcode', true));  // 条码
-      $code_len    = mb_strlen($code, 'utf8');
-      switch ($code_len) {
-        case ($code_len < 9):
-          $bar_code = '"gtin8":"' . $code . '"';
-          break;
-        case ($code_len > 8 && $code_len < 14):
-          $bar_code = '"gtin13":"' . $code . '"';
-          break;
-        case ($code_len > 13):
-          $bar_code = '"gtin14":"' . $code . '"';
-          break;
-        default:
-      }
-
-      echo '
-      "@type": "Product",
-      "name": "' . get_the_title() . '",
-      "image": "' . $thumbnail . '",
-      "description": "' . $excerpt . '",
-      "brand": "' . get_post_meta($post->ID, 'product_brand', true) . '",
-      ' . $bar_code . ',
-      "offers": {
-          "@type": "AggregateOffer",
-          "url": "' . get_the_permalink() . '",
-          "priceCurrency": "' . get_post_meta($post->ID, 'product_currency', true) . '",
-          "lowPrice": "0",
-          "highPrice": "' . get_post_meta($post->ID, 'product_price', true) . '",
-          "offerCount": "1"
-      },
-      "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "bestRating": "",
-          "worstRating": "",
-          "ratingCount": "' . $ratingCount . '"
-      }';
-    } elseif (is_singular('video')) {
-    } else {
-      echo '
-      "@type": "WebSite",
-      "name": "' . get_bloginfo('name') . '",
-      "url": "' . home_url() . '",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "' . home_url() . '/?s={search_term_string}' . '",
-        "query-input": "required name=search_term_string"
-      }';
-    }
-    echo '}</script>';
-  }
-
-  if (!is_home() && !is_front_page()) {
-    $items = breadcrumblists();
-    $count = count($items);
-    $num   = 0;
-    echo '
-    <script type="application/ld+json">{
-      "@context": "https://schema.org/",
-      "@type": "BreadcrumbList",
-      "itemListElement": [';
-    foreach ($items as $value) {
-      echo '{
-        "@type": "ListItem",
-        "position": ' . $num . ',
-        "name": "' . $value['title'] . '",
-        "item": "' . $value['link'] . '"
-      }';
-      if ($num < $count) echo ',';
+    $count = count(the_content_thumbnails());
+    $image = '';
+    $num   = 1;
+    foreach (the_content_thumbnails() as $img) {
+      $image .= '"' . $img . '"';
+      $image .= $num < $count ? ',' : '';
       $num++;
     }
-    echo ']
-    }</script>';
+    $image .= $thumbnail ? '"' . $thumbnail . '"' : '';
+    if (is_single()) {
+      echo '{"@type": "NewsArticle", "mainEntityOfPage": { "@type": "WebPage", "@id": "' . get_the_permalink() . '"}, "headline": "' . get_the_title() . '", "image": [' . $image . '], "author": { "@type": "Person", "name": "' . get_the_author_meta('display_name', $author_id) . '", "url": "' . get_author_posts_url($author_id) . '"}, "publisher": { "@type": "Organization", "name": "' . get_the_author_meta('display_name', $author_id) . '", "logo": {"@type": "ImageObject", "url": "' . get_avatar_url($author_id) . '"}}, "datePublished": "' . get_the_time('Y-m-d') . '", "dateModified": "' . get_the_modified_time('Y-m-d') . '"}';
+    }
   }
+
+  echo ']}</script>';
 }, 10, 3);
 
-add_action('breadcrumblist', function () {
-  if (!is_home() && !is_front_page()) {
-    echo '<nav class="breadcrumblist"><ol>';
-    foreach (breadcrumblists() as $value) {
-      if ($value['link'] == '#') {
-        echo '<li>' . $value['title'] . '</li>';
-      } else {
-        echo '<li><a href="' . $value['link'] . '">' . $value['title'] . '</a></li>';
-      }
+function breadcrumblist($before = '', $after = '')
+{
+  $output = '';
+  foreach (breadcrumblists() as $value) {
+    if ($value['link'] == '#') {
+      $output .= '<li>' . $value['title'] . '</li>';
+    } else {
+      $output .= '<li><a href="' . $value['link'] . '">' . $value['title'] . '</a></li>';
     }
-    echo '</ol></nav>';
   }
-}, 10, 3);
+  return $before . $output . $after;
+};
 
 function breadcrumblists()
 {
@@ -195,22 +116,10 @@ function breadcrumblists()
       ];
     } elseif (is_month()) {
       $lists[] = [
-        'title' => $year,
-        'link'  => get_year_link($year),
-      ];
-      $lists[] = [
         'title' => $month,
         'link'  => get_month_link($year, $month),
       ];
     } elseif (is_day()) {
-      $lists[] = [
-        'title' => $year,
-        'link'  => get_year_link($year),
-      ];
-      $lists[] = [
-        'title' => $month,
-        'link'  => get_month_link($year, $month),
-      ];
       $lists[] = [
         'title' => $day,
         'link'  => get_day_link($year, $month, $day),

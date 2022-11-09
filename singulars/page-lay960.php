@@ -5,7 +5,7 @@ Template Post Type: page, post
 */
 get_header(); ?>
 
-<div class="max__960">
+<div class="maing__max max__960">
   <?php
   while (have_posts()) : the_post();
     if (is_page()) {

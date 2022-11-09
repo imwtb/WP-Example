@@ -185,7 +185,6 @@ body {
 
 main {
   flex-grow: 1;
-  margin: toRem(32px) 0;
 }
 
 .heading,
@@ -195,6 +194,10 @@ main {
   &__max {
     padding: toRem(8px) 0;
   }
+}
+
+.maing__max {
+  padding: toRem(32px) 0;
 }
 
 .max {
@@ -430,7 +433,9 @@ main {
     min-height: toRem(128px);
   }
 
+  &__mustlogin,
   &__notes,
+  &__loggedinas,
   &__cookies label {
     font-size: .875em;
     color: rgba($black, .7);
@@ -453,6 +458,10 @@ main {
     a {
       color: $base;
     }
+  }
+
+  &__submit input {
+    font-size: .875em;
   }
 
   @media screen and (min-width: #{$max576}) {
@@ -591,21 +600,30 @@ main {
 /*------------------------------ 面包屑 ------------------------------*/
 .breadcrumblist {
   padding: toRem(8px);
-  background: rgba($black, .1);
 
   ol {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: toRem(8px) toRem(24px);
+    gap: toRem(4px);
 
     li {
       list-style: none;
+
+      &:nth-of-type(n+2)::before {
+        content: ">";
+        margin-right: toRem(4px);
+      }
+
+      a:hover {
+        color: $base;
+      }
     }
 
     li,
     li a {
       font-size: .875em;
+      color: rgba($black, .5);
     }
   }
 }
