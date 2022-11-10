@@ -100,7 +100,6 @@ add_action('wp_head', function () {
 
   if (is_singular()) {
     global $post;
-    $excerpt   = preg_replace('/( |　|\s)*/', '', wp_strip_all_tags(get_the_excerpt($post)));
     $author_id = $post->post_author;
     $thumbnail = has_post_thumbnail() ? get_the_post_thumbnail_url($post->ID, 'full') : '';
 

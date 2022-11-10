@@ -138,7 +138,7 @@ input:not([type="color"], [type="image"], [type="file"]),
 textarea,
 select {
   border: toRem(1px) solid rgba($black, .3);
-  border-radius: toRem(8px);
+  border-radius: toRem(8px) !important;
 
   &::placeholder {
     color: rgba($black, .5);
@@ -150,6 +150,8 @@ input {
   &[type="submit"],
   &[type="reset"],
   &[type="button"] {
+    padding-left: toRem(16px);
+    padding-right: toRem(16px);
     color: $white;
     background: $base;
     border: none;
@@ -158,12 +160,6 @@ input {
     &:hover {
       background: $black;
     }
-  }
-
-  &[type="submit"],
-  &[type="reset"] {
-    padding-left: toRem(16px);
-    padding-right: toRem(16px);
   }
 }
 

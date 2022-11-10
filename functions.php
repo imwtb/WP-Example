@@ -51,6 +51,7 @@ add_action('wp_enqueue_scripts',  function () {
 
   wp_enqueue_style('style', get_stylesheet_uri(), [], filemtime(get_template_directory() . '/style.css'), 'all');
   wp_enqueue_style('iconoir', get_template_directory_uri() . '/assets/css/iconoir.css', [], '5.4', 'all');
+  wp_enqueue_style('bbpress', get_template_directory_uri() . '/assets/css/bbpress.css', filemtime(get_template_directory() . '/assets/css/bbpress.css'), null, 'all');
 
   wp_enqueue_script('jquery');
   wp_enqueue_script('qrcode-min', get_template_directory_uri() . '/assets/js/qrcode.min.js', [], null, true);
@@ -170,6 +171,16 @@ function post_time_ago($time)
   $time = strtotime($post->post_date);
   return human_time_diff($time, current_time('timestamp')) . __('前', 'imwtb');
 }
+
+// bbsPress论坛可视化编辑器
+function bbp_enable_visual_editor($args = array())
+{
+  $args['tinymce'] = true;
+  $args['quicktags'] = false;
+  //$args['teeny'] = false;
+  return $args;
+}
+add_filter('bbp_after_get_the_content_parse_args', 'bbp_enable_visual_editor');
 
 // 添加维护模式
 /* add_action('get_header', function () {

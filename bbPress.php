@@ -1,9 +1,9 @@
 <?php get_header(); ?>
 
-<div class="maing__max max__1200">
+<div class="maing__max max__960">
   <?php
   while (have_posts()) : the_post();
-    get_template_part('template-parts/content', 'page');
+    the_content();
   endwhile;
   ?>
 </div>

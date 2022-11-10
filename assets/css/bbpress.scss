@@ -1,0 +1,291 @@
+@function toRem($px) {
+  @return $px / 16px * 1rem;
+}
+
+@function toRemF($px) {
+  @return (-($px / 16px * 1rem));
+}
+
+$green: #21cc55;
+$yellow: #ffd000;
+$purple: #e938c3;
+$red: #e93838;
+$base: #3858e9;
+$black: #1e1e1e;
+$white: #ffffff;
+
+#bbpress-forums {
+
+  a,
+  a:hover {
+    transition: .3s ease-in-out;
+  }
+
+  .bbp-breadcrumb,
+  .bbp-topic-tags {
+    p {
+      display: flex;
+      align-items: center;
+      gap: toRem(4px);
+    }
+  }
+
+  .bbp-breadcrumb {
+    p {
+      padding: toRem(8px) toRem(16px);
+      font-size: 1.125em;
+      background: $black;
+    }
+
+    p,
+    a {
+      color: $white;
+    }
+  }
+
+  .bbp-topic-tags {
+    p {
+      padding: toRem(4px) toRem(8px);
+      font-size: 1em;
+      background: rgba($black, .05);
+    }
+
+    p,
+    a {
+      color: rgba($black, .5);
+    }
+  }
+
+  #subscription-toggle,
+  #favorite-toggle {
+    a {
+      display: inline-block;
+      padding: toRem(4px) toRem(8px);
+      font-size: 1.125em;
+      color: $white;
+      background: $base;
+      border-radius: toRem(8px);
+
+      &:hover {
+        background: $black;
+      }
+    }
+  }
+
+  li {
+
+    &.bbp-header,
+    &.bbp-footer,
+    &.bbp-body ul.forum,
+    &.bbp-body ul.topic {
+      padding: toRem(16px);
+    }
+
+    &.bbp-header,
+    &.bbp-footer {
+      font-size: 1.5em;
+    }
+
+    &.bbp-header {
+      color: $white;
+      background: $black;
+    }
+  }
+
+  .bbp-topic-description,
+  .bbp-forum-description {
+    display: flex;
+    align-items: center;
+    gap: toRem(4px);
+
+    a:last-of-type {
+      color: rgba($red, .5);
+
+      &:hover {
+        color: rgba($base, .7);
+      }
+    }
+  }
+
+  .bbp-forum-info > a {
+    font-size: 1.5em;
+    color: $black;
+    font-weight: 700;
+
+    &:hover {
+      color: $base;
+    }
+  }
+
+  .bbp-topic-title > a {
+    font-size: 1.3em;
+    color: $black;
+    font-weight: 700;
+
+    &:hover {
+      color: $base;
+    }
+  }
+
+  .bbp-header > a,
+  .bbp-topic-started-in > a {
+    color: rgba($base, .7);
+  }
+
+  .bbp-topic-started-by {
+    display: inline-flex;
+    align-items: center;
+    gap: toRem(4px);
+    color: rgba($black, .5);
+  }
+
+  .bbp-forum-freshness,
+  .bbp-topic-freshness {
+    > a {
+      color: rgba($red, .5);
+
+      &:hover {
+        color: rgba($base, .7);
+      }
+    }
+  }
+
+  .bbp-reply-post-date {
+    color: rgba($base, .7);
+  }
+
+  .bbp-author-link {
+    display: inline-flex;
+    align-items: center;
+
+    img {
+      border: none !important;
+      border-radius: toRem(100px);
+      transform: translateY(toRemF(1px));
+    }
+
+    span {
+      display: inline-block;
+      margin-bottom: toRem(4px) !important;
+      color: rgba($black, .7);
+    }
+  }
+
+  .bbp-body {
+
+    .bbp-forum-topic-count,
+    .bbp-topic-reply-count,
+    .bbp-topic-voice-count,
+    .bbp-reply-content {
+      font-size: 1.25em;
+    }
+  }
+
+  .bbp-form {
+    padding: 0 !important;
+    border: none !important;
+
+    legend {
+      padding: toRem(8px) toRem(16px) !important;
+      font-size: 1.5em;
+      color: $white;
+      font-weight: 700;
+      background: rgba($base, .7);
+    }
+
+    input {
+      height: auto !important;
+      padding: toRem(8px) toRem(10px) !important;
+      font-size: 1.125em !important;
+    }
+  }
+
+  .bbp-reply-author > a {
+    display: block !important;
+  }
+
+  .bbp-submit-wrapper,
+  .user-pass1-wrap {
+    float: left;
+
+    .button {
+      padding: toRem(8px) toRem(24px);
+      font-size: 1.125em;
+      color: $white;
+      background: $base;
+      border-radius: toRem(8px);
+
+      &:hover {
+        background: $black;
+      }
+    }
+  }
+
+  fieldset.submit {
+    margin-left: calc(20% - 20px) !important;
+    float: left;
+    border: none;
+
+    .user-submit {
+      padding: toRem(8px) toRem(24px);
+      font-size: 1.125em;
+      color: $white;
+      background: $black;
+      border-radius: toRem(8px);
+
+      &:hover {
+        background: $base;
+      }
+    }
+  }
+
+  .entry-title {
+    margin-bottom: toRem(16px) !important;
+    font-size: 2em !important;
+    border-bottom: toRem(4px) solid $black;
+  }
+
+  .bbp-user-section {
+
+    h3 {
+      margin-top: toRem(16px);
+      font-size: 1.5em;
+    }
+
+    p {
+      margin-top: toRem(8px);
+      font-size: 1.125em;
+    }
+
+    hr {
+      display: none;
+    }
+  }
+
+  #bbp-user-navigation {
+
+    li a:hover,
+    li.current a {
+      color: $white;
+      background: $base !important;
+    }
+
+    a {
+      font-size: 1.125em;
+      color: $black;
+    }
+  }
+
+  .bbp-author-role {
+    display: inline-block;
+    padding: 0 toRem(8px);
+    color: rgba($red, .7);
+    background: rgba($red, .1);
+  }
+}
+
+
+// 编辑器
+.mce-container-body input {
+  padding: 0 toRem(4px) !important;
+}
