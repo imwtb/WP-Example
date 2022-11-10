@@ -49,8 +49,6 @@ register_nav_menus([
 // 引入样式脚本
 add_action('wp_enqueue_scripts',  function () {
 
-  $version = wp_get_theme()->get('Version');
-
   wp_enqueue_style('style', get_stylesheet_uri(), [], filemtime(get_template_directory() . '/style.css'), 'all');
   wp_enqueue_style('iconoir', get_template_directory_uri() . '/assets/css/iconoir.css', [], '5.4', 'all');
 
@@ -218,135 +216,80 @@ require_once get_template_directory() . '/widgets/widget.php';
 // 引入文件
 require_once get_template_directory() . '/inc/optimize.php';
 require_once get_template_directory() . '/inc/comments.php';
-require_once get_template_directory() . '/inc/schema-org.php';
 
-require_once get_template_directory() . '/inc/taxonomy-post-type.php';
+require_once get_template_directory() . '/inc/meta-schema.php';
+
+/* require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
   register_custom_post_type(__('产品', 'imwtb'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
 }, 0);
 add_action('init', function () {
   register_custom_taxonomy(__('产品类别', 'imwtb'), 'products', ['product']);
   register_custom_taxonomy(__('测试', 'imwtb'), 'ceshis', ['post']);
-}, 0);
+}, 0); */
 
 require_once get_template_directory() . '/customize/options.php';
-//$theme_option = new Theme_Options();
-require_once get_template_directory() . '/customize/metabox-tax.php';
-//$meta_tax = new MetaBoxTax();
-require_once get_template_directory() . '/customize/metabox-post.php';
-//$meta_post = new MetaBoxPost();
-
-/* $theme_option->fields([
-
-  // textarea
-  // text
-  // - - email
-  // - - url
-  // - - tel
-  // - - password
-  // - - color
-  // - - range
-  // - - number
-  // - - month
-  // - - date
-  // - - week
-  // - - time
-  // - checkbox
-  // - pages
-  // - users
-  // - categories ['taxonomy' => ['category']]
-  // select
-  // radio
-  // file ['returnvalue' => 'id' or 'returnvalue' => 'url']
-  // image ['returnvalue' => 'id' or 'returnvalue' => 'url']
-  // wp_editor
-
+$theme_option = new Theme_Options();
+$theme_option->fields([
   'fields' => [
     [
-      'label' => __('多行文本', 'imwtb'),
-      'id'    => 'textarea_id',
+      'label'   => __('Logo 与 Ico', 'imwtb'),
+      'default' => sprintf(__('使用主题自带设置，%s', 'imwtb'), '<a href="' . wp_customize_url() . '">' . __('去设置', 'imwtb') . '</a>'),
+      'id'      => 'site_logo',
+      'type'    => 'notes',
+    ],
+    [
+      'label' => __('描述', 'imwtb'),
+      'id'    => 'site_description',
       'type'  => 'textarea',
     ],
     [
-      'label' => __('文本', 'imwtb'),
-      'id'    => 'text_id',
-      'type'  => 'text',
+      'label' => __('关键词', 'imwtb'),
+      'id'    => 'site_keywords',
+      'type'  => 'textarea',
     ],
     [
-      'label' => __('颜色', 'imwtb'),
-      'id'    => 'color_id',
-      'type'  => 'color',
-    ],
-    [
-      'label' => __('滑块', 'imwtb'),
-      'id'    => 'range_id',
-      'type'  => 'range',
-      'max'   => '10',
-      'min'   => '1',
-      'step'  => '1',
-    ],
-    [
-      'label' => __('选框', 'imwtb'),
-      'id'    => 'checkbox_id',
-      'type'  => 'checkbox',
-    ],
-    [
-      'label' => __('页面', 'imwtb'),
-      'id'    => 'pages_id',
-      'type'  => 'pages',
-    ],
-    [
-      'label' => __('用户', 'imwtb'),
-      'id'    => 'users_id',
-      'type'  => 'users',
-    ],
-    [
-      'label' => __('分类', 'imwtb'),
-      'id'    => 'categories_id',
-      'type'  => 'categories',
-    ],
-    [
-      'label'   => __('下拉框', 'imwtb'),
-      'id'      => 'select_id',
-      'type'    => 'select',
-      'default' => '1',
-      'options' => [
-        '下拉框1',
-        '下拉框2',
-        '下拉框3',
-      ]
-    ],
-    [
-      'label'   => __('单选', 'imwtb'),
-      'id'      => 'radio_id',
-      'type'    => 'radio',
-      'default' => '1',
-      'options' => [
-        '单选1',
-        '单选2',
-        '单选3',
-      ]
-    ],
-    [
-      'label'       => __('文件', 'imwtb'),
-      'id'          => 'file_id',
-      'type'        => 'file',
-      'returnvalue' => 'url',
-    ],
-    [
-      'label'       => __('图片', 'imwtb'),
-      'id'          => 'image_id',
+      'label'       => __('分享图', 'imwtb'),
+      'description' => __('使用固定分辨率 1200x630 像素大小。', 'imwtb'),
+      'id'          => 'site_image',
       'type'        => 'image',
       'returnvalue' => 'url',
     ],
     [
-      'label'         => __('文本编辑器', 'imwtb'),
-      'id'            => 'wysiwyg_id',
-      'type'          => 'wysiwyg',
-      'media_buttons' => false,
-      'textarea_rows' => 5,
-      'quicktags'     => false,
-      'teeny'         => false,
+      'label' => __('备案号', 'imwtb'),
+      'id'    => 'site_record',
+      'type'  => 'text',
     ],
+    [
+      'label'         => __('版权', 'imwtb'),
+      'id'            => 'site_copyright',
+      'type'          => 'wysiwyg',
+      'media_buttons' => true,
+      'textarea_rows' => 5,
+    ],
+    [
+      'label'       => __('脚本', 'imwtb'),
+      'description' => esc_html__('脚本需要加上 类似于这种 <script type="text/javascript"> 脚本 </script> 标签。', 'imwtb'),
+      'id'          => 'site_script',
+      'type'        => 'textarea',
+    ]
   ]
-]); */
+]);
+require_once get_template_directory() . '/customize/metabox-tax.php';
+$meta_tax = new MetaBoxTax();
+$meta_tax->fields([
+  'fields' => [
+    [
+      'label' => __('关键词', 'imwtb'),
+      'id'    => 'term_keywords',
+      'type'  => 'textarea',
+    ],
+    [
+      'label'       => __('图片', 'imwtb'),
+      'id'          => 'term_image',
+      'type'        => 'image',
+      'returnvalue' => 'url',
+    ]
+  ]
+]);
+require_once get_template_directory() . '/customize/metabox-post.php';

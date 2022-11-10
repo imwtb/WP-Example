@@ -3,7 +3,7 @@
 </div>
 <?php
 $args = [
-  'post_type'           => get_post_type(),
+  'post_type'           => !empty(get_post_type()) ? get_post_type() : 'imwtb',
   'post__not_in'        => [get_the_ID()],
   'orderby'             => 'rand',
   'fields'              => 'ids',

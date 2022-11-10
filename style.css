@@ -199,17 +199,17 @@ main { flex-grow: 1; }
 .search__form button { position: absolute; right: 0; z-index: 5; font-size: 1.75em; color: rgba(30, 30, 30, 0.5); }
 
 /*------------------------------ 面包屑 ------------------------------*/
-.breadcrumblist { padding: 0.5rem; }
+.breadcrumbs { padding: 0.5rem; }
 
-.breadcrumblist ol { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem; }
+.breadcrumbs ol { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem; }
 
-.breadcrumblist ol li { list-style: none; }
+.breadcrumbs ol li { list-style: none; }
 
-.breadcrumblist ol li:nth-of-type(n+2)::before { content: ">"; margin-right: 0.25rem; }
+.breadcrumbs ol li:nth-of-type(n+2)::before { content: ">"; margin-right: 0.25rem; }
 
-.breadcrumblist ol li a:hover { color: #3858e9; }
+.breadcrumbs ol li a:hover { color: #3858e9; }
 
-.breadcrumblist ol li, .breadcrumblist ol li a { font-size: .875em; color: rgba(30, 30, 30, 0.5); }
+.breadcrumbs ol li, .breadcrumbs ol li a { font-size: .875em; color: rgba(30, 30, 30, 0.5); }
 
 /*------------------------------ 跳到内容 ------------------------------*/
 .screen-reader-text { position: absolute !important; width: 0.0625rem; height: 0.0625rem; overflow: hidden; border: 0; outline: 0; word-wrap: normal !important; word-break: normal; clip: rect(0.0625rem, 0.0625rem, 0.0625rem, 0.0625rem); clip-path: inset(50%); }

@@ -31,34 +31,38 @@ class Theme_Options
 
   public function meta_post_enqueue_scripts()
   {
-    global $typenow;
-    $slugs = is_array($this->slug) ?: explode(',', $this->slug);
-    if (in_array($typenow, $slugs)) {
-      wp_enqueue_media();
-      wp_enqueue_script('wp-color-picker');
-      wp_enqueue_style('wp-color-picker');
+    global $pagenow;
+    $slugs = is_array($this->slug) ? $this->slug : explode(',', $this->slug);
+    foreach ($slugs as $slug) {
+      if ($pagenow . '?page=' . $slug) {
+        wp_enqueue_media();
+        wp_enqueue_script('wp-color-picker');
+        wp_enqueue_style('wp-color-picker');
+      }
     }
   }
 
   public function option_footer_scripts()
   {
-    global $typenow;
-    $slugs = is_array($this->slug) ?: explode(',', $this->slug);
-    if (in_array($typenow, $slugs)) {
-      $theme_fields = new Theme_fields();
-      return $theme_fields->footer_script();
+    global $pagenow;
+    $slugs = is_array($this->slug) ? $this->slug : explode(',', $this->slug);
+    foreach ($slugs as $slug) {
+      if ($pagenow . '?page=' . $slug) {
+        $theme_fields = new Theme_fields();
+        return $theme_fields->footer_script();
+      }
     }
   }
 
   public function fields($fields = [])
   {
     $this->fields     = $fields['fields'];
-    $this->title      = isset($fields['title']) ?: __('主题设置', 'imwtb');
-    $this->escription = isset($fields['escription']) ?: '';
-    $this->capability = isset($fields['capability']) ?: 'manage_options';
-    $this->slug       = isset($fields['slug']) ?: 'theme-options';
-    $this->icon       = isset($fields['icon']) ?: 'dashicons-admin-settings';
-    $this->position   = isset($fields['position']) ?: 99;
+    $this->title      = isset($fields['title']) ? $fields['title'] : __('主题设置', 'imwtb');
+    $this->escription = isset($fields['escription']) ? $fields['escription'] : '';
+    $this->capability = isset($fields['capability']) ? $fields['capability'] : 'manage_options';
+    $this->slug       = isset($fields['slug']) ? $fields['slug'] : 'theme-options';
+    $this->icon       = isset($fields['icon']) ? $fields['icon'] : 'dashicons-admin-settings';
+    $this->position   = isset($fields['position']) ? $fields['position'] : 99;
   }
 
   public function option_create_settings()
@@ -106,14 +110,14 @@ class Theme_Options
     $theme_fields = new Theme_fields();
     $value        = get_option($field['id']);
     if (empty($value)) {
-      if (isset($field['default'])) {
-        $value = $field['default'];
-      }
-      if (isset($field['placeholder'])) {
-        $placeholder = $field['placeholder'];
-      }
+      $value       = isset($field['default']) ? $field['default'] : '';
+      $placeholder = isset($field['placeholder']) ? $field['placeholder'] : '';
     }
     switch ($field['type']) {
+
+      case 'notes':
+        $input = $theme_fields->notes($field);
+        break;
 
       case 'textarea':
         $input = $theme_fields->textarea($field, $value, $placeholder);
@@ -169,8 +173,8 @@ class Theme_Options
     }
     echo $input;
 
-    if (isset($field['desc'])) {
-      if ($desc = $field['desc']) {
+    if (isset($field['description'])) {
+      if ($desc = $field['description']) {
         printf('<p class="description">%s </p>', $desc);
       }
     }

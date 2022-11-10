@@ -1,13 +1,140 @@
 <?php
+//$meta_post = new MetaBoxPost();
+/* $meta_post->fields([
+
+  // notes
+  // textarea
+  // text
+  // - - email
+  // - - url
+  // - - tel
+  // - - password
+  // - - color
+  // - - range
+  // - - number
+  // - - month
+  // - - date
+  // - - week
+  // - - time
+  // - checkbox
+  // - pages
+  // - users
+  // - categories ['taxonomy' => ['category']]
+  // select
+  // radio
+  // file ['returnvalue' => 'id' or 'returnvalue' => 'url']
+  // image ['returnvalue' => 'id' or 'returnvalue' => 'url']
+  // wp_editor
+
+  'fields' => [
+    [
+      'label' => __('多行文本', 'imwtb'),
+      'id'    => 'textarea_id',
+      'type'  => 'textarea',
+    ],
+    [
+      'label' => __('文本', 'imwtb'),
+      'id'    => 'text_id',
+      'type'  => 'text',
+    ],
+    [
+      'label' => __('颜色', 'imwtb'),
+      'id'    => 'color_id',
+      'type'  => 'color',
+    ],
+    [
+      'label' => __('滑块', 'imwtb'),
+      'id'    => 'range_id',
+      'type'  => 'range',
+      'max'   => '10',
+      'min'   => '1',
+      'step'  => '1',
+    ],
+    [
+      'label' => __('选框', 'imwtb'),
+      'id'    => 'checkbox_id',
+      'type'  => 'checkbox',
+    ],
+    [
+      'label' => __('页面', 'imwtb'),
+      'id'    => 'pages_id',
+      'type'  => 'pages',
+    ],
+    [
+      'label' => __('用户', 'imwtb'),
+      'id'    => 'users_id',
+      'type'  => 'users',
+    ],
+    [
+      'label' => __('分类', 'imwtb'),
+      'id'    => 'categories_id',
+      'type'  => 'categories',
+    ],
+    [
+      'label'   => __('下拉框', 'imwtb'),
+      'id'      => 'select_id',
+      'type'    => 'select',
+      'default' => '1',
+      'options' => [
+        '下拉框1',
+        '下拉框2',
+        '下拉框3',
+      ]
+    ],
+    [
+      'label'   => __('单选', 'imwtb'),
+      'id'      => 'radio_id',
+      'type'    => 'radio',
+      'default' => '1',
+      'options' => [
+        '单选1',
+        '单选2',
+        '单选3',
+      ]
+    ],
+    [
+      'label'       => __('文件', 'imwtb'),
+      'id'          => 'file_id',
+      'type'        => 'file',
+      'returnvalue' => 'url',
+    ],
+    [
+      'label'       => __('图片', 'imwtb'),
+      'id'          => 'image_id',
+      'type'        => 'image',
+      'returnvalue' => 'url',
+    ],
+    [
+      'label'         => __('文本编辑器', 'imwtb'),
+      'id'            => 'wysiwyg_id',
+      'type'          => 'wysiwyg',
+      'media_buttons' => false,
+      'textarea_rows' => 5,
+      'quicktags'     => false,
+      'teeny'         => false,
+    ],
+  ]
+]); */
 
 class Theme_Fields
 {
 
   // 多行文本
+  function notes($field)
+  {
+    $input = sprintf(
+      '<div id="%1$s">%2$s</div>',
+      $field['id'],
+      $field['default'],
+    );
+    return $input;
+  }
+
+  // 多行文本
   function textarea($field, $value, $placeholder)
   {
     $input = sprintf(
-      '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>',
+      '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="3" style="min-width:50%%">%3$s</textarea>',
       $field['id'],
       $placeholder,
       $value
@@ -24,7 +151,7 @@ class Theme_Fields
       $field['type'],
       $placeholder,
       $value,
-      $field['type'] == 'color' ? 'class="text-color-picker" style="display:none;"' : '',
+      $field['type'] == 'color' ? 'class="text-color-picker" style="display:none;"' : 'style="min-width:50%"',
     );
     return $input;
   }
@@ -91,7 +218,7 @@ class Theme_Fields
       'id'               => $field['id'],
       'name'             => $field['id'],
       'selected'         => $value,
-      'taxonomy'         => isset($field['taxonomy']) ?: ['category'],
+      'taxonomy'         => isset($field['taxonomy']) ? $field['taxonomy'] : ['category'],
       'hide_empty'       => 0,
       'echo'             => 0,
     ]);
@@ -241,9 +368,9 @@ class Theme_Fields
     wp_editor($value, $field['id'], [
       'textarea_name' => $field['id'],
       'textarea_rows' => isset($field['rows']) ? $field['rows'] : 5,
-      'media_buttons' => isset($field['media_buttons']) ? true : false,
-      'quicktags'     => isset($field['quicktags']) ? true : false,
-      'teeny'         => isset($field['teeny']) ? true : false,
+      'media_buttons' => isset($field['media_buttons']) ?: false,
+      'quicktags'     => isset($field['quicktags']) ?: false,
+      'teeny'         => isset($field['teeny']) ?: false,
     ]);
     $input = ob_get_contents();
     ob_end_clean();

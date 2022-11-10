@@ -17,7 +17,15 @@
     ?>
 
     <div class="fooing__copyright">
-      Copyright &copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> <a href="<?php echo esc_url('https://beian.miit.gov.cn/'); ?>"><?php _e('京ICP备2022018789号'); ?></a> <?php the_privacy_policy_link(); ?>
+      <p>
+        Copyright &copy; <?php echo date('Y') . ' ' . get_bloginfo('name') . ' ' . preg_replace('#^(http)?(s)?(://)#', '', home_url()); ?>
+        <?php
+        if (get_option('site_record')) echo '<a href="https://beian.miit.gov.cn/">' . get_option('site_record') . '</a>';
+        the_privacy_policy_link();
+        ?>
+      </p>
+      <p><?php echo get_option('site_copyright') . get_option('site_script'); ?></p>
+
     </div>
   </div>
 

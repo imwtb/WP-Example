@@ -23,7 +23,6 @@ class MetaBoxPost
 
     add_action('admin_enqueue_scripts', [$this, 'meta_post_enqueue_scripts']);
     add_action('admin_footer', [$this, 'meta_post_footer_scripts']);
-
   }
 
   public function meta_post_enqueue_scripts()
@@ -40,7 +39,7 @@ class MetaBoxPost
   public function meta_post_footer_scripts()
   {
     global $typenow;
-    $screens = is_array($this->screens) ?: explode(',', $this->screens);
+    $screens = is_array($this->screens) ? $this->screens : explode(',', $this->screens);
     if (in_array($typenow, $screens)) {
       $theme_fields = new Theme_fields();
       return $theme_fields->footer_script();
@@ -51,16 +50,16 @@ class MetaBoxPost
   {
     $this->menus    = $fields;
     $this->fields   = $fields['fields'];
-    $this->id       = isset($this->menus['meta_id']) ?: 'metabox_id';
-    $this->title    = isset($this->menus['title']) ?: __('元框', 'imwtb');
-    $this->screens  = isset($this->menus['screen']) ?: 'post';
-    $this->context  = isset($this->menus['context']) ?: 'advanced';
-    $this->priority = isset($this->menus['priority']) ?: 'high';
+    $this->id       = isset($this->menus['meta_id']) ? $this->menus['meta_id'] : 'metabox_id';
+    $this->title    = isset($this->menus['title']) ? $this->menus['title'] : __('元框', 'imwtb');
+    $this->screens  = isset($this->menus['screen']) ? $this->menus['screen'] : 'post';
+    $this->context  = isset($this->menus['context']) ? $this->menus['context'] : 'advanced';
+    $this->priority = isset($this->menus['priority']) ? $this->menus['priority'] : 'high';
   }
 
   public function meta_post_add_boxes()
   {
-    $screens = is_array($this->screens) ?: explode(',', $this->screens);
+    $screens = is_array($this->screens) ? $this->screens : explode(',', $this->screens);
     foreach ($screens as $screen) {
       add_meta_box(
         $this->id,
@@ -89,14 +88,14 @@ class MetaBoxPost
       $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
       $value       = get_post_meta($post->ID, $field['id'], true);
       if (empty($value)) {
-        if (isset($field['default'])) {
-          $value = $field['default'];
-        }
-        if (isset($field['placeholder'])) {
-          $placeholder = $field['placeholder'];
-        }
+        $value       = isset($field['default']) ? $field['default'] : '';
+        $placeholder = isset($field['placeholder']) ? $field['placeholder'] : '';
       }
       switch ($field['type']) {
+
+        case 'notes':
+          $input = $theme_fields->notes($field);
+          break;
 
         case 'textarea':
           $input = $theme_fields->textarea($field, $value, $placeholder);

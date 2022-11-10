@@ -25,20 +25,22 @@ class MetaBoxTax
 
   public function meta_post_enqueue_scripts()
   {
-    global $typenow;
-    if (in_array($typenow, $this->terms)) {
-      wp_enqueue_media();
-      wp_enqueue_script('wp-color-picker');
-      wp_enqueue_style('wp-color-picker');
+    foreach ($this->terms as $tax) {
+      if (get_current_screen()->taxonomy == $tax) {
+        wp_enqueue_media();
+        wp_enqueue_script('wp-color-picker');
+        wp_enqueue_style('wp-color-picker');
+      }
     }
   }
 
   public function metabox_footer_scripts()
   {
-    global $typenow;
-    if (in_array($typenow, $this->terms)) {
-      $theme_fields = new Theme_fields();
-      return $theme_fields->footer_script();
+    foreach ($this->terms as $tax) {
+      if (get_current_screen()->taxonomy == $tax) {
+        $theme_fields = new Theme_fields();
+        return $theme_fields->footer_script();
+      }
     }
   }
 
@@ -53,9 +55,13 @@ class MetaBoxTax
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
       $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
-      $value       = isset($field['default']) ?: '';
-      $placeholder = isset($field['placeholder']) ?: '';
+      $value       = isset($field['default']) ? $field['default'] : '';
+      $placeholder = isset($field['placeholder']) ? $field['placeholder'] : '';
       switch ($field['type']) {
+
+        case 'notes':
+          $input = $theme_fields->notes($field);
+          break;
 
         case 'textarea':
           $input = $theme_fields->textarea($field, $value, $placeholder);
@@ -122,10 +128,14 @@ class MetaBoxTax
       $label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
       $value = get_term_meta($term->term_id, $field['id'], true);
       if (empty($value)) {
-        $value = isset($field['default']) ?: '';
+        $value = isset($field['default']) ? $field['default'] : '';
       }
-      $placeholder = isset($field['placeholder']) ?: '';
+      $placeholder = isset($field['placeholder']) ? $field['placeholder'] : '';
       switch ($field['type']) {
+
+        case 'notes':
+          $input = $theme_fields->notes($field);
+          break;
 
         case 'textarea':
           $input = $theme_fields->textarea($field, $value, $placeholder);

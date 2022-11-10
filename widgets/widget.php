@@ -117,11 +117,9 @@ class Title_Widget extends WP_Widget
   {
     $output = '';
     foreach ($this->widget_fields() as $widget_field) {
-      $default = '';
-      if (isset($widget_field['default'])) {
-        $default = $widget_field['default'];
-      }
-      $widget_value = !empty($instance[$widget_field['id']]) ? $instance[$widget_field['id']] : __($default, 'Text-Domain');
+      $default      = '';
+      $default      = isset($widget_field['default']) ? $widget_field['default'] : '';
+      $widget_value = !empty($instance[$widget_field['id']]) ? $instance[$widget_field['id']] : __($default, 'imwtb');
       switch ($widget_field['type']) {
         case 'textarea':
           $output .= '<p>';
@@ -168,7 +166,7 @@ class Title_Widget extends WP_Widget
 
         default:
           $output .= '<p>';
-          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'Text-Domain') . ':</label> ';
+          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'imwtb') . ':</label> ';
           $output .= '<input class="widefat" id="' . esc_attr($this->get_field_id($widget_field['id'])) . '" name="' . esc_attr($this->get_field_name($widget_field['id'])) . '" type="' . $widget_field['type'] . '" value="' . esc_attr($widget_value) . '">';
           $output .= '</p>';
       }
@@ -178,10 +176,10 @@ class Title_Widget extends WP_Widget
 
   public function form($instance)
   {
-    $title = !empty($instance['title']) ? $instance['title'] : __('', 'Text-Domain');
+    $title = !empty($instance['title']) ? $instance['title'] : __('', 'imwtb');
   ?>
     <p>
-      <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_attr_e('Title:', 'Text-Domain'); ?></label>
+      <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_attr_e('Title:', 'imwtb'); ?></label>
       <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
     </p>
 <?php
