@@ -38,6 +38,12 @@ add_action('after_setup_theme', function () {
   //add_theme_support('editor-styles');
   //add_editor_style('/assets/css/style-editor.css');
   remove_theme_support('core-block-patterns');
+
+  /*----- Woocommerce商店 -----*/
+  add_theme_support('woocommerce');
+  add_theme_support('wc-product-gallery-zoom');
+  add_theme_support('wc-product-gallery-lightbox');
+  add_theme_support('wc-product-gallery-slider');
 });
 
 // 注册菜单
@@ -52,6 +58,7 @@ add_action('wp_enqueue_scripts',  function () {
   wp_enqueue_style('style', get_stylesheet_uri(), [], filemtime(get_template_directory() . '/style.css'), 'all');
   wp_enqueue_style('iconoir', get_template_directory_uri() . '/assets/css/iconoir.css', [], '5.4', 'all');
   wp_enqueue_style('bbpress', get_template_directory_uri() . '/bbpress/bbpress.css', filemtime(get_template_directory() . '/bbpress/bbpress.css'), null, 'all');
+  wp_enqueue_style('woocommerce', get_template_directory_uri() . '/woocommerce/woocommerce.css', filemtime(get_template_directory() . '/woocommerce/woocommerce.css'), null, 'all');
 
   wp_enqueue_script('jquery');
   wp_enqueue_script('qrcode-min', get_template_directory_uri() . '/assets/js/qrcode.min.js', [], null, true);
@@ -217,9 +224,16 @@ add_filter('bbp_get_tiny_mce_plugins', function ($plugins = []) {
 // 注册小工具
 add_action('widgets_init', function () {
   register_sidebar([
-    'name'          => __('侧边栏', 'imwtb'),
-    'description'   => __('默认侧边栏', 'imwtb'),
+    'name'          => __('默认侧边栏', 'imwtb'),
     'id'            => 'sidebar',
+    'before_widget' => '<section id="%1$s" class="widget %2$s">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h2 class="widget__title">',
+    'after_title'   => '</h2>',
+  ]);
+  register_sidebar([
+    'name'          => __('产品侧边栏', 'imwtb'),
+    'id'            => 'product',
     'before_widget' => '<section id="%1$s" class="widget %2$s">',
     'after_widget'  => '</section>',
     'before_title'  => '<h2 class="widget__title">',

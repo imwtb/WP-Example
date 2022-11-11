@@ -61,8 +61,6 @@ main { flex-grow: 1; }
 
 .heading__max, .fooing__max { padding: 0.5rem 0; }
 
-.maing__max { padding: 2rem 0; }
-
 .max__1200, .max__960, .max__768, .max__576 { margin: 0 3vw; }
 
 @media screen and (min-width: 75rem) { .max__1200 { max-width: 75rem; margin: 0 auto; } }
@@ -111,10 +109,14 @@ main { flex-grow: 1; }
 
 .post__content p { margin: 0.5rem 0; }
 
-.post__catag a { display: inline-block; margin: 0 0.5rem 0.5rem 0; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); }
+.post__catag a { display: inline-block; margin: 0 0.5rem 0.5rem 0; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); border-radius: 0.5rem; }
+
+@media screen and (min-width: 48rem) { .post__title { font-size: 2em; } }
 
 /*------------------------------ 侧面 ------------------------------*/
 .widget:not(:last-child) { margin-bottom: 2rem; }
+
+.widget__title { margin-bottom: 0.5rem; }
 
 .widget ul { list-style: none; }
 

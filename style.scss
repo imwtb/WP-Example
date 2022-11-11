@@ -192,10 +192,6 @@ main {
   }
 }
 
-.maing__max {
-  padding: toRem(32px) 0;
-}
-
 .max {
 
   &__1200,
@@ -306,6 +302,8 @@ main {
     margin-bottom: toRem(16px);
   }
 
+  &__title {}
+
   &__meta {
     display: flex;
     align-items: center;
@@ -355,6 +353,13 @@ main {
     font-size: .875em;
     color: rgba($black, .5);
     background: rgba($black, .05);
+    border-radius: toRem(8px);
+  }
+
+  @media screen and (min-width: #{$max768}) {
+    &__title {
+      font-size: 2em;
+    }
   }
 }
 
@@ -362,6 +367,10 @@ main {
 .widget {
   &:not(:last-child) {
     margin-bottom: toRem(32px);
+  }
+
+  &__title {
+    margin-bottom: toRem(8px);
   }
 
   ul {

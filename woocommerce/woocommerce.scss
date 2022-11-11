@@ -1,0 +1,236 @@
+@function toRem($px) {
+  @return $px / 16px * 1rem;
+}
+
+@function toRemF($px) {
+  @return (-($px / 16px * 1rem));
+}
+
+$green: #21cc55;
+$yellow: #ffd000;
+$purple: #e938c3;
+$red: #e93838;
+$base: #3858e9;
+$black: #1e1e1e;
+$white: #ffffff;
+
+.woocommerce {
+  &-loop-product__title {
+    font-size: 1.5em !important;
+    color: $black;
+  }
+
+  #respond input#submit,
+  a.button,
+  button.button,
+  input.button {
+    font-size: 1em;
+    color: $black;
+    font-weight: 400;
+    background: transparent;
+    border: toRem(2px) solid $black;
+    border-radius: toRem(100px);
+
+    &:hover {
+      color: $white;
+      background: $black;
+    }
+  }
+
+  ul.products li.product .star-rating {
+    font-size: 1.25em;
+  }
+
+  .star-rating::before {
+    color: rgba($base, .5);
+  }
+
+  .star-rating span::before {
+    color: $base;
+  }
+
+  ul.products li.product .price,
+  div.product p.price,
+  div.product span.price {
+    font-size: 1.375em;
+    color: $black;
+    font-weight: 700;
+  }
+
+  // 内页
+  .product_title {
+    font-size: 2.5em;
+  }
+
+  &-review-link {
+    font-size: .875em;
+    color: rgba($base, .5);
+  }
+
+  &-product-details__short-description {
+    margin: toRem(16px) 0;
+  }
+
+  div.product form.cart .variations {
+    padding: toRem(16px) 0;
+    background: rgba($black, .05);
+    border-radius: toRem(8px);
+  }
+
+  div.product p.stock {
+    margin-bottom: toRem(16px);
+    color: $base !important;
+  }
+
+  .product_meta {
+    padding: toRem(8px) toRem(16px);
+    background: rgba($black, .05);
+    border-radius: toRem(8px);
+
+    span:not(:last-child) {
+      margin-right: toRem(16px);
+    }
+
+    a {
+      color: rgba($black, .5);
+    }
+  }
+
+  #comments {
+    margin-bottom: toRem(16px);
+  }
+
+  &-Reviews-title {
+    margin-bottom: toRem(16px);
+  }
+
+  .comment-reply-title {
+    font-size: 1.5em;
+    font-weight: 700;
+  }
+
+  div.product .woocommerce-tabs .panel,
+  .related {
+    h2 {
+      margin-bottom: toRem(16px);
+    }
+  }
+
+  #reviews #comments ol.commentlist li {
+    img.avatar {
+      width: toRem(50px);
+      padding: 0;
+      border: none;
+      border-radius: toRem(100px);
+    }
+
+    .comment-text {
+      margin-left: toRem(60px) !important;
+    }
+  }
+
+  #respond input#submit.alt,
+  a.button.alt,
+  button.button.alt,
+  input.button.alt,
+  #respond input#submit.alt.disabled,
+  #respond input#submit.alt.disabled:hover,
+  #respond input#submit.alt:disabled,
+  #respond input#submit.alt:disabled:hover,
+  #respond input#submit.alt:disabled[disabled],
+  #respond input#submit.alt:disabled[disabled]:hover,
+  a.button.alt.disabled,
+  a.button.alt.disabled:hover,
+  a.button.alt:disabled,
+  a.button.alt:disabled:hover,
+  a.button.alt:disabled[disabled],
+  a.button.alt:disabled[disabled]:hover,
+  button.button.alt.disabled,
+  button.button.alt.disabled:hover,
+  button.button.alt:disabled,
+  button.button.alt:disabled:hover,
+  button.button.alt:disabled[disabled],
+  button.button.alt:disabled[disabled]:hover,
+  input.button.alt.disabled,
+  input.button.alt.disabled:hover,
+  input.button.alt:disabled,
+  input.button.alt:disabled:hover,
+  input.button.alt:disabled[disabled],
+  input.button.alt:disabled[disabled]:hover {
+    border: none;
+  }
+
+  #review_form #respond .form-submit input {
+    color: $white;
+    background: $black;
+  }
+
+  #respond input#submit,
+  a.button,
+  button.button,
+  input.button,
+  #respond input#submit.disabled,
+  #respond input#submit:disabled,
+  #respond input#submit:disabled[disabled],
+  a.button.disabled,
+  a.button:disabled,
+  a.button:disabled[disabled],
+  button.button.disabled,
+  button.button:disabled,
+  button.button:disabled[disabled],
+  input.button.disabled,
+  input.button:disabled,
+  input.button:disabled[disabled] {
+    padding: toRem(12px) toRem(24px);
+  }
+
+  //其他
+  &-MyAccount-navigation ul {
+    li {
+      list-style: none;
+
+      a {
+        display: block;
+        padding: toRem(8px) toRem(16px);
+        color: $black;
+        border-radius: toRem(8px);
+
+        &:hover {
+          background: rgba($black, .05);
+        }
+      }
+    }
+
+    .is-active > a {
+      color: $white;
+      background: $base;
+
+      &:hover {
+        color: $black;
+      }
+    }
+  }
+
+  &-MyAccount-content a {
+    display: inline-block;
+    margin: 0 toRem(4px);
+    padding: toRem(2px) toRem(16px);
+    font-size: .875em;
+    color: $white;
+    background: $black;
+    border-radius: toRem(8px);
+
+    &:hover {
+      background: $base;
+    }
+  }
+
+  ul.cart_list li img,
+  ul.product_list_widget li img {
+    width: toRem(72px);
+  }
+
+  .star-rating {
+    margin: toRem(4px) 0;
+  }
+}

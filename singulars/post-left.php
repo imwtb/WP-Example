@@ -15,7 +15,7 @@ get_header(); ?>
       get_template_part('template-parts/content', 'post');
     endwhile;
     get_template_part('template-parts/section', 'related');
-    ?>
+   ?>
   </div>
 
 </div>

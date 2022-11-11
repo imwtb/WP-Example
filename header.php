@@ -31,7 +31,7 @@
           'theme_location'       => 'primary',
         ]);
       }
-      ?>
+     ?>
 
       <?php get_search_form(); ?>
     </div>

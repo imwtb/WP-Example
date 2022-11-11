@@ -30,7 +30,7 @@
 
 #bbpress-forums .bbp-forum-info > a:hover { color: #3858e9; }
 
-#bbpress-forums .bbp-topic-title > a { font-size: 1.3em; color: #1e1e1e; font-weight: 700; }
+#bbpress-forums .bbp-topic-title > a { font-size: 1.3334em; color: #1e1e1e; font-weight: 700; }
 
 #bbpress-forums .bbp-topic-title > a:hover { color: #3858e9; }
 
@@ -80,9 +80,11 @@
 
 #bbpress-forums .bbp-user-section hr { display: none; }
 
-#bbpress-forums #bbp-user-navigation li a:hover, #bbpress-forums #bbp-user-navigation li.current a { color: #ffffff; background: #3858e9 !important; }
+#bbpress-forums #bbp-user-navigation li.current a { color: #ffffff; background: #3858e9 !important; }
 
-#bbpress-forums #bbp-user-navigation a { font-size: 1.125em; color: #1e1e1e; }
+#bbpress-forums #bbp-user-navigation li a { padding: 0.5rem !important; font-size: 1.3334em; color: #1e1e1e; }
+
+#bbpress-forums #bbp-user-navigation li a:hover { background: rgba(30, 30, 30, 0.05); }
 
 #bbpress-forums .bbp-author-role { display: inline-block; margin: 0.5rem 0; padding: 0 0.5rem; color: rgba(233, 56, 56, 0.7); background: rgba(233, 56, 56, 0.1); }
 

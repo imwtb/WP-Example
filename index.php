@@ -23,7 +23,7 @@
       }
     endwhile;
     wp_reset_postdata();
-    ?>
+   ?>
 
     <div class="maing__head">
       <h2>最新</h2>
@@ -40,7 +40,7 @@
       get_template_part('template-parts/content', 'post');
     endwhile;
     wp_reset_postdata();
-    ?>
+   ?>
 
   </div>
 

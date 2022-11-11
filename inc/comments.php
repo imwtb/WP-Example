@@ -18,7 +18,7 @@ if (!class_exists('Theme_Walker_Comment')) {
             $avatar_url .= ($args['avatar_size'] != 0) ? get_avatar($comment, $args['avatar_size']) : '';
             $avatar_url .= ($approved && !$shows) ? '' : '</a>';
             echo $avatar_url;
-            ?>
+           ?>
           </figure>
 
           <div class="comment__box">
@@ -32,7 +32,7 @@ if (!class_exists('Theme_Walker_Comment')) {
               $notes = $commenter['comment_author_email'] ? __('您的评论正在等待审核。 这是预览，您的评论将在获得批准后可见。', 'imwtb') : '';
               if ($approved) echo  '<em class="comment__awaiting">' . $notes . '</em>';
               comment_text();
-              ?>
+             ?>
             </div>
 
             <footer class="comment__foo">

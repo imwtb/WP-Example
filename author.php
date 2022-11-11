@@ -32,7 +32,7 @@
     the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
     wp_reset_postdata();
 
-    ?>
+   ?>
   </div>
 
   <?php get_sidebar(); ?>

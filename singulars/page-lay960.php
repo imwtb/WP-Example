@@ -14,7 +14,7 @@ get_header(); ?>
       get_template_part('template-parts/content', 'post');
     }
   endwhile;
-  ?>
+ ?>
 </div>
 
 <?php get_footer(); ?>

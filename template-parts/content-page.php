@@ -11,7 +11,7 @@
       'nextpagelink'     => '&gt;',
       'previouspagelink' => '&lt;',
     ]);
-    ?>
+   ?>
   </div>
 
 </article>

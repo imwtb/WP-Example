@@ -81,7 +81,7 @@ class Theme_Options
         settings_fields($this->slug);
         do_settings_sections($this->slug);
         submit_button();
-        ?>
+       ?>
       </form>
     </div>
 <?php

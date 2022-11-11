@@ -14,7 +14,7 @@
         'theme_location'  => 'secondary',
       ]);
     }
-    ?>
+   ?>
 
     <div class="fooing__copyright">
       <p>
@@ -22,7 +22,7 @@
         <?php
         if (get_option('site_record')) echo '<a href="https://beian.miit.gov.cn/">' . get_option('site_record') . '</a>';
         the_privacy_policy_link();
-        ?>
+       ?>
       </p>
       <p><?php echo get_option('site_copyright') . get_option('site_script'); ?></p>
 

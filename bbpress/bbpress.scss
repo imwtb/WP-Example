@@ -120,7 +120,7 @@ $white: #ffffff;
   }
 
   .bbp-topic-title > a {
-    font-size: 1.3em;
+    font-size: 1.3334em;
     color: $black;
     font-weight: 700;
 
@@ -265,15 +265,19 @@ $white: #ffffff;
 
   #bbp-user-navigation {
 
-    li a:hover,
     li.current a {
       color: $white;
       background: $base !important;
     }
 
-    a {
-      font-size: 1.125em;
+    li a {
+      padding: toRem(8px) !important;
+      font-size: 1.3334em;
       color: $black;
+
+      &:hover {
+        background: rgba($black, .05);
+      }
     }
   }
 
