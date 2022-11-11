@@ -38,4 +38,4 @@
   </header>
 
   <main class="maing">
-    <?php if (!is_bbpress()) breadcrumbs('breadcrumbs', 'max__1200'); ?>
+    <?php /* if (!is_bbpress()) */ breadcrumbs('breadcrumbs', 'max__1200'); ?>

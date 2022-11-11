@@ -1,15 +1,15 @@
 @charset "UTF-8";
 /*
-Theme Name: example
-Theme URI: https://example.cn
-Author: example
-Author URI: https://example.cn
-Description: example
+Theme Name: WP-Example
+Theme URI: https://Example.cn
+Author: Example
+Author URI: https://Example.cn
+Description: Example
 Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: imwtb
-Tags: example
+Tags: Example
 */
 /*------------------------------ 重置 ------------------------------*/
 *, *:before, *:after { box-sizing: inherit; margin: 0; padding: 0; }
@@ -75,11 +75,11 @@ main { flex-grow: 1; }
 
 .layout { display: flex; flex-wrap: wrap; gap: 2rem; }
 
+.layout__left, .layout__right { flex: 0 1 100%; background: rgba(30, 30, 30, 0.1); }
+
 .layout__center { flex: 1; }
 
-.layout__right { flex: 0 1 100%; background: rgba(30, 30, 30, 0.1); }
-
-@media screen and (min-width: 75rem) { .layout__right { flex: 0 1 25rem; } }
+@media screen and (min-width: 75rem) { .layout__left, .layout__right { flex: 0 1 25rem; } }
 
 .sticky__left, .sticky__right { height: auto !important; will-change: min-height; }
 
