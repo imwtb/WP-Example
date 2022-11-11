@@ -14,7 +14,7 @@ if (post_password_required()) {
 		$comment = wp_get_current_commenter();
 		$user    = wp_get_current_user();
 		$name    = $user->exists() ? $user->display_name : '';
-		$req     = get_option('require_name_email') ? '*' : '';
+		$req     = get_option('require_name_email') ? ' *' : '';
 		$consent = !empty($comment['comment_author_email']) ? 'checked' : '';
 		$text    = sprintf(__(' 必需的地方已用 %s 做标记', 'imwtb'), '<span>*</span>');
 
