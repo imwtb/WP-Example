@@ -77,7 +77,7 @@ main { flex-grow: 1; }
 
 .layout__center { flex: 1; }
 
-@media screen and (min-width: 75rem) { .layout__left, .layout__right { flex: 0 1 25rem; } }
+@media screen and (min-width: 75rem) { .layout__left, .layout__right { flex: 0 1 22.5rem; } }
 
 .sticky__left, .sticky__right { height: auto !important; will-change: min-height; }
 

@@ -248,14 +248,13 @@ require_once get_template_directory() . '/inc/comments.php';
 
 require_once get_template_directory() . '/inc/meta-schema.php';
 
-/* require_once get_template_directory() . '/inc/taxonomy-post-type.php';
+require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
-  register_custom_post_type(__('产品', 'imwtb'), 'product', ['products'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
+  register_custom_post_type(__('店铺', 'imwtb'), 'locstore', ['locstores'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
 }, 0);
 add_action('init', function () {
-  register_custom_taxonomy(__('产品类别', 'imwtb'), 'products', ['product']);
-  register_custom_taxonomy(__('测试', 'imwtb'), 'ceshis', ['post']);
-}, 0); */
+  register_custom_taxonomy(__('店铺类别', 'imwtb'), 'locstores', ['locstore']);
+}, 0);
 
 require_once get_template_directory() . '/customize/options.php';
 $theme_option = new Theme_Options();
