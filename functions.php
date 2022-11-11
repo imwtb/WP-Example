@@ -68,10 +68,6 @@ add_action('wp_enqueue_scripts',  function () {
   if (is_singular() && comments_open() && get_option('thread_comments')) {
     wp_enqueue_script('comment-reply');
   }
-  /* $custom_css = '';
-  $main_color = get_theme_mod('wtb_main_color', 'default');
-  if ($main_color != 'default') $custom_css .= ":root { --cw-base: var(--cw-{$main_color}) !important; --cw-base-rgb: var(--cw-{$main_color}-rgb) !important; --cw-base-dark: var(--cw-{$main_color}-dark) !important;}";
-  wp_add_inline_style('style', $custom_css); */
 });
 
 // wp_body_open
