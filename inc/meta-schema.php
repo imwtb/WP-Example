@@ -267,11 +267,11 @@ function breadcrumbs_args()
             'link'  => get_term_link($term_id),
           ];
         }
-        $lists[] = [
-          'title' => get_the_title(),
-          'link'  => get_the_permalink(),
-        ];
       }
+      $lists[] = [
+        'title' => get_the_title(),
+        'link'  => get_the_permalink(),
+      ];
     }
 
     // 文章归档

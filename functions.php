@@ -263,6 +263,11 @@ $theme_option->fields([
       'type'    => 'notes',
     ],
     [
+      'label'   => __('Logo 后面标题', 'imwtb'),
+      'id'      => 'site_logo_title',
+      'type'    => 'checkbox',
+    ],
+    [
       'label' => __('描述', 'imwtb'),
       'id'    => 'site_description',
       'type'  => 'textarea',

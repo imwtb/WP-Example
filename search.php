@@ -15,10 +15,9 @@
   while ($main_query->have_posts()) : $main_query->the_post();
     get_template_part('template-parts/content', 'post');
   endwhile;
-  the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
   wp_reset_postdata();
-
- ?>
+  the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
+  ?>
 
 </div>
 

@@ -17,7 +17,7 @@
           <?php if (has_custom_logo()) : ?>
             <img src="<?php echo esc_url(wp_get_attachment_url(get_theme_mod('custom_logo'))); ?>" alt="">
           <?php endif; ?>
-          <?php if (empty($has_custom_title)) : ?>
+          <?php if (get_option('site_logo_title', 1)) : ?>
             <span><?php bloginfo('name'); ?></span>
           <?php endif; ?>
         </a>
@@ -31,11 +31,11 @@
           'theme_location'       => 'primary',
         ]);
       }
-     ?>
+      ?>
 
       <?php get_search_form(); ?>
     </div>
   </header>
 
   <main class="maing">
-    <?php /* if (!is_bbpress()) */ breadcrumbs('breadcrumbs', 'max__1200'); ?>
+    <?php if (!is_bbpress()) breadcrumbs('breadcrumbs', 'max__1200'); ?>
