@@ -1,5 +1,14 @@
 <?php
 
+// 菜单Class
+add_filter('nav_menu_css_class', 'menu_class_filter', 100, true);
+add_filter('nav_menu_item_id', 'menu_class_filter', 100, true);
+add_filter('page_css_class', 'menu_class_filter', 100, true);
+function menu_class_filter($var)
+{
+  return is_array($var) ? array_intersect($var, ['current-menu-item', 'current-menu-parent', 'current-post-ancestor', 'menu-item-has-children']) : '';
+}
+
 //add_filter('use_block_editor_for_post', '__return_false');                                      // 使用 旧版文章编辑器
 add_filter('gutenberg_use_widgets_block_editor', '__return_false');                             // 移除 古腾堡中的旧版小部件
 add_filter('use_widgets_block_editor', '__return_false');                                       // 使用 旧版小工具

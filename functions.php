@@ -191,6 +191,55 @@ function post_time_ago($time)
   return $display;
 }
 
+// 文章浏览量
+function views_types()
+{
+  $types = ['post'];
+  return $types;
+}
+
+function get_post_views()
+{
+  return get_post_meta(get_the_ID(), 'views', true);
+}
+
+add_action('get_header', function () {
+  if (is_singular(views_types())) {
+    $id     = get_the_ID();
+    $views  = get_post_views();
+    $cookie = get_option('views_cookie', false);
+    if ($cookie == false) {
+      if ($views) {
+        update_post_meta($id, 'views', $views + 1);
+      } else {
+        add_post_meta($id, 'views', '0');
+      }
+    } else if ($cookie == true) {
+      $cookies = $_COOKIE['views'  . $id . COOKIEHASH];
+      if (!isset($cookies) && $cookies != '1') {
+        update_post_meta($id, 'views', $views + 1);
+        setcookie('views'  . $id . COOKIEHASH, '1', time() + 86400, COOKIEPATH, COOKIE_DOMAIN);
+      }
+    }
+  }
+});
+
+foreach (views_types() as $value) {
+  add_action('save_post_' . $value, function () {
+    $id    = get_the_ID();
+    $views = get_post_views();
+    $rand  = get_option('views_rand', false);
+    $array = explode(',', get_option('views_rand_num', '64,128'));
+    if ($rand == true && ($views == '0' || $views == '')) {
+      delete_post_meta($id, 'views');
+      add_post_meta($id, 'views', (int)rand($array[0], $array[1]));
+    } else if ($rand == false && ($views == '0' || $views == '')) {
+      delete_post_meta($id, 'views');
+      add_post_meta($id, 'views', '0');
+    }
+  });
+}
+
 // bbsPress论坛可视化编辑器
 add_filter('bbp_after_get_the_content_parse_args', function ($args = []) {
   $args['tinymce'] = true;
@@ -299,6 +348,22 @@ $theme_option->fields([
       'id'          => 'site_image',
       'type'        => 'image',
       'returnvalue' => 'url',
+    ],
+    [
+      'label'   => __('文章阅读量 Cookie', 'imwtb'),
+      'id'      => 'views_cookie',
+      'type'    => 'checkbox',
+    ],
+    [
+      'label'   => __('文章阅读量随机数', 'imwtb'),
+      'id'      => 'views_rand',
+      'type'    => 'checkbox',
+    ],
+    [
+      'label'   => __('文章阅读量初始随机数', 'imwtb'),
+      'default' => '64,128',
+      'id'      => 'views_rand_num',
+      'type'    => 'text',
     ],
     [
       'label' => __('备案号', 'imwtb'),
