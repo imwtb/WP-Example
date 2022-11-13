@@ -52,6 +52,17 @@ register_nav_menus([
   'secondary' => __('次级菜单', 'imwtb')
 ]);
 
+// 禁止生成图片尺寸
+add_action('intermediate_image_sizes_advanced', function ($sizes) {
+  unset($sizes['thumbnail']);        // 150
+  // unset($sizes['medium']);        // 300
+  // unset($sizes['medium_large']);  // 768
+  // unset($sizes['large']);         // 1024
+  unset($sizes['1536x1536']);
+  unset($sizes['2048x2048']);
+  return $sizes;
+}, 10);
+
 // 引入样式脚本
 add_action('wp_enqueue_scripts',  function () {
 
