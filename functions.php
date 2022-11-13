@@ -181,9 +181,14 @@ add_filter('the_time', 'post_time_ago', 10, 1);
 add_filter('get_comment_date', 'post_time_ago', 10, 1);
 function post_time_ago($time)
 {
-  global $post;
-  $time = strtotime($post->post_date);
-  return human_time_diff($time, current_time('timestamp')) . __('前', 'imwtb');
+  $time      = get_post_time('G', true);
+  $time_diff = time() - $time;
+  if ($time_diff > 0 && $time_diff < 24 * 60 * 60) {
+    $display = human_time_diff($time) . __('前', 'imetb');
+  } else {
+    $display = get_the_time(get_option('date_format'));
+  }
+  return $display;
 }
 
 // bbsPress论坛可视化编辑器

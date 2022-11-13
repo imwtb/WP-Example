@@ -1,5 +1,7 @@
 <?php
 
+require_once get_template_directory() . '/widgets/fields.php';
+
 // Adds widget: Title
 class Title_Widget extends WP_Widget
 {
@@ -13,9 +15,9 @@ class Title_Widget extends WP_Widget
   }
 
   // Widget fields
-  private function widget_fields()
+  private function fields()
   {
-    $widget_fields = [
+    $fields = [
       // text
       // textarea
       // checkbox
@@ -43,7 +45,7 @@ class Title_Widget extends WP_Widget
         ]
       ]
     ];
-    return $widget_fields;
+    return $fields;
   }
 
   // Frontend display of widget
@@ -57,17 +59,6 @@ class Title_Widget extends WP_Widget
     }
 
     // Output generated fields
-    echo '<p>' . $instance['text_id'] . '</p>';
-    echo '<p>' . $instance['textarea_id'] . '</p>';
-    echo '<p>' . $instance['checkbox_id'] . '</p>';
-    echo '<p>' . $instance['select_id'] . '</p>';
-    echo '<p>' . $instance['media_id'] . '</p>';
-    echo '<p>' . $instance['email_id'] . '</p>';
-    echo '<p>' . $instance['url_id'] . '</p>';
-    echo '<p>' . $instance['password'] . '</p>';
-    echo '<p>' . $instance['number_id'] . '</p>';
-    echo '<p>' . $instance['tel_id'] . '</p>';
-    echo '<p>' . $instance['date_id'] . '</p>';
 
     echo $args['after_widget'];
   }
@@ -75,100 +66,62 @@ class Title_Widget extends WP_Widget
   // Media field backend
   public function media_fields()
   {
-?>
-    <script>
-      jQuery(document).ready(function($) {
-        if (typeof wp.media !== 'undefined') {
-          var _custom_media = true,
-            _orig_send_attachment = wp.media.editor.send.attachment;
-          $(document).on('click', '.custommedia', function(e) {
-            var send_attachment_bkp = wp.media.editor.send.attachment;
-            var button = $(this);
-            var id = button.attr('id');
-            _custom_media = true;
-            wp.media.editor.send.attachment = function(props, attachment) {
-              if (_custom_media) {
-                $('input#' + id).val(attachment.id);
-                $('span#preview' + id).css('background-image', 'url(' + attachment.url + ')');
-                $('input#' + id).trigger('change');
-              } else {
-                return _orig_send_attachment.apply(this, [props, attachment]);
-              };
-            }
-            wp.media.editor.open(button);
-            return false;
-          });
-          $('.add_media').on('click', function() {
-            _custom_media = false;
-          });
-          $(document).on('click', '.remove-media', function() {
-            var parent = $(this).parents('p');
-            parent.find('input[type="media"]').val('').trigger('change');
-            parent.find('span').css('background-image', 'url()');
-          });
-        }
-      });
-    </script>
-  <?php
+    $widget_fields = new widget_fields();
+    return $widget_fields->footer_script();
   }
 
   // Back-end widget fields
   public function field_generator($instance)
   {
-    $output = '';
-    foreach ($this->widget_fields() as $widget_field) {
-      $default      = '';
-      $default      = isset($widget_field['default']) ? $widget_field['default'] : '';
-      $widget_value = !empty($instance[$widget_field['id']]) ? $instance[$widget_field['id']] : __($default, 'imwtb');
-      switch ($widget_field['type']) {
+    $widget_fields = new Widget_fields();
+    foreach ($this->fields() as $field) {
+      $default = isset($field['default']) ? $field['default'] : '';
+      $value   = !empty($instance[$field['id']]) ? $instance[$field['id']] : __($default, 'imwtb');
+      switch ($field['type']) {
+
         case 'textarea':
-          $output .= '<p>';
-          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'domtest') . ':</label> ';
-          $output .= '<textarea class="widefat" id="' . esc_attr($this->get_field_id($widget_field['id'])) . '" name="' . esc_attr($this->get_field_name($widget_field['id'])) . '" rows="6" cols="6" value="' . esc_attr($widget_value) . '">' . $widget_value . '</textarea>';
-          $output .= '</p>';
+          $output = $widget_fields->textarea(get_field_id($field), $value);
+          break;
+
+        case 'range':
+        case 'number':
+        case 'month':
+        case 'date':
+        case 'week':
+        case 'time':
+          $output = $widget_fields->text_minmax(get_field_id($field), $value);
           break;
 
         case 'checkbox':
-          $output .= '<p>';
-          $output .= '<input class="checkbox" type="checkbox" ' . checked($widget_value, true, false) . ' id="' . esc_attr($this->get_field_id($widget_field['id'])) . '" name="' . esc_attr($this->get_field_name($widget_field['id'])) . '" value="1">';
-          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'domtest') . '</label>';
-          $output .= '</p>';
+          $output = $widget_fields->checkbox(get_field_id($field), $value);
+          break;
+
+        case 'pages':
+          $output = $widget_fields->pages(get_field_id($field), $value);
+          break;
+
+        case 'users':
+          $output = $widget_fields->users(get_field_id($field), $value);
+          break;
+
+        case 'categories':
+          $output = $widget_fields->categories(get_field_id($field), $value);
           break;
 
         case 'select':
-          $output .= '<p>';
-          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'textdomain') . ':</label> ';
-          $output .= '<select id="' . esc_attr($this->get_field_id($widget_field['id'])) . '" name="' . esc_attr($this->get_field_name($widget_field['id'])) . '">';
-          foreach ($widget_field['options'] as $option) {
-            if ($widget_value == $option) {
-              $output .= '<option value="' . $option . '" selected>' . $option . '</option>';
-            } else {
-              $output .= '<option value="' . $option . '">' . $option . '</option>';
-            }
-          }
-          $output .= '</select>';
-          $output .= '</p>';
+          $output = $widget_fields->selects(get_field_id($field), $value);
+          break;
+
+        case 'radio':
+          $output = $widget_fields->radio(get_field_id($field), $value);
           break;
 
         case 'image':
-          $media_url = '';
-          if ($widget_value) {
-            $media_url = wp_get_attachment_url($widget_value);
-          }
-          $output .= '<p>';
-          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'domtest') . ':</label> ';
-          $output .= '<input style="display:none;" class="widefat" id="' . esc_attr($this->get_field_id($widget_field['id'])) . '" name="' . esc_attr($this->get_field_name($widget_field['id'])) . '" type="' . $widget_field['type'] . '" value="' . $widget_value . '">';
-          $output .= '<span id="preview' . esc_attr($this->get_field_id($widget_field['id'])) . '" style="margin-right:10px;border:2px solid #eee;display:block;width: 100px;height:100px;background-image:url(' . $media_url . ');background-size:contain;background-repeat:no-repeat;"></span>';
-          $output .= '<button id="' . $this->get_field_id($widget_field['id']) . '" class="button select-media custommedia">Add Media</button>';
-          $output .= '<input style="width: 19%;" class="button remove-media" id="buttonremove" name="buttonremove" type="button" value="Clear" />';
-          $output .= '</p>';
+          $output = $widget_fields->image(get_field_id($field), $value);
           break;
 
         default:
-          $output .= '<p>';
-          $output .= '<label for="' . esc_attr($this->get_field_id($widget_field['id'])) . '">' . esc_attr($widget_field['label'], 'imwtb') . ':</label> ';
-          $output .= '<input class="widefat" id="' . esc_attr($this->get_field_id($widget_field['id'])) . '" name="' . esc_attr($this->get_field_name($widget_field['id'])) . '" type="' . $widget_field['type'] . '" value="' . esc_attr($widget_value) . '">';
-          $output .= '</p>';
+          $output = $widget_fields->text(get_field_id($field), $value);
       }
     }
     echo $output;
@@ -177,7 +130,7 @@ class Title_Widget extends WP_Widget
   public function form($instance)
   {
     $title = !empty($instance['title']) ? $instance['title'] : __('标题', 'imwtb');
- ?>
+?>
     <p>
       <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_attr_e('标题:', 'imwtb'); ?></label>
       <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
@@ -191,10 +144,10 @@ class Title_Widget extends WP_Widget
   {
     $instance = [];
     $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
-    foreach ($this->widget_fields() as $widget_field) {
-      switch ($widget_field['type']) {
+    foreach ($this->fields() as $field) {
+      switch ($field['type']) {
         default:
-          $instance[$widget_field['id']] = (!empty($new_instance[$widget_field['id']])) ? strip_tags($new_instance[$widget_field['id']]) : '';
+          $instance[$field['id']] = (!empty($new_instance[$field['id']])) ? strip_tags($new_instance[$field['id']]) : '';
       }
     }
     return $instance;

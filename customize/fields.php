@@ -165,9 +165,9 @@ class Theme_Fields
       $field['type'],
       $placeholder,
       $value,
-      $field['max'] ? 'max="' . $field['max'] . '"' : '',
-      $field['min'] ? 'min="' . $field['min'] . '"' : '',
-      $field['step'] ? 'step="' . $field['step'] . '"' : '',
+      isset($field['max']) ? 'max="' . $field['max'] . '"' : '',
+      isset($field['min']) ? 'min="' . $field['min'] . '"' : '',
+      isset($field['step']) ? 'step="' . $field['step'] . '"' : '',
     );
     return $input;
   }
