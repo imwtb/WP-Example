@@ -283,8 +283,8 @@ function breadcrumbs_args()
 
     //归档
     else if (is_archive()) {
-      $terms    = get_term(get_queried_object_id());
-      $term_id  = $terms->term_id;
+      $term_id  = get_queried_object_id();
+      $terms    = get_term($term_id);
       $taxonomy = $terms->taxonomy;
       if ($terms->parent > 0) {
         $parent_ids = get_ancestors($term_id, $taxonomy);
