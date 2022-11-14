@@ -315,9 +315,9 @@ add_action('wp_footer', function () {
 }, 99);
 
 //页面二维码
-function qrcode()
+function qrcode($class = 'maing__qrcode')
 {
-  echo '<div class="maing__qrcode"><p>' . __('使用移动设备随时随地浏览', 'imwtb') . '</p><figure id="qrcode"></figure></div>';
+  echo '<div class="' . $class . '"><p>' . __('使用移动设备随时随地浏览', 'imwtb') . '</p><figure id="qrcode"></figure></div>';
 }
 
 // bbsPress论坛可视化编辑器

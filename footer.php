@@ -4,7 +4,8 @@
 <footer class="fooing">
 
   <div class="fooing__max max__1200">
-    <div id="qrcode"></div>
+
+    <?php qrcode(); ?>
 
     <?php
     if (has_nav_menu('secondary')) {
