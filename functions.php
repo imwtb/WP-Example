@@ -233,6 +233,7 @@ foreach (views_types() as $value) {
   });
 }
 
+<<<<<<< HEAD
 // 指定作者浏览总数
 function count_users_views($author_id = 1, $display = true)
 {
@@ -320,6 +321,29 @@ function qrcode()
   echo '<div class="maing__qrcode"><p>' . __('使用移动设备随时随地浏览', 'imwtb') . '</p><figure id="qrcode"></figure></div>';
 }
 
+=======
+// IP归属地
+function get_locate($ip)
+{
+  if (empty($ip)) {
+    $ip = get_comment_author_IP();
+  }
+  $ch      = curl_init();
+  $timeout = 5;
+  curl_setopt($ch, CURLOPT_URL, 'http://ip.taobao.com/service/getIpInfo.php?ip=' . $ip);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+  $file_contents = curl_exec($ch);
+  curl_close($ch);
+  $result = json_decode($file_contents, true);
+  if ($result['data']['country'] != '中国') {
+    return $result['data']['country'];
+  } else {
+    return $result['data']['country'] . '&nbsp;·&nbsp;' . $result['data']['region'] . '&nbsp;·&nbsp;' . $result['data']['city'] . '&nbsp;·&nbsp;' . $result['data']['isp'];
+  }
+}
+
+>>>>>>> 5633d27b3ef6dc7fc3a5f9c61ed448b9f4fd4f4d
 // bbsPress论坛可视化编辑器
 add_filter('bbp_after_get_the_content_parse_args', function ($args = []) {
   $args['tinymce'] = true;
@@ -449,6 +473,7 @@ $theme_option->fields([
       'type'        => 'checkbox',
     ],
     [
+<<<<<<< HEAD
       'label'   => __('文章阅读量随机', 'imwtb'),
       'default' => true,
       'id'      => 'views_rand',
@@ -457,6 +482,15 @@ $theme_option->fields([
     [
       'label'       => __('文章阅读量随机数', 'imwtb'),
       'default'     => '128,256',
+=======
+      'label' => __('文章阅读量随机', 'imwtb'),
+      'id'    => 'views_rand',
+      'type'  => 'checkbox',
+    ],
+    [
+      'label'       => __('文章阅读量随机数', 'imwtb'),
+      'default'     => '64,128',
+>>>>>>> 5633d27b3ef6dc7fc3a5f9c61ed448b9f4fd4f4d
       'description' => __('最大数和最小数用英逗号 , 相隔开。', 'imwtb'),
       'id'          => 'views_rand_num',
       'type'        => 'text',
