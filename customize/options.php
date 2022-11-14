@@ -81,7 +81,7 @@ class Theme_Options
         settings_fields($this->slug);
         do_settings_sections($this->slug);
         submit_button();
-       ?>
+        ?>
       </form>
     </div>
 <?php
@@ -105,22 +105,17 @@ class Theme_Options
 
   public function field_callback($field)
   {
-    $input        = '';
-    $placeholder  = '';
     $theme_fields = new Theme_fields();
     $value        = get_option($field['id']);
-    if (empty($value)) {
-      $value       = isset($field['default']) ? $field['default'] : '';
-      $placeholder = isset($field['placeholder']) ? $field['placeholder'] : '';
-    }
+    $placeholder  = isset($field['placeholder']) ? $field['placeholder'] : '';
     switch ($field['type']) {
 
       case 'notes':
-        $input = $theme_fields->notes($field);
+        $export = $theme_fields->notes($field);
         break;
 
       case 'textarea':
-        $input = $theme_fields->textarea($field, $value, $placeholder);
+        $export = $theme_fields->textarea($field, $value, $placeholder);
         break;
 
       case 'range':
@@ -129,49 +124,49 @@ class Theme_Options
       case 'date':
       case 'week':
       case 'time':
-        $input = $theme_fields->text_minmax($field, $value, $placeholder);
+        $export = $theme_fields->text_minmax($field, $value, $placeholder);
         break;
 
       case 'checkbox':
-        $input = $theme_fields->checkbox($field, $value);
+        $export = $theme_fields->checkbox($field, $value);
         break;
 
       case 'pages':
-        $input = $theme_fields->pages($field, $value);
+        $export = $theme_fields->pages($field, $value);
         break;
 
       case 'users':
-        $input = $theme_fields->users($field, $value);
+        $export = $theme_fields->users($field, $value);
         break;
 
       case 'categories':
-        $input = $theme_fields->categories($field, $value);
+        $export = $theme_fields->categories($field, $value);
         break;
 
       case 'select':
-        $input = $theme_fields->selects($field, $value);
+        $export = $theme_fields->selects($field, $value);
         break;
 
       case 'radio':
-        $input = $theme_fields->radio($field, $value);
+        $export = $theme_fields->radio($field, $value);
         break;
 
       case 'file':
-        $input = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
+        $export = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
         break;
 
       case 'image':
-        $input = $theme_fields->image($field, $value) . $theme_fields->button($field);
+        $export = $theme_fields->image($field, $value) . $theme_fields->button($field);
         break;
 
       case 'wysiwyg':
-        $input = $theme_fields->wysiwyg($field, $value);
+        $export = $theme_fields->wysiwyg($field, $value);
         break;
 
       default:
-        $input = $theme_fields->text($field, $value, $placeholder);
+        $export = $theme_fields->text($field, $value, $placeholder);
     }
-    echo $input;
+    echo $export;
 
     if (isset($field['description'])) {
       if ($desc = $field['description']) {

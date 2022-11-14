@@ -178,7 +178,7 @@ class Theme_Fields
     $input = sprintf(
       '<label><input id="%1$s" name="%1$s" %2$s type="checkbox" value="1" />%3$s</label>',
       $field['id'],
-      checked($value, 1, false),
+      checked($value, true, false),
       $field['label'],
     );
     return $input;

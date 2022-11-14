@@ -76,7 +76,7 @@ class Title_Widget extends WP_Widget
     $widget_fields = new Widget_fields();
     foreach ($this->fields() as $field) {
       $default = isset($field['default']) ? $field['default'] : '';
-      $value   = !empty($instance[$field['id']]) ? $instance[$field['id']] : __($default, 'imwtb');
+      $value   = !empty($instance[$field['id']]) ? $instance[$field['id']] : $default;
       switch ($field['type']) {
 
         case 'textarea':

@@ -205,39 +205,52 @@ function get_post_views()
 
 add_action('get_header', function () {
   if (is_singular(views_types())) {
-    $id     = get_the_ID();
-    $views  = get_post_views();
-    $cookie = get_option('views_cookie', false);
-    if ($cookie == false) {
-      if ($views) {
-        update_post_meta($id, 'views', $views + 1);
-      } else {
-        add_post_meta($id, 'views', '0');
-      }
-    } else if ($cookie == true) {
-      $cookies = $_COOKIE['views'  . $id . COOKIEHASH];
+    $views = get_post_views();
+    if (get_option('views_cookie')) {
+      $cookies = $_COOKIE['views'  . get_the_ID() . COOKIEHASH];
       if (!isset($cookies) && $cookies != '1') {
-        update_post_meta($id, 'views', $views + 1);
-        setcookie('views'  . $id . COOKIEHASH, '1', time() + 86400, COOKIEPATH, COOKIE_DOMAIN);
+        update_post_meta(get_the_ID(), 'views', $views + 1);
+        setcookie('views'  . get_the_ID() . COOKIEHASH, '1', time() + 86400, COOKIEPATH, COOKIE_DOMAIN);
       }
+    } else {
+      update_post_meta(get_the_ID(), 'views', $views + 1);
     }
   }
 });
 
 foreach (views_types() as $value) {
   add_action('save_post_' . $value, function () {
-    $id    = get_the_ID();
     $views = get_post_views();
-    $rand  = get_option('views_rand', false);
-    $array = explode(',', get_option('views_rand_num', '64,128'));
-    if ($rand == true && ($views == '0' || $views == '')) {
-      delete_post_meta($id, 'views');
-      add_post_meta($id, 'views', (int)rand($array[0], $array[1]));
-    } else if ($rand == false && ($views == '0' || $views == '')) {
-      delete_post_meta($id, 'views');
-      add_post_meta($id, 'views', '0');
+    $array = explode(',', get_option('views_rand_num', '128,256'));
+    if (get_option('views_rand') && ($views == '0' || $views == '')) {
+      delete_post_meta(get_the_ID(), 'views');
+      update_post_meta(get_the_ID(), 'views', (int)rand($array[0], $array[1]));
+    } else if ($views == '0' || $views == '') {
+      delete_post_meta(get_the_ID(), 'views');
+      update_post_meta(get_the_ID(), 'views', '0');
     }
   });
+}
+
+// IP归属地
+function get_locate($ip)
+{
+  if (empty($ip)) {
+    $ip = get_comment_author_IP();
+  }
+  $ch      = curl_init();
+  $timeout = 5;
+  curl_setopt($ch, CURLOPT_URL, 'http://ip.taobao.com/service/getIpInfo.php?ip=' . $ip);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+  $file_contents = curl_exec($ch);
+  curl_close($ch);
+  $result = json_decode($file_contents, true);
+  if ($result['data']['country'] != '中国') {
+    return $result['data']['country'];
+  } else {
+    return $result['data']['country'] . '&nbsp;·&nbsp;' . $result['data']['region'] . '&nbsp;·&nbsp;' . $result['data']['city'] . '&nbsp;·&nbsp;' . $result['data']['isp'];
+  }
 }
 
 // bbsPress论坛可视化编辑器
@@ -329,41 +342,44 @@ $theme_option->fields([
     ],
     [
       'label'   => __('Logo 后面标题', 'imwtb'),
+      'default' => true,
       'id'      => 'site_logo_title',
       'type'    => 'checkbox',
     ],
     [
-      'label' => __('描述', 'imwtb'),
+      'label' => __('默认描述', 'imwtb'),
       'id'    => 'site_description',
       'type'  => 'textarea',
     ],
     [
-      'label' => __('关键词', 'imwtb'),
+      'label' => __('默认关键词', 'imwtb'),
       'id'    => 'site_keywords',
       'type'  => 'textarea',
     ],
     [
-      'label'       => __('分享图', 'imwtb'),
+      'label'       => __('分享站点时显示的图', 'imwtb'),
       'description' => __('使用固定分辨率 1200x630 像素大小。', 'imwtb'),
       'id'          => 'site_image',
       'type'        => 'image',
       'returnvalue' => 'url',
     ],
     [
-      'label'   => __('文章阅读量 Cookie', 'imwtb'),
-      'id'      => 'views_cookie',
-      'type'    => 'checkbox',
+      'label'       => __('文章阅读量 Cookie', 'imwtb'),
+      'description' => __('每IP在24小时内访问仅增加一个阅读量。', 'imwtb'),
+      'id'          => 'views_cookie',
+      'type'        => 'checkbox',
     ],
     [
-      'label'   => __('文章阅读量随机数', 'imwtb'),
-      'id'      => 'views_rand',
-      'type'    => 'checkbox',
+      'label' => __('文章阅读量随机', 'imwtb'),
+      'id'    => 'views_rand',
+      'type'  => 'checkbox',
     ],
     [
-      'label'   => __('文章阅读量初始随机数', 'imwtb'),
-      'default' => '64,128',
-      'id'      => 'views_rand_num',
-      'type'    => 'text',
+      'label'       => __('文章阅读量随机数', 'imwtb'),
+      'default'     => '64,128',
+      'description' => __('最大数和最小数用英逗号 , 相隔开。', 'imwtb'),
+      'id'          => 'views_rand_num',
+      'type'        => 'text',
     ],
     [
       'label' => __('备案号', 'imwtb'),

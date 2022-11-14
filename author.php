@@ -5,20 +5,51 @@
     <?php
     the_archive_title('<h2>', '</h2>');
 
-    global $post;
-    $author_id = $post->post_author;
-    echo get_avatar($author_id) . '<br>';
-    echo __('ID：', 'imwtb') . get_the_author_meta('ID', $author_id) . '<br>';
-    echo __('用户名：', 'imwtb') . get_the_author_meta('user_login', $author_id) . '<br>';
-    echo __('注册时间：', 'imwtb') . get_the_author_meta('user_registered', $author_id) . '<br>';
-    echo __('等级：', 'imwtb') . get_the_author_meta('user_level', $author_id) . '<br>';
-    echo __('名字：', 'imwtb') . get_the_author_meta('first_name', $author_id) . '<br>';
-    echo __('姓氏：', 'imwtb') . get_the_author_meta('last_name', $author_id) . '<br>';
-    echo __('昵称：', 'imwtb') . get_the_author_meta('nickname', $author_id) . '<br>';
-    echo __('公开显示：', 'imwtb') . get_the_author_meta('display_name', $author_id) . '<br>';
-    echo __('邮箱：', 'imwtb') . get_the_author_meta('user_email', $author_id) . '<br>';
-    echo __('网址：', 'imwtb') . get_the_author_meta('user_url', $author_id) . '<br>';
-    echo __('简介：', 'imwtb') . get_the_author_meta('description', $author_id) . '<br>';
+    if (is_author()) {
+      global $post;
+      $user_id   = $post->post_author;
+      $user_role = get_userdata($user_id)->roles[0];
+    } else {
+      $user_id   = get_current_user_id();
+      $user_role = wp_get_current_user()->roles[0];
+    }
+
+    $user_name = get_the_author_meta('display_name', $user_id) ? get_the_author_meta('display_name', $user_id) : __('游客', 'news-text');
+    switch ($user_role) {
+      case 'administrator':
+        $user_purview = __('管理员', 'news-text');
+        break;
+      case 'editor':
+        $user_purview = __('编辑', 'news-text');
+        break;
+      case 'author':
+        $user_purview = __('作者', 'news-text');
+        break;
+      case 'contributor':
+        $user_purview = __('贡献者', 'news-text');
+        break;
+      case 'subscriber':
+        $user_purview = __('订阅者', 'news-text');
+        break;
+      default:
+        $user_purview = __('游客', 'news-text');
+        break;
+    }
+    echo get_avatar($user_id) . '<br>';
+    echo __('ID：', 'imwtb') . get_the_author_meta('ID', $user_id) . '<br>';
+    echo __('用户名：', 'imwtb') . $user_purview . '<br>';
+    echo __('权限：', 'imwtb') . get_the_author_meta('user_login', $user_id) . '<br>';
+    echo __('注册时间：', 'imwtb') . get_the_author_meta('user_registered', $user_id) . '<br>';
+    echo __('等级：', 'imwtb') . get_the_author_meta('user_level', $user_id) . '<br>';
+    echo __('名字：', 'imwtb') . get_the_author_meta('first_name', $user_id) . '<br>';
+    echo __('姓氏：', 'imwtb') . get_the_author_meta('last_name', $user_id) . '<br>';
+    echo __('昵称：', 'imwtb') . get_the_author_meta('nickname', $user_id) . '<br>';
+    echo __('公开显示：', 'imwtb') . get_the_author_meta('display_name', $user_id) . '<br>';
+    echo __('邮箱：', 'imwtb') . get_the_author_meta('user_email', $user_id) . '<br>';
+    echo __('网址：', 'imwtb') . get_the_author_meta('user_url', $user_id) . '<br>';
+    echo __('简介：', 'imwtb') . get_the_author_meta('description', $user_id) . '<br>';
+    echo __('文章数量：', 'imwtb') . count_user_posts($user_id) . '<br>';
+    echo __('评论数量：', 'imwtb') . count(get_comments($user_id)) . '<br>';
 
     $main_query = new WP_Query([
       'fields'              => 'ids',
@@ -32,7 +63,7 @@
     the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
     wp_reset_postdata();
 
-   ?>
+    ?>
   </div>
 
   <?php get_sidebar(); ?>

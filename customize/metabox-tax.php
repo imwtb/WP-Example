@@ -51,7 +51,6 @@ class MetaBoxTax
 
   public function meta_tax_create_fields($taxonomy)
   {
-    $output       = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
       $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
@@ -60,11 +59,11 @@ class MetaBoxTax
       switch ($field['type']) {
 
         case 'notes':
-          $input = $theme_fields->notes($field);
+          $export = $theme_fields->notes($field);
           break;
 
         case 'textarea':
-          $input = $theme_fields->textarea($field, $value, $placeholder);
+          $export = $theme_fields->textarea($field, $value, $placeholder);
           break;
 
         case 'range':
@@ -73,56 +72,55 @@ class MetaBoxTax
         case 'date':
         case 'week':
         case 'time':
-          $input = $theme_fields->text_minmax($field, $value, $placeholder);
+          $export = $theme_fields->text_minmax($field, $value, $placeholder);
           break;
 
         case 'checkbox':
-          $input = $theme_fields->checkbox($field, $value);
+          $export = $theme_fields->checkbox($field, $value);
           break;
 
         case 'pages':
-          $input = $theme_fields->pages($field, $value);
+          $export = $theme_fields->pages($field, $value);
           break;
 
         case 'users':
-          $input = $theme_fields->users($field, $value);
+          $export = $theme_fields->users($field, $value);
           break;
 
         case 'categories':
-          $input = $theme_fields->categories($field, $value);
+          $export = $theme_fields->categories($field, $value);
           break;
 
         case 'select':
-          $input = $theme_fields->selects($field, $value);
+          $export = $theme_fields->selects($field, $value);
           break;
 
         case 'radio':
-          $input = $theme_fields->radio($field, $value);
+          $export = $theme_fields->radio($field, $value);
           break;
 
         case 'file':
-          $input = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
+          $export = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
           break;
 
         case 'image':
-          $input = $theme_fields->image($field, $value) . $theme_fields->button($field);
+          $export = $theme_fields->image($field, $value) . $theme_fields->button($field);
           break;
 
         case 'wysiwyg':
-          $input = $theme_fields->wysiwyg($field, $value);
+          $export = $theme_fields->wysiwyg($field, $value);
           break;
 
         default:
-          $input = $theme_fields->text($field, $value, $placeholder);
+          $export = $theme_fields->text($field, $value, $placeholder);
       }
-      $output .= '<div class="form-field">' . $this->format_rows($label, $input) . '</div>';
+      $output = '<div class="form-field">' . $this->format_rows($label, $export) . '</div>';
     }
     echo $output;
   }
 
   public function meta_tax_edit_fields($term, $taxonomy)
   {
-    $output       = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
       $label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
@@ -134,11 +132,11 @@ class MetaBoxTax
       switch ($field['type']) {
 
         case 'notes':
-          $input = $theme_fields->notes($field);
+          $export = $theme_fields->notes($field);
           break;
 
         case 'textarea':
-          $input = $theme_fields->textarea($field, $value, $placeholder);
+          $export = $theme_fields->textarea($field, $value, $placeholder);
           break;
 
         case 'range':
@@ -147,56 +145,56 @@ class MetaBoxTax
         case 'date':
         case 'week':
         case 'time':
-          $input = $theme_fields->text_minmax($field, $value, $placeholder);
+          $export = $theme_fields->text_minmax($field, $value, $placeholder);
           break;
 
         case 'checkbox':
-          $input = $theme_fields->checkbox($field, $value);
+          $export = $theme_fields->checkbox($field, $value);
           break;
 
         case 'pages':
-          $input = $theme_fields->pages($field, $value);
+          $export = $theme_fields->pages($field, $value);
           break;
 
         case 'users':
-          $input = $theme_fields->users($field, $value);
+          $export = $theme_fields->users($field, $value);
           break;
 
         case 'categories':
-          $input = $theme_fields->categories($field, $value);
+          $export = $theme_fields->categories($field, $value);
           break;
 
         case 'select':
-          $input = $theme_fields->selects($field, $value);
+          $export = $theme_fields->selects($field, $value);
           break;
 
         case 'radio':
-          $input = $theme_fields->radio($field, $value);
+          $export = $theme_fields->radio($field, $value);
           break;
 
         case 'file':
-          $input = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
+          $export = $theme_fields->file($field, $value, $placeholder) . $theme_fields->button($field);
           break;
 
         case 'image':
-          $input = $theme_fields->image($field, $value) . $theme_fields->button($field);
+          $export = $theme_fields->image($field, $value) . $theme_fields->button($field);
           break;
 
         case 'wysiwyg':
-          $input = $theme_fields->wysiwyg($field, $value);
+          $export = $theme_fields->wysiwyg($field, $value);
           break;
 
         default:
-          $input = $theme_fields->text($field, $value, $placeholder);
+          $export = $theme_fields->text($field, $value, $placeholder);
       }
-      $output .= $this->format_rows($label, $input);
+      $output = $this->format_rows($label, $export);
     }
     echo '<div class="form-field">' . $output . '</div>';
   }
 
-  public function format_rows($label, $input)
+  public function format_rows($label, $export)
   {
-    return '<tr class="form-field"><th>' . $label . '</th><td>' . $input . '</td></tr>';
+    return '<tr class="form-field"><th>' . $label . '</th><td>' . $export . '</td></tr>';
   }
 
   public function meta_tax_save_fields($term_id)
