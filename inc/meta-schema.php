@@ -9,7 +9,7 @@ add_action('wp_head', function () {
   $image       = get_option('site_image');
 
   if (is_author()) {
-    $author_id   = get_author_meta('ID');
+    $author_id   = get_the_author_meta('ID');
     $title       = get_the_author_meta('display_name', $author_id);
     $description = get_the_author_meta('description', $author_id) ?: $description;
   } else if (is_singular()) {
@@ -209,8 +209,7 @@ function breadcrumbs_args()
 
     // 作者
     else if (is_author()) {
-      global $post;
-      $author_id = $post->post_author;
+      $author_id = get_the_author_meta('ID');
       $lists[] = [
         'title' => get_the_author_meta('display_name', $author_id),
         'link'  => get_author_posts_url($author_id),

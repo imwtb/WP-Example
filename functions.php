@@ -8,6 +8,7 @@
 
 if (!isset($content_width)) $content_width = 960;
 
+
 add_action('after_setup_theme', function () {
   load_theme_textdomain('imwtb', get_template_directory() . '/languages');
   //add_theme_support('post-formats', ['aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat']);
@@ -72,7 +73,7 @@ add_action('wp_enqueue_scripts',  function () {
   wp_enqueue_style('woocommerce', get_template_directory_uri() . '/woocommerce/woocommerce.css', filemtime(get_template_directory() . '/woocommerce/woocommerce.css'), null, 'all');
 
   wp_enqueue_script('jquery');
-  wp_enqueue_script('qrcode-min', get_template_directory_uri() . '/assets/js/qrcode.min.js', [], null, true);
+  wp_enqueue_script('qrcode-min', get_template_directory_uri() . '/assets/js/qrcode.min.js', ['jquery'], null, true);
   wp_enqueue_script('resizesensor-min', get_template_directory_uri() . '/assets/js/resizesensor.min.js', [], '1.2.2', true);
   wp_enqueue_script('stickysidebar-min', get_template_directory_uri() . '/assets/js/stickysidebar.min.js', [], '3.3.1', true);
   wp_enqueue_script('scripts', get_template_directory_uri() . '/assets/js/scripts.js', [], filemtime(get_template_directory() . '/assets/js/scripts.js'), true);
@@ -205,39 +206,118 @@ function get_post_views()
 
 add_action('get_header', function () {
   if (is_singular(views_types())) {
-    $id     = get_the_ID();
-    $views  = get_post_views();
-    $cookie = get_option('views_cookie', false);
-    if ($cookie == false) {
-      if ($views) {
-        update_post_meta($id, 'views', $views + 1);
-      } else {
-        add_post_meta($id, 'views', '0');
-      }
-    } else if ($cookie == true) {
-      $cookies = $_COOKIE['views'  . $id . COOKIEHASH];
+    $views = get_post_views();
+    if (get_option('views_cookie')) {
+      $cookies = $_COOKIE['views'  . get_the_ID() . COOKIEHASH];
       if (!isset($cookies) && $cookies != '1') {
-        update_post_meta($id, 'views', $views + 1);
-        setcookie('views'  . $id . COOKIEHASH, '1', time() + 86400, COOKIEPATH, COOKIE_DOMAIN);
+        update_post_meta(get_the_ID(), 'views', $views + 1);
+        setcookie('views'  . get_the_ID() . COOKIEHASH, '1', time() + 86400, COOKIEPATH, COOKIE_DOMAIN);
       }
+    } else {
+      update_post_meta(get_the_ID(), 'views', $views + 1);
     }
   }
 });
 
 foreach (views_types() as $value) {
   add_action('save_post_' . $value, function () {
-    $id    = get_the_ID();
     $views = get_post_views();
-    $rand  = get_option('views_rand', false);
-    $array = explode(',', get_option('views_rand_num', '64,128'));
-    if ($rand == true && ($views == '0' || $views == '')) {
-      delete_post_meta($id, 'views');
-      add_post_meta($id, 'views', (int)rand($array[0], $array[1]));
-    } else if ($rand == false && ($views == '0' || $views == '')) {
-      delete_post_meta($id, 'views');
-      add_post_meta($id, 'views', '0');
+    $array = explode(',', get_option('views_rand_num', '128,256'));
+    if (get_option('views_rand') && ($views == '0' || $views == '')) {
+      delete_post_meta(get_the_ID(), 'views');
+      update_post_meta(get_the_ID(), 'views', (int)rand($array[0], $array[1]));
+    } else if ($views == '0' || $views == '') {
+      delete_post_meta(get_the_ID(), 'views');
+      update_post_meta(get_the_ID(), 'views', '0');
     }
   });
+}
+
+// 指定作者浏览总数
+function count_users_views($author_id = 1, $display = true)
+{
+  global $wpdb;
+  $sql = "SELECT SUM(meta_value+0) FROM $wpdb->posts left join $wpdb->postmeta on ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE meta_key = 'views' AND post_author =$author_id";
+  $comment_views = intval($wpdb->get_var($sql));
+  if ($display) {
+    echo number_format_i18n($comment_views);
+  } else {
+    return $comment_views;
+  }
+}
+
+// Ajax点赞
+function post_likes_list($class = '', $icon = '<i class="iconoir-heart"></i>')
+{
+  global $post;
+  $id     = is_singular() ? get_the_ID() : $post;
+  $done   = isset($_COOKIE['likes_' . $id]) ? 'done' : '';
+  $count  = get_post_meta($id, 'likes', true);
+  $counts = $count ? $count : '0';
+
+  $like_text = '<a class="' . $class . ' like-it ' . $done . '" data-action="likeit" data-id="' . $id . '"><span>' . $counts . '</span> | ' . $icon . '</a>';
+  return $like_text;
+}
+
+function post_likes()
+{
+  $id     = $_POST["like_id"];
+  $action = $_POST["like_action"];
+  if ($action == 'likeit') {
+    $raters = get_post_meta($id, 'likes', true);
+    $expire = time() + 99999999;
+    $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+    setcookie('likes_' . $id, $id, $expire, '/', $domain, false);
+    if (!$raters || !is_numeric($raters)) {
+      update_post_meta($id, 'likes', 1);
+    } else {
+      update_post_meta($id, 'likes', ($raters + 1));
+    }
+    echo get_post_meta($id, 'likes', true);
+  }
+  die;
+}
+add_action('wp_ajax_nopriv_post_likes', 'post_likes');
+add_action('wp_ajax_post_likes', 'post_likes');
+
+add_action('wp_footer', function () {
+  if (is_singular()) {
+?>
+    <script type="text/javascript">
+      (function($) {
+        $.fn.postLike = function() {
+          if ($(this).hasClass('done')) {
+            return alert('<?php _e('你已经点过赞咯！', 'imwtb'); ?>');
+          } else {
+            $(this).addClass('done');
+            let
+              id = $(this).data("id"),
+              action = $(this).data('action'),
+              span = $(this).children('span');
+            let ajax_data = {
+              action: "post_likes",
+              like_id: id,
+              like_action: action
+            };
+            $.post("/wp-admin/admin-ajax.php", ajax_data, function(data) {
+              $(span).html(data);
+            });
+            return false;
+          }
+        };
+        $(document).on("click", ".like-it", function() {
+          $(this).postLike();
+        });
+      })(jQuery);
+    </script>
+<?php
+  }
+}, 99);
+
+//页面二维码
+function qrcode()
+{
+  echo '<div class="maing__qrcode"><p>' . __('使用移动设备随时随地浏览', 'imwtb') . '</p><figure id="qrcode"></figure></div>';
 }
 
 // bbsPress论坛可视化编辑器
@@ -253,6 +333,7 @@ add_filter('bbp_get_tiny_mce_plugins', function ($plugins = []) {
   $plugins[] = 'paste';
   return $plugins;
 });
+
 
 // 添加维护模式
 /* add_action('get_header', function () {
@@ -289,19 +370,28 @@ add_action('widgets_init', function () {
     'id'            => 'sidebar',
     'before_widget' => '<section id="%1$s" class="widget %2$s">',
     'after_widget'  => '</section>',
+    'before_title'  => '<h2 class="widget__head">',
+    'after_title'   => '</h2>',
+  ]);
+  register_sidebar([
+    'name'          => __('商品侧边栏', 'imwtb'),
+    'id'            => 'shop',
+    'before_widget' => '<section id="%1$s" class="widget %2$s">',
+    'after_widget'  => '</section>',
     'before_title'  => '<h2 class="widget__title">',
     'after_title'   => '</h2>',
   ]);
   register_sidebar([
-    'name'          => __('产品侧边栏', 'imwtb'),
-    'id'            => 'product',
+    'name'          => __('论坛侧边栏', 'imwtb'),
+    'id'            => 'bbs',
     'before_widget' => '<section id="%1$s" class="widget %2$s">',
     'after_widget'  => '</section>',
     'before_title'  => '<h2 class="widget__title">',
     'after_title'   => '</h2>',
   ]);
 });
-require_once get_template_directory() . '/widgets/widget.php';
+require_once get_template_directory() . '/widgets/widget-rand-posts.php';
+require_once get_template_directory() . '/widgets/widget-videos.php';
 
 // 引入文件
 require_once get_template_directory() . '/inc/optimize.php';
@@ -312,9 +402,11 @@ require_once get_template_directory() . '/inc/meta-schema.php';
 require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
   register_custom_post_type(__('店铺', 'imwtb'), 'locstore', ['locstores'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
+  register_custom_post_type(__('视频', 'imwtb'), 'video', ['videos'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
 }, 0);
 add_action('init', function () {
   register_custom_taxonomy(__('店铺类别', 'imwtb'), 'locstores', ['locstore']);
+  register_custom_taxonomy(__('视频类别', 'imwtb'), 'videos', ['video']);
 }, 0);
 
 require_once get_template_directory() . '/customize/options.php';
@@ -329,41 +421,45 @@ $theme_option->fields([
     ],
     [
       'label'   => __('Logo 后面标题', 'imwtb'),
+      'default' => true,
       'id'      => 'site_logo_title',
       'type'    => 'checkbox',
     ],
     [
-      'label' => __('描述', 'imwtb'),
+      'label' => __('默认描述', 'imwtb'),
       'id'    => 'site_description',
       'type'  => 'textarea',
     ],
     [
-      'label' => __('关键词', 'imwtb'),
+      'label' => __('默认关键词', 'imwtb'),
       'id'    => 'site_keywords',
       'type'  => 'textarea',
     ],
     [
-      'label'       => __('分享图', 'imwtb'),
+      'label'       => __('分享站点时显示的图', 'imwtb'),
       'description' => __('使用固定分辨率 1200x630 像素大小。', 'imwtb'),
       'id'          => 'site_image',
       'type'        => 'image',
       'returnvalue' => 'url',
     ],
     [
-      'label'   => __('文章阅读量 Cookie', 'imwtb'),
-      'id'      => 'views_cookie',
-      'type'    => 'checkbox',
+      'label'       => __('文章阅读量 Cookie', 'imwtb'),
+      'description' => __('每IP在24小时内访问仅增加一个阅读量。', 'imwtb'),
+      'id'          => 'views_cookie',
+      'type'        => 'checkbox',
     ],
     [
-      'label'   => __('文章阅读量随机数', 'imwtb'),
+      'label'   => __('文章阅读量随机', 'imwtb'),
+      'default' => true,
       'id'      => 'views_rand',
       'type'    => 'checkbox',
     ],
     [
-      'label'   => __('文章阅读量初始随机数', 'imwtb'),
-      'default' => '64,128',
-      'id'      => 'views_rand_num',
-      'type'    => 'text',
+      'label'       => __('文章阅读量随机数', 'imwtb'),
+      'default'     => '128,256',
+      'description' => __('最大数和最小数用英逗号 , 相隔开。', 'imwtb'),
+      'id'          => 'views_rand_num',
+      'type'        => 'text',
     ],
     [
       'label' => __('备案号', 'imwtb'),
@@ -379,7 +475,7 @@ $theme_option->fields([
     ],
     [
       'label'       => __('脚本', 'imwtb'),
-      'description' => esc_html__('脚本需要加上 类似于这种 <script type="text/javascript"> 脚本 </script> 标签。', 'imwtb'),
+      'description' => __('脚本需要加上 类似于这种 <script type="text/javascript"> 脚本 </script> 标签。', 'imwtb'),
       'id'          => 'site_script',
       'type'        => 'textarea',
     ]
