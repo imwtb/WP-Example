@@ -499,3 +499,33 @@ $meta_tax->fields([
   ]
 ]);
 require_once get_template_directory() . '/customize/metabox-post.php';
+$meta_post = new MetaBoxPost();
+$meta_post->fields([
+  'id'     => 'video_metabox',
+  'title'  => '视频信息',
+  'screen' => 'video',
+  'fields' => [
+    [
+      'label'   => __('模式', 'imwtb'),
+      'id'      => 'video_radio',
+      'type'    => 'radio',
+      'default' => '0',
+      'options' => [
+        'none',
+        'mp4',
+        'iframe',
+      ]
+    ],
+    [
+      'label'       => __('MP4 链接', 'imwtb'),
+      'id'          => 'video_mp4',
+      'type'        => 'file',
+      'returnvalue' => 'url',
+    ],
+    [
+      'label' => __('iframe 链接', 'imwtb'),
+      'id'    => 'video_iframe',
+      'type'  => 'textarea',
+    ],
+  ]
+]);

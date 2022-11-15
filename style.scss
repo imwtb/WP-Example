@@ -86,6 +86,17 @@ h5 {
   font-size: .875em;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+p {
+  word-wrap: break-word;
+}
+
 a {
   text-decoration: none;
 }
@@ -167,6 +178,7 @@ button {
   border: none;
   cursor: pointer;
 }
+
 
 /*------------------------------ 基本 ------------------------------*/
 body {

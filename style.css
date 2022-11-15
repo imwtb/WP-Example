@@ -26,6 +26,8 @@ h3 { font-size: 1.125em; }
 
 h5 { font-size: .875em; }
 
+h1, h2, h3, h4, h5, h6, a, p { word-wrap: break-word; }
+
 a { text-decoration: none; }
 
 img { max-width: 100%; height: auto; image-rendering: crisp-edges; }
