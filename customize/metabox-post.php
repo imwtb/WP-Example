@@ -81,6 +81,7 @@ class MetaBoxPost
 
   public function field_generator($post)
   {
+    $output       = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
       $label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
@@ -147,7 +148,7 @@ class MetaBoxPost
         default:
           $export = $theme_fields->text($field, $value, $placeholder);
       }
-      $output = $this->format_rows($label, $export);
+      $output .= $this->format_rows($label, $export);
     }
     echo '<table class="form-table"><tbody>' . $output . '</tbody></table>';
   }

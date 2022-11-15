@@ -51,6 +51,7 @@ class MetaBoxTax
 
   public function meta_tax_create_fields($taxonomy)
   {
+    $output       = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
       $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
@@ -114,20 +115,18 @@ class MetaBoxTax
         default:
           $export = $theme_fields->text($field, $value, $placeholder);
       }
-      $output = '<div class="form-field">' . $this->format_rows($label, $export) . '</div>';
+      $output .= '<div class="form-field">' . $this->format_rows($label, $export) . '</div>';
     }
     echo $output;
   }
 
   public function meta_tax_edit_fields($term, $taxonomy)
   {
+    $output       = '';
     $theme_fields = new Theme_fields();
     foreach ($this->fields as $field) {
-      $label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
-      $value = get_term_meta($term->term_id, $field['id'], true);
-      if (empty($value)) {
-        $value = isset($field['default']) ? $field['default'] : '';
-      }
+      $label       = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
+      $value       = get_term_meta($term->term_id, $field['id'], true);
       $placeholder = isset($field['placeholder']) ? $field['placeholder'] : '';
       switch ($field['type']) {
 
@@ -187,7 +186,7 @@ class MetaBoxTax
         default:
           $export = $theme_fields->text($field, $value, $placeholder);
       }
-      $output = $this->format_rows($label, $export);
+      $output .= $this->format_rows($label, $export);
     }
     echo '<div class="form-field">' . $output . '</div>';
   }
