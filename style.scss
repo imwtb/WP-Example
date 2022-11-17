@@ -378,7 +378,7 @@ main {
 /*------------------------------ 右侧边栏 ------------------------------*/
 .widget {
   &:not(:last-of-type) {
-    margin-bottom: toRem(48px);
+    margin-bottom: toRem(32px);
   }
 
   &__head {
@@ -464,6 +464,7 @@ main {
         color: $white;
         font-weight: 700;
         background: rgba($black, .7);
+        border-radius: toRem(8px);
       }
 
       tbody td {
@@ -492,6 +493,7 @@ main {
         font-size: .875em;
         color: $white;
         background: rgba($black, .7);
+        border-radius: toRem(8px);
         transition: background .3s ease-in-out;
 
         &:hover {

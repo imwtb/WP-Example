@@ -116,7 +116,7 @@ main { flex-grow: 1; }
 @media screen and (min-width: 48rem) { .post__title { font-size: 2em; } }
 
 /*------------------------------ 右侧边栏 ------------------------------*/
-.widget:not(:last-of-type) { margin-bottom: 3rem; }
+.widget:not(:last-of-type) { margin-bottom: 2rem; }
 
 .widget__head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; }
 
@@ -144,7 +144,7 @@ main { flex-grow: 1; }
 
 .widget_calendar table { width: 100%; }
 
-.widget_calendar table caption { margin-bottom: 0.5rem; padding: 0.5rem; font-size: 1.25em; color: #ffffff; font-weight: 700; background: rgba(30, 30, 30, 0.7); }
+.widget_calendar table caption { margin-bottom: 0.5rem; padding: 0.5rem; font-size: 1.25em; color: #ffffff; font-weight: 700; background: rgba(30, 30, 30, 0.7); border-radius: 0.5rem; }
 
 .widget_calendar table tbody td { padding: 0.25rem 0; text-align: center; }
 
@@ -152,7 +152,7 @@ main { flex-grow: 1; }
 
 .widget_calendar nav { display: flex; justify-content: space-between; align-items: center; }
 
-.widget_calendar nav a { display: inline-block; padding: 0.25rem 0.5rem; font-size: .875em; color: #ffffff; background: rgba(30, 30, 30, 0.7); transition: background .3s ease-in-out; }
+.widget_calendar nav a { display: inline-block; padding: 0.25rem 0.5rem; font-size: .875em; color: #ffffff; background: rgba(30, 30, 30, 0.7); border-radius: 0.5rem; transition: background .3s ease-in-out; }
 
 .widget_calendar nav a:hover { background: #1e1e1e; }
 
