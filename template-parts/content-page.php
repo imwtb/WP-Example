@@ -5,13 +5,8 @@
   <div class="post__content">
     <?php
     the_content();
-    wp_link_pages([
-      'before'           => '<nav class="navigation post__nav"><div class="nav-links">',
-      'after'            => '</div></nav>',
-      'nextpagelink'     => '&gt;',
-      'previouspagelink' => '&lt;',
-    ]);
-   ?>
+    wp_link_pages(['before' => '<nav class="navigation post__nav"><div class="nav-links">', 'after'  => '</div></nav>', 'nextpagelink' => '&gt;', 'previouspagelink' => '&lt;']);
+    ?>
   </div>
 
 </article>

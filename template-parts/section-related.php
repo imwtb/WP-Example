@@ -1,5 +1,5 @@
 <div class="maing__head">
-  <h2><?php echo !empty($args['title']) ? esc_html($args['title']) : __('相关文章', 'imwtb'); ?></h2>
+  <h2><?php echo !empty($args['title']) ? $args['title'] : __('相关文章', 'imwtb'); ?></h2>
 </div>
 <?php
 $args = [
@@ -23,6 +23,6 @@ foreach (get_post_taxonomies() as $tax) {
 }
 $main_query = new WP_Query($args);
 while ($main_query->have_posts()) : $main_query->the_post();
-  the_title('<h3><a href="' . esc_url(get_the_permalink()) . '">', '</a></h3>');
+  the_title('<h3><a href="' . get_the_permalink() . '">', '</a></h3>');
 endwhile;
 wp_reset_postdata();

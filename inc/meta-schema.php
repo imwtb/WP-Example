@@ -16,13 +16,13 @@ add_action('wp_head', function () {
     $id          = get_the_ID();
     $url         = get_the_permalink();
     $title       = get_the_title();
-    $description = preg_replace('/( |　|\s)*/', '', wp_strip_all_tags(get_the_excerpt())) ?: $description;
+    $description = has_excerpt() ? preg_replace('/( |　|\s)*/', '', wp_strip_all_tags(get_the_excerpt())) : $description;
     $keywords    = get_bloginfo('name');
     foreach (get_post_taxonomies() as $tax) {
       $keywords .= $tax != 'post_format' ? strip_tags(get_the_term_list($id, $tax, ',')) : '';
     }
     if (has_post_thumbnail()) {
-      $image = get_the_post_thumbnail_url($id, 'metatag');
+      $image = get_the_post_thumbnail_url($id, 'meta_image');
     } elseif (get_the_content_thumbnail()) {
       $image = get_the_content_thumbnail();
     } else {
@@ -241,7 +241,7 @@ function breadcrumbs_args()
           if (($page->ID) != ($post->ancestors[$i])) {
             $lists[] = [
               'title' => get_the_title($post->ancestors[$i]),
-              'link'  => get_permalink($post->ancestors[$i]),
+              'link'  => get_the_permalink($post->ancestors[$i]),
             ];
           }
         }

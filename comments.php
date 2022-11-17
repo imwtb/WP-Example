@@ -20,12 +20,12 @@ if (post_password_required()) {
 
 		comment_form([
 			'fields' => [
-				'author'  => '<p class="comment__author"><input id="author" name="author" type="text" value="' . esc_attr($comment['comment_author']) . '" placeholder="' . __('昵称', 'imwtb') . $req . '" autocomplete="name" required /></p>',
-				'email'   => '<p class="comment__email"><input id="email" name="email" type="email" value="' . esc_attr($comment['comment_author_email']) . '" placeholder="' . __('邮箱', 'imwtb') . $req . '"  aria-describedby="email-notes" autocomplete="email" required /></p>',
-				'url'     => '<p class="comment__url"><input id="url" name="url" type="url" value="' . esc_attr($comment['comment_author_url']) . '" placeholder="' . __('网址', 'imwtb') . '" autocomplete="url" /></p>',
+				'author'  => '<p class="comment__author"><input id="author" name="author" type="text" value="' . $comment['comment_author'] . '" placeholder="' . __('昵称', 'imwtb') . $req . '" autocomplete="name" required /></p>',
+				'email'   => '<p class="comment__email"><input id="email" name="email" type="email" value="' . $comment['comment_author_email'] . '" placeholder="' . __('邮箱', 'imwtb') . $req . '"  aria-describedby="email-notes" autocomplete="email" required /></p>',
+				'url'     => '<p class="comment__url"><input id="url" name="url" type="url" value="' . $comment['comment_author_url'] . '" placeholder="' . __('网址', 'imwtb') . '" autocomplete="url" /></p>',
 				'cookies' => has_action('set_comment_cookies', 'wp_set_comment_cookies') && get_option('show_comments_cookies_opt_in') ? '<p class="comment__cookies"><label><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes" ' . $consent . ' />' . sprintf(__('保存信息，并同意%s条款。', 'imwtb'), '<a href="' . get_privacy_policy_url() . '">' . __('隐私政策', 'imwtb') . '</a>') . '<label></p>' : '',
 			],
-			'comment_field'        => '<p class="comment__comment"><textarea id="comment" name="comment" placeholder="' . esc_attr__('评论', 'imwtb') . ' *" required></textarea></p>',
+			'comment_field'        => '<p class="comment__comment"><textarea id="comment" name="comment" placeholder="' . __('评论', 'imwtb') . ' *" required></textarea></p>',
 			'must_log_in'          => '<p class="comment__mustlogin"><a href="' . wp_login_url(apply_filters('the_permalink', get_the_permalink($id), $id)) . '">' . __('登录', 'imwtb') . '</a>' . __('后发表评论！', 'imwtb') . '</p>',
 			'comment_notes_before' => '<p class="comment__notes">' . __('您的电子邮件地址不会被公开。', 'imwtb') . $text . '</p>',
 			'logged_in_as'         => '<p class="comment__loggedinas">' . __('登录为', 'imwtb') . '<a href="' . get_edit_user_link() . '">' . $name . '</a>. <a href="' . wp_logout_url(apply_filters('the_permalink', get_the_permalink($id), $id)) . '">' . __('退出?', 'imwtb') . '</a>' . $text . '</p>',

@@ -5,7 +5,7 @@
 
   <div class="fooing__max max__1200">
 
-    <?php qrcode(); ?>
+    <?php if (!is_singular()) qrcode(); ?>
 
     <?php
     if (has_nav_menu('secondary')) {
@@ -40,7 +40,7 @@
     width: 128,
     height: 128,
     render: "canvas",
-    text: "<?php echo esc_url($current_url); ?>"
+    text: "<?php echo $current_url; ?>"
   })
 </script>
 

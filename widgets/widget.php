@@ -132,8 +132,8 @@ class Title_Widget extends WP_Widget
     $title = !empty($instance['title']) ? $instance['title'] : __('标题', 'imwtb');
 ?>
     <p>
-      <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_attr_e('标题:', 'imwtb'); ?></label>
-      <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+      <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('标题:', 'imwtb'); ?></label>
+      <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>">
     </p>
 <?php
     $this->field_generator($instance);

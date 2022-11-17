@@ -15,7 +15,7 @@
       <h1 class="logo">
         <a href="<?php echo home_url(); ?>">
           <?php if (has_custom_logo()) : ?>
-            <img src="<?php echo esc_url(wp_get_attachment_url(get_theme_mod('custom_logo'))); ?>" alt="">
+            <img src="<?php echo wp_get_attachment_url(get_theme_mod('custom_logo')); ?>" alt="">
           <?php endif; ?>
           <?php if (get_option('site_logo_title', 1)) : ?>
             <span><?php bloginfo('name'); ?></span>
