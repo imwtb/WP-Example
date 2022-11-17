@@ -52,18 +52,6 @@ remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
 add_filter('admin_footer_text', '__return_empty_string');
 add_filter('update_footer', '__return_empty_string', 11);
 
-// 禁止生成图片尺寸
-add_filter('big_image_size_threshold', '__return_false');
-add_action('intermediate_image_sizes_advanced', function ($sizes) {
-  unset($sizes['thumbnail']);     // 150
-  // unset($sizes['medium']);        // 300
-  // unset($sizes['medium_large']);  // 768
-  // unset($sizes['large']);         // 1024
-  unset($sizes['1536x1536']);
-  unset($sizes['2048x2048']);
-  return $sizes;
-}, 10);
-
 add_action('wp_enqueue_scripts', function () {
   wp_dequeue_style('classic-theme-styles');    // classic-theme-styles-css
   wp_dequeue_style('wp-block-library');        // wp-block-library-css

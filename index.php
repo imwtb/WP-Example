@@ -16,7 +16,7 @@
     while ($sticky_query->have_posts()) : $sticky_query->the_post();
       get_template_part('template-parts/content', 'post');
       if (is_sticky()) {
-        the_title('<h3><span>Top</span> <a href="' . esc_url(get_the_permalink()) . '">', '</a></h3>');
+        the_title('<h3><span>Top</span> <a href="' . get_the_permalink() . '">', '</a></h3>');
         echo '<br>';
       }
     endwhile;

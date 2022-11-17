@@ -1,11 +1,9 @@
-<?php $current_url = set_url_scheme('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>
-
 </main>
 <footer class="fooing">
 
   <div class="fooing__max max__1200">
 
-    <?php qrcode(); ?>
+    <?php if (!is_singular()) get_template_part('template-parts/qrcode'); ?>
 
     <?php
     if (has_nav_menu('secondary')) {
@@ -34,13 +32,13 @@
 </footer>
 
 <?php wp_footer(); ?>
-
+<?php $current_url = set_url_scheme('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>
 <script>
   jQuery("#qrcode").qrcode({
     width: 128,
     height: 128,
     render: "canvas",
-    text: "<?php echo esc_url($current_url); ?>"
+    text: "<?php echo $current_url; ?>"
   })
 </script>
 

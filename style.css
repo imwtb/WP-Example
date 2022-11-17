@@ -115,12 +115,50 @@ main { flex-grow: 1; }
 
 @media screen and (min-width: 48rem) { .post__title { font-size: 2em; } }
 
-/*------------------------------ 侧面 ------------------------------*/
-.widget:not(:last-child) { margin-bottom: 2rem; }
+/*------------------------------ 右侧边栏 ------------------------------*/
+.widget:not(:last-of-type) { margin-bottom: 2rem; }
 
-.widget__title { margin-bottom: 0.5rem; }
+.widget__head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; }
+
+.widget__head h3 { font-size: 1.375em; }
+
+.widget__head h3 span { margin-left: 0.25rem; font-weight: 400; }
+
+.widget__head a { display: flex; align-items: center; gap: 0.25rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); }
 
 .widget ul { list-style: none; }
+
+.widget ul li:not(:last-child) { margin-bottom: 0.5rem; }
+
+.widget_media_image { overflow: hidden; border-radius: 1rem; }
+
+.widget_nav_menu .menu li a, .widget_categories > ul li a, .widget_pages li a { display: block; padding: 0.625rem 1rem; color: rgba(30, 30, 30, 0.7); background: #ffffff; border-radius: 0.5rem; }
+
+.widget_nav_menu .menu li a:hover, .widget_categories > ul li a:hover, .widget_pages li a:hover { color: #ffffff; background: #3858e9; }
+
+.widget_nav_menu .menu .sub-menu, .widget_nav_menu .menu .children, .widget_categories > ul .sub-menu, .widget_categories > ul .children, .widget_pages .sub-menu, .widget_pages .children { margin: 0.5rem 0 0 1rem; }
+
+.widget_meta > ul li a, .widget_archive > ul li a, .widget_recent_entries > ul li a, .widget_recent_comments > ul li a { color: rgba(30, 30, 30, 0.7); }
+
+.widget_meta > ul li a:hover, .widget_archive > ul li a:hover, .widget_recent_entries > ul li a:hover, .widget_recent_comments > ul li a:hover { color: #3858e9; }
+
+.widget_calendar table { width: 100%; }
+
+.widget_calendar table caption { margin-bottom: 0.5rem; padding: 0.5rem; font-size: 1.25em; color: #ffffff; font-weight: 700; background: rgba(30, 30, 30, 0.7); border-radius: 0.5rem; }
+
+.widget_calendar table tbody td { padding: 0.25rem 0; text-align: center; }
+
+.widget_calendar table tbody td a { display: inline-block; padding: 0.25rem 0.5rem; color: rgba(30, 30, 30, 0.7); line-height: 1; background: rgba(30, 30, 30, 0.1); border-radius: 6.25rem; }
+
+.widget_calendar nav { display: flex; justify-content: space-between; align-items: center; }
+
+.widget_calendar nav a { display: inline-block; padding: 0.25rem 0.5rem; font-size: .875em; color: #ffffff; background: rgba(30, 30, 30, 0.7); border-radius: 0.5rem; transition: background .3s ease-in-out; }
+
+.widget_calendar nav a:hover { background: #1e1e1e; }
+
+.widget_tag_cloud a { display: inline-block; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(30, 30, 30, 0.5); background: rgba(30, 30, 30, 0.05); border-radius: 0.5rem; }
+
+.widget_tag_cloud a:hover { color: #ffffff; background: #3858e9; }
 
 /*------------------------------ 底部 ------------------------------*/
 .fooing__max { text-align: center; }
@@ -148,7 +186,7 @@ main { flex-grow: 1; }
 
 .comment__mustlogin, .comment__notes, .comment__loggedinas, .comment__cookies label { font-size: .875em; color: rgba(30, 30, 30, 0.7); }
 
-.comment__notes span { color: #e93838; }
+.comment__notes span { color: #ff4848; }
 
 .comment__cookies label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
 
@@ -178,7 +216,7 @@ main { flex-grow: 1; }
 
 .comment__content { margin: 0.5rem 0; }
 
-.comment__awaiting { display: block; margin-bottom: 0.5rem; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(233, 56, 56, 0.7); background: rgba(233, 56, 56, 0.1); border-radius: 0.5rem; }
+.comment__awaiting { display: block; margin-bottom: 0.5rem; padding: 0.25rem 0.5rem; font-size: .875em; color: rgba(255, 72, 72, 0.7); background: rgba(255, 72, 72, 0.1); border-radius: 0.5rem; }
 
 @media screen and (min-width: 36rem) { .comment__vcard { flex: 0 1 2.5rem; } }
 

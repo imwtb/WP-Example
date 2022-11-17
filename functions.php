@@ -13,6 +13,7 @@ add_action('after_setup_theme', function () {
   load_theme_textdomain('imwtb', get_template_directory() . '/languages');
   //add_theme_support('post-formats', ['aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat']);
   add_theme_support('post-thumbnails');
+  add_image_size('meta_image', 1200, 630, true);
   //add_theme_support('custom-background');
   //add_theme_support('custom-header');
   add_theme_support('custom-logo');
@@ -113,7 +114,7 @@ function the_content_thumbnail($width = '768', $height = 'auto', $number = 1)
 {
   foreach (the_content_thumbnails() as $key => $value) {
     if ($key < $number) {
-      echo '<img width="' . $width . '" height="' . $height . '" src="' . esc_url($value) . '">';
+      echo '<img width="' . $width . '" height="' . $height . '" src="' . $value . '">';
     }
   }
 }
@@ -170,7 +171,7 @@ function delete_post_link($text = null, $before = '', $after = '', $id = 0, $cla
   if (null === $text) {
     $text = __('删除', 'imwtb');
   }
-  $link = '<a class="' . esc_attr($class) . '" href="' . esc_url($url) . '">' . $text . '</a>';
+  $link = '<a class="' . $class . '" href="' . $url . '">' . $text . '</a>';
   echo $before . apply_filters('delete_post_link', $link, $post->ID, $text) . $after;
 }
 
@@ -195,7 +196,7 @@ function post_time_ago($time)
 // 文章浏览量
 function views_types()
 {
-  $types = ['post'];
+  $types = ['post', 'video'];
   return $types;
 }
 
@@ -246,6 +247,27 @@ function count_users_views($author_id = 1, $display = true)
   }
 }
 
+// 文章分享
+function post_share_url($shara_name)
+{
+  $site_description = get_option('site_description') ? get_option('site_description') : get_bloginfo('description');
+  $site_logo        = get_option('site_image') ? get_option('site_image') : wp_get_attachment_url(get_theme_mod('custom_logo'));
+  $title            = urlencode(get_the_title());
+  $site_url         = urlencode(get_the_permalink());
+  $excerpt          = has_excerpt() ? preg_replace('/( |　|\s)*/', '', wp_strip_all_tags(get_the_excerpt())) : $site_description;
+  $thumbnail        = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'full') : $site_logo;
+
+  if ($shara_name == "weibo") {
+    return 'https://service.weibo.com/share/share.php?url=' . $site_url . '&sharesource=weibo&title=' . $title . '&pic=' . $thumbnail . '&appkey=' . get_option('weibo_appkey') . '&language=zh_cn';
+  }
+  if ($shara_name == "qzone") {
+    return 'https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' . $site_url . '&sharesource=qzone&title=' . $title . '&pics=' . $thumbnail . '&summary=' . $excerpt;
+  }
+  if ($shara_name == "qrcode") {
+    return urldecode($site_url);
+  }
+}
+
 // Ajax点赞
 function post_likes_list($class = '', $icon = '<i class="iconoir-heart"></i>')
 {
@@ -254,9 +276,7 @@ function post_likes_list($class = '', $icon = '<i class="iconoir-heart"></i>')
   $done   = isset($_COOKIE['likes_' . $id]) ? 'done' : '';
   $count  = get_post_meta($id, 'likes', true);
   $counts = $count ? $count : '0';
-
-  $like_text = '<a class="' . $class . ' like-it ' . $done . '" data-action="likeit" data-id="' . $id . '"><span>' . $counts . '</span> | ' . $icon . '</a>';
-  return $like_text;
+  return '<a class="' . $class . ' like-it ' . $done . '" data-action="likeit" data-id="' . $id . '"><span>' . $counts . '</span> | ' . $icon . '</a>';
 }
 
 function post_likes()
@@ -281,44 +301,36 @@ add_action('wp_ajax_nopriv_post_likes', 'post_likes');
 add_action('wp_ajax_post_likes', 'post_likes');
 
 add_action('wp_footer', function () {
-  if (is_singular()) {
 ?>
-    <script type="text/javascript">
-      (function($) {
-        $.fn.postLike = function() {
-          if ($(this).hasClass('done')) {
-            return alert('<?php _e('你已经点过赞咯！', 'imwtb'); ?>');
-          } else {
-            $(this).addClass('done');
-            let
-              id = $(this).data("id"),
-              action = $(this).data('action'),
-              span = $(this).children('span');
-            let ajax_data = {
-              action: "post_likes",
-              like_id: id,
-              like_action: action
-            };
-            $.post("/wp-admin/admin-ajax.php", ajax_data, function(data) {
-              $(span).html(data);
-            });
-            return false;
-          }
-        };
-        $(document).on("click", ".like-it", function() {
-          $(this).postLike();
-        });
-      })(jQuery);
-    </script>
+  <script type="text/javascript">
+    (function($) {
+      $.fn.postLike = function() {
+        if ($(this).hasClass('done')) {
+          return alert('<?php _e('你已经点过赞咯！', 'imwtb'); ?>');
+        } else {
+          $(this).addClass('done');
+          let
+            id = $(this).data("id"),
+            action = $(this).data('action'),
+            span = $(this).children('span');
+          let ajax_data = {
+            action: "post_likes",
+            like_id: id,
+            like_action: action
+          };
+          $.post("/wp-admin/admin-ajax.php", ajax_data, function(data) {
+            $(span).html(data);
+          });
+          return false;
+        }
+      };
+      $(document).on("click", ".like-it", function() {
+        $(this).postLike();
+      });
+    })(jQuery);
+  </script>
 <?php
-  }
 }, 99);
-
-//页面二维码
-function qrcode($class = 'maing__qrcode')
-{
-  echo '<div class="' . $class . '"><p>' . __('使用移动设备随时随地浏览', 'imwtb') . '</p><figure id="qrcode"></figure></div>';
-}
 
 // bbsPress论坛可视化编辑器
 add_filter('bbp_after_get_the_content_parse_args', function ($args = []) {
@@ -373,25 +385,8 @@ add_action('widgets_init', function () {
     'before_title'  => '<h2 class="widget__head">',
     'after_title'   => '</h2>',
   ]);
-  register_sidebar([
-    'name'          => __('商品侧边栏', 'imwtb'),
-    'id'            => 'shop',
-    'before_widget' => '<section id="%1$s" class="widget %2$s">',
-    'after_widget'  => '</section>',
-    'before_title'  => '<h2 class="widget__title">',
-    'after_title'   => '</h2>',
-  ]);
-  register_sidebar([
-    'name'          => __('论坛侧边栏', 'imwtb'),
-    'id'            => 'bbs',
-    'before_widget' => '<section id="%1$s" class="widget %2$s">',
-    'after_widget'  => '</section>',
-    'before_title'  => '<h2 class="widget__title">',
-    'after_title'   => '</h2>',
-  ]);
 });
-require_once get_template_directory() . '/widgets/widget-rand-posts.php';
-require_once get_template_directory() . '/widgets/widget-videos.php';
+require_once get_template_directory() . '/widgets/widget.php';
 
 // 引入文件
 require_once get_template_directory() . '/inc/optimize.php';
@@ -401,11 +396,9 @@ require_once get_template_directory() . '/inc/meta-schema.php';
 
 require_once get_template_directory() . '/inc/taxonomy-post-type.php';
 add_action('init', function () {
-  register_custom_post_type(__('店铺', 'imwtb'), 'locstore', ['locstores'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
-  register_custom_post_type(__('视频', 'imwtb'), 'video', ['videos'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments', 'custom-fields']);
+  register_custom_post_type(__('视频', 'imwtb'), 'video', ['videos'], 'dashicons-store', ['title', 'editor', 'thumbnail', 'comments']);
 }, 0);
 add_action('init', function () {
-  register_custom_taxonomy(__('店铺类别', 'imwtb'), 'locstores', ['locstore']);
   register_custom_taxonomy(__('视频类别', 'imwtb'), 'videos', ['video']);
 }, 0);
 
@@ -443,6 +436,17 @@ $theme_option->fields([
       'returnvalue' => 'url',
     ],
     [
+      'label'    => __('首页显示视频分类', 'imwtb'),
+      'id'       => 'home_video',
+      'type'     => 'categories',
+      'taxonomy' => ['videos']
+    ],
+    [
+      'label'    => __('首页显示文章分类', 'imwtb'),
+      'id'       => 'home_post',
+      'type'     => 'categories',
+    ],
+    [
       'label'       => __('文章阅读量 Cookie', 'imwtb'),
       'description' => __('每IP在24小时内访问仅增加一个阅读量。', 'imwtb'),
       'id'          => 'views_cookie',
@@ -467,6 +471,12 @@ $theme_option->fields([
       'type'  => 'text',
     ],
     [
+      'label'       => __('文章分享：微博 appkey', 'imwtb'),
+      'description' => sprintf(__('使用主题自带设置，%s', 'imwtb'), '<a href="' . wp_customize_url() . '">' . __('去设置', 'imwtb') . '</a>'),
+      'id'          => 'weibo_appkey',
+      'type'        => 'text',
+    ],
+    [
       'label'         => __('版权', 'imwtb'),
       'id'            => 'site_copyright',
       'type'          => 'wysiwyg',
@@ -482,7 +492,7 @@ $theme_option->fields([
   ]
 ]);
 require_once get_template_directory() . '/customize/metabox-tax.php';
-$meta_tax = new MetaBoxTax();
+$meta_tax = new MetaBoxTax(['category', 'videos', 'locstores']);
 $meta_tax->fields([
   'fields' => [
     [
@@ -499,8 +509,8 @@ $meta_tax->fields([
   ]
 ]);
 require_once get_template_directory() . '/customize/metabox-post.php';
-$meta_post = new MetaBoxPost();
-$meta_post->fields([
+$meta_post_video = new MetaBoxPost();
+$meta_post_video->fields([
   'id'     => 'video_metabox',
   'title'  => '视频信息',
   'screen' => 'video',
