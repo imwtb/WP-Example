@@ -10,67 +10,69 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: imwtb
 Tags: Example
 */
-
-@function toRem($px) {
-  @return $px / 16px * 1rem;
-}
-
-@function toRemF($px) {
-  @return (-($px / 16px * 1rem));
-}
-
-$max1920: toRem(1920px);
-$max1600: toRem(1600px);
-$max1200: toRem(1200px);
-$max960: toRem(960px);
-$max768: toRem(768px);
-$max576: toRem(576px);
-
-$info-blue-title: #00529B;
-$info-blue-backg: #BDE5F8;
-$info-green-title: #208F00;
-$info-green-backg: #D3FED3;
-$info-orange-title: #9F6000;
-$info-orange-backg: #FEF1B3;
-$info-red-title: #9F0000;
-$info-red-backg: #FECFCF;
-
-$red: #ff4848;
-$base: #3858e9;
-$black: #1e1e1e;
+$base: #8068f9;
 $white: #ffffff;
+$black: #00091f;
 
-/*------------------------------ 重置 ------------------------------*/
+$info-blue-dark: #00529B;
+$info-blue-light: #BDE5F8;
+$info-green-dark: #208F00;
+$info-green-light: #D3FED3;
+$info-orange-dark: #9F6000;
+$info-orange-light: #FEF1B3;
+$info-red-dark: #9F0000;
+$info-red-light: #FECFCF;
+
+/* 480px */
+@media screen and (min-width: 30em) {}
+
+/* 992px */
+@media screen and (min-width: 62em) {}
+
+/* 1366px */
+@media screen and (min-width: 85.375em) {}
+
+/* 基础样式 */
 *,
-*:before,
-*:after {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-  min-height: 100%;
+*::before,
+*::after {
   box-sizing: border-box;
-  text-size-adjust: none;
 }
 
-input,
-textarea,
-button {
-  font-size: inherit;
-  font-family: inherit;
+* {
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+html,
+body {
+  min-height: 100vh;
 }
 
 body {
-  position: relative;
-  height: 100%;
-  min-height: 100vh;
-  font-size: 100%;
-  color: $black;
+  font-weight: 400;
+  font-family: "PingFang SC", "Lantinghei SC", "Microsoft YaHei", "HanHei SC", "Helvetica Neue", "Open Sans", "Hiragino Sans GB", 微软雅黑, STHeiti, "WenQuanYi Micro Hei", Arial, SimSun, sans-serif;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+
+  &.active {
+    overflow: hidden;
+  }
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
 }
 
 h1,
@@ -79,97 +81,136 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 1.35;
+  font-weight: 700;
+  line-height: 1.25;
+  color: $black;
 }
 
 h3 {
-  font-size: 1.125em;
+  font-size: 1.8rem;
 }
 
-h5 {
-  font-size: .875em;
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-a,
-p {
-  word-wrap: break-word;
+svg {
+  width: 2.4rem;
+  height: 2.4rem;
+
+  @media screen and (min-width: 62em) {
+    width: 3rem;
+    height: 3rem;
+  }
 }
 
 a {
   text-decoration: none;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  image-rendering: crisp-edges;
-}
-
-video,
-iframe {
-  width: 100%;
-  aspect-ratio: 16/9;
-}
-
-a,
-img,
-video,
-iframe,
-input,
-textarea,
-select,
-button {
-  vertical-align: middle;
-}
-
 a,
 input,
-textarea,
-select,
-button {
-  outline-color: transparent;
-  transition: color .3s ease-in-out, background .3s ease-in-out, border .3s ease-in-out, outline .3s ease-in-out;
-
-  &:focus {
-    outline-color: $base;
-  }
-}
-
-input:not([type="color"], [type="file"]),
-textarea,
-select,
-button {
-  padding: toRem(10px);
-}
-
-input:not([type="color"], [type="image"], [type="file"]),
+button,
 textarea,
 select {
-  border: toRem(1px) solid rgba($black, .3);
-  border-radius: toRem(8px) !important;
+  font: inherit;
+  outline-width: 0;
 
   &::placeholder {
     color: rgba($black, .5);
   }
 }
 
+button {
+  all: unset;
+}
+
+input:not([type="range"]),
+select {
+  appearance: none;
+}
+
+input:not([type="checkbox"], [type="radio"], [type="color"], [type="file"], [type="image"]),
+textarea,
+select {
+  padding: .7em 1em;
+  border: 1px solid rgba($black, .3);
+  border-radius: .3em;
+  transition: border-color .3s ease-in-out;
+
+  &:focus {
+    border-color: $base;
+  }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+  background: rgba($black, .2);
+  cursor: pointer;
+  transition: background .3s ease-in-out;
+
+  &:checked {
+    background: $black;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  &::after {
+    display: block;
+    position: absolute;
+    content: "";
+    transform: rotate(35deg);
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+  }
+}
+
+input[type="checkbox"] {
+  border-radius: .3em;
+
+  &::after {
+    top: .3em;
+    left: .5em;
+    width: .5em;
+    height: .7em;
+    border: .2em solid $white;
+    border-top: none;
+    border-left: none;
+  }
+}
+
+input[type="radio"] {
+  border-radius: 100em;
+
+  &::after {
+    top: .4em;
+    left: .4em;
+    width: .675em;
+    height: .675em;
+    background: $white;
+    border-radius: 100em;
+  }
+}
+
 input {
 
   &[type="submit"],
-  &[type="reset"],
-  &[type="button"] {
-    padding-left: toRem(16px);
-    padding-right: toRem(16px);
+  &[type="reset"] {
+    border: none;
     color: $white;
     background: $base;
-    border: none;
     cursor: pointer;
+    transition: background .3s ease-in-out;
 
     &:hover {
       background: $black;
@@ -177,17 +218,40 @@ input {
   }
 }
 
-button {
-  background: transparent;
+input[type="color"] {
+  width: 2em;
+  height: 2em;
+  padding: 0;
+  border-radius: 100em;
   border: none;
-  cursor: pointer;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 100em;
+  }
 }
 
+select {
+  position: relative;
+  padding-right: 2.5em;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10px' width='15px'%3E%3Ctext x='0' y='10' fill='gray'%3E%E2%96%BE%3C/text%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 2em 1em;
+  background-position: right center;
+  background-clip: border-box;
+}
 
-/*------------------------------ 基本 ------------------------------*/
 body {
   display: flex;
   flex-direction: column;
+  font-size: 1.6rem;
+  color: rgba($black, .9);
+  background: $white;
 
   &.active {
     overflow: hidden;
@@ -198,12 +262,13 @@ main {
   flex-grow: 1;
 }
 
+/*------------------------------ 基本 ------------------------------*/
 .heading,
 .fooing {
   background: rgba($black, .05);
 
   &__max {
-    padding: toRem(8px) 0;
+    padding: .5em 0;
   }
 }
 
@@ -216,30 +281,30 @@ main {
     margin: 0 3vw;
   }
 
-  @media screen and (min-width: #{$max1200}) {
+  @media screen and (min-width: 75em) {
     &__1200 {
-      max-width: $max1200;
+      max-width: 120rem;
       margin: 0 auto;
     }
   }
 
-  @media screen and (min-width: #{$max960}) {
+  @media screen and (min-width: 60em) {
     &__960 {
-      max-width: $max960;
+      max-width: 96rem;
       margin: 0 auto;
     }
   }
 
-  @media screen and (min-width: #{$max768}) {
+  @media screen and (min-width: 48em) {
     &__768 {
-      max-width: $max768;
+      max-width: 76.8rem;
       margin: 0 auto;
     }
   }
 
-  @media screen and (min-width: #{$max576}) {
+  @media screen and (min-width: 36em) {
     &__576 {
-      max-width: $max576;
+      max-width: 57.6rem;
       margin: 0 auto;
     }
   }
@@ -248,7 +313,7 @@ main {
 .layout {
   display: flex;
   flex-wrap: wrap;
-  gap: toRem(32px);
+  gap: 2em;
 
   &__left,
   &__right {
@@ -260,11 +325,11 @@ main {
     flex: 1;
   }
 
-  @media screen and (min-width: #{$max1200}) {
+  @media screen and (min-width: 75em) {
 
     &__left,
     &__right {
-      flex: 0 1 toRem(360px);
+      flex: 0 1 3.6rem;
     }
   }
 }
@@ -300,7 +365,7 @@ main {
 .topnav > ul {
   display: flex;
   align-items: center;
-  gap: toRem(32px);
+  gap: 2em;
 
   li {
     list-style: none;
@@ -314,7 +379,7 @@ main {
   &__title,
   &__meta,
   &__excerpt {
-    margin-bottom: toRem(16px);
+    margin-bottom: 1em;
   }
 
   &__title {}
@@ -323,15 +388,15 @@ main {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: toRem(8px) toRem(16px);
+    gap: .5em 1em;
 
     a,
     time,
     span {
       display: inline-flex;
       align-items: center;
-      gap: toRem(4px);
-      font-size: .875em;
+      gap: .25em;
+      font-size: 1.4rem;
 
       i {
         font-size: 1em;
@@ -340,38 +405,38 @@ main {
   }
 
   &__excerpt {
-    padding: toRem(8px) toRem(16px);
-    font-size: .75em;
+    padding: .5em 1em;
+    font-size: 1.2rem;
     color: rgba($black, .5);
     background: rgba($black, .05);
-    border-radius: toRem(8px);
+    border-radius: .5em;
   }
 
   &__content,
   &__catag,
   &__precnext {
-    margin-bottom: toRem(32px);
+    margin-bottom: 2em;
   }
 
   &__content {
     line-height: 1.8;
 
     p {
-      margin: toRem(8px) 0;
+      margin: .5em 0;
     }
   }
 
   &__catag a {
     display: inline-block;
-    margin: 0 toRem(8px) toRem(8px) 0;
-    padding: toRem(4px) toRem(8px);
-    font-size: .875em;
+    margin: 0 .5em .5em 0;
+    padding: .25em .5em;
+    font-size: 1.4rem;
     color: rgba($black, .5);
     background: rgba($black, .05);
-    border-radius: toRem(8px);
+    border-radius: .5em;
   }
 
-  @media screen and (min-width: #{$max768}) {
+  @media screen and (min-width: 48em) {
     &__title {
       font-size: 2em;
     }
@@ -382,20 +447,20 @@ main {
 /*------------------------------ 右侧边栏 ------------------------------*/
 .widget {
   &:not(:last-of-type) {
-    margin-bottom: toRem(32px);
+    margin-bottom: 2em;
   }
 
   &__head {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: toRem(16px);
+    margin-bottom: 1em;
 
     h3 {
       font-size: 1.375em;
 
       span {
-        margin-left: toRem(4px);
+        margin-left: .25em;
         font-weight: 400;
       }
     }
@@ -403,8 +468,8 @@ main {
     a {
       display: flex;
       align-items: center;
-      gap: toRem(4px);
-      font-size: .875em;
+      gap: .25em;
+      font-size: 1.4rem;
       color: rgba($black, .5);
     }
   }
@@ -413,13 +478,13 @@ main {
     list-style: none;
 
     li:not(:last-child) {
-      margin-bottom: toRem(8px);
+      margin-bottom: .5em;
     }
   }
 
   &_media_image {
     overflow: hidden;
-    border-radius: toRem(16px);
+    border-radius: 1em;
   }
 
   &_nav_menu .menu,
@@ -427,10 +492,10 @@ main {
   &_pages {
     li a {
       display: block;
-      padding: toRem(10px) toRem(16px);
+      padding: .5em 1em;
       color: rgba($black, .7);
       background: $white;
-      border-radius: toRem(8px);
+      border-radius: .5em;
 
       &:hover {
         color: $white;
@@ -440,7 +505,7 @@ main {
 
     .sub-menu,
     .children {
-      margin: toRem(8px) 0 0 toRem(16px);
+      margin: .5em 0 0 1em;
     }
   }
 
@@ -462,26 +527,26 @@ main {
       width: 100%;
 
       caption {
-        margin-bottom: toRem(8px);
-        padding: toRem(8px);
+        margin-bottom: .5em;
+        padding: .5em;
         font-size: 1.25em;
         color: $white;
         font-weight: 700;
         background: rgba($black, .7);
-        border-radius: toRem(8px);
+        border-radius: .5em;
       }
 
       tbody td {
-        padding: toRem(4px) 0;
+        padding: .25em 0;
         text-align: center;
 
         a {
           display: inline-block;
-          padding: toRem(4px) toRem(8px);
+          padding: .25em .5em;
           color: rgba($black, .7);
           line-height: 1;
           background: rgba($black, .1);
-          border-radius: toRem(100px);
+          border-radius: 100em;
         }
       }
     }
@@ -493,11 +558,11 @@ main {
 
       a {
         display: inline-block;
-        padding: toRem(4px) toRem(8px);
-        font-size: .875em;
+        padding: .25em .5em;
+        font-size: 1.4rem;
         color: $white;
         background: rgba($black, .7);
-        border-radius: toRem(8px);
+        border-radius: .5em;
         transition: background .3s ease-in-out;
 
         &:hover {
@@ -509,11 +574,11 @@ main {
 
   &_tag_cloud a {
     display: inline-block;
-    padding: toRem(4px) toRem(8px);
-    font-size: .875em;
+    padding: .25em .5em;
+    font-size: 1.4rem;
     color: rgba($black, .5);
     background: rgba($black, .05);
-    border-radius: toRem(8px);
+    border-radius: .5em;
 
     &:hover {
       color: $white;
@@ -529,7 +594,7 @@ main {
   }
 
   &__copyright {
-    font-size: .875em;
+    font-size: 1.4rem;
     color: rgba($black, .5);
 
     a {
@@ -547,21 +612,21 @@ main {
 /*------------------------------ 评论 ------------------------------*/
 .comment {
   &__title {
-    margin-bottom: toRem(16px);
+    margin-bottom: 1em;
 
     small {
-      margin-left: toRem(8px);
+      margin-left: .5em;
     }
   }
 
   &__respond {
-    margin-bottom: toRem(32px);
+    margin-bottom: 2em;
   }
 
   &__form {
     display: flex;
     flex-wrap: wrap;
-    gap: toRem(16px) toRem(8px);
+    gap: 1em .5em;
   }
 
   &__notes,
@@ -586,25 +651,25 @@ main {
   }
 
   &__comment textarea {
-    min-height: toRem(128px);
+    min-height: 120rem;
   }
 
   &__mustlogin,
   &__notes,
   &__loggedinas,
   &__cookies label {
-    font-size: .875em;
+    font-size: 1.4rem;
     color: rgba($black, .7);
   }
 
   &__notes span {
-    color: $red;
+    color: $info-red-dark;
   }
 
   &__cookies label {
     display: flex;
     align-items: center;
-    gap: toRem(4px);
+    gap: .25em;
     cursor: pointer;
 
     input {
@@ -617,10 +682,10 @@ main {
   }
 
   &__submit input {
-    font-size: .875em;
+    font-size: 1.4rem;
   }
 
-  @media screen and (min-width: #{$max576}) {
+  @media screen and (min-width: 36em) {
 
     &__author,
     &__email,
@@ -636,13 +701,13 @@ main {
   &__body {
     display: flex;
     align-items: flex-start;
-    gap: toRem(8px);
+    gap: .5em;
   }
 
   &__vcard {
     flex: 0 1 toRem(30px);
     overflow: hidden;
-    border-radius: toRem(100px);
+    border-radius: 100em;
   }
 
   &__box {
@@ -650,7 +715,7 @@ main {
   }
 
   &__head a {
-    font-size: .875em;
+    font-size: 1.4rem;
     color: rgba($black, .7);
   }
 
@@ -659,16 +724,16 @@ main {
     > a,
     > time,
     > span {
-      margin-right: toRem(8px);
-      font-size: .75em;
+      margin-right: .5em;
+      font-size: 1.2rem;
       color: rgba($black, .5);
     }
 
     span a {
-      padding: toRem(4px) toRem(8px);
+      padding: .25em .5em;
       color: rgba($base, .7);
       background: rgba($base, .1);
-      border-radius: toRem(8px);
+      border-radius: .5em;
 
       &:hover {
         color: $base;
@@ -677,20 +742,20 @@ main {
   }
 
   &__content {
-    margin: toRem(8px) 0;
+    margin: .5em 0;
   }
 
   &__awaiting {
     display: block;
-    margin-bottom: toRem(8px);
-    padding: toRem(4px) toRem(8px);
-    font-size: .875em;
-    color: rgba($red, .7);
-    background: rgba($red, .1);
-    border-radius: toRem(8px);
+    margin-bottom: .5em;
+    padding: .25em .5em;
+    font-size: 1.4rem;
+    color: rgba($info-red-dark, .7);
+    background: rgba($info-red-dark, .1);
+    border-radius: .5em;
   }
 
-  @media screen and (min-width: #{$max576}) {
+  @media screen and (min-width: 36em) {
     &__vcard {
       flex: 0 1 toRem(40px);
     }
@@ -699,21 +764,21 @@ main {
 
 /*------------------------------ 数字分页 ------------------------------*/
 .navigation {
-  margin-top: toRem(32px);
+  margin-top: 2em;
 
   .nav-links {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: toRem(8px);
+    gap: .5em;
 
     a,
     span {
-      padding: toRem(8px) toRem(13.55px);
+      padding: .5em toRem(13.55px);
       color: rgba($black, .5);
       line-height: 1.25;
       background: rgba($black, .05);
-      border-radius: toRem(8px);
+      border-radius: .5em;
     }
 
     a:hover,
@@ -747,7 +812,7 @@ main {
       position: absolute;
       right: 0;
       z-index: 5;
-      font-size: 1.75em;
+      font-size: 11.2rem;
       color: rgba($black, .5);
     }
   }
@@ -755,20 +820,20 @@ main {
 
 /*------------------------------ 面包屑 ------------------------------*/
 .breadcrumbs {
-  padding: toRem(8px);
+  padding: .5em;
 
   ol {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: toRem(4px);
+    gap: .25em;
 
     li {
       list-style: none;
 
       &:nth-of-type(n+2)::before {
         content: ">";
-        margin-right: toRem(4px);
+        margin-right: .25em;
       }
 
       a:hover {
@@ -778,7 +843,7 @@ main {
 
     li,
     li a {
-      font-size: .875em;
+      font-size: 1.4rem;
       color: rgba($black, .5);
     }
   }
@@ -800,36 +865,36 @@ main {
 
 .skip-link:focus {
   display: block;
-  top: toRem(16px);
-  left: toRem(16px);
+  top: 1em;
+  left: 1em;
   z-index: 100000;
   width: auto;
   height: auto;
-  padding: toRem(8px) toRem(24px);
+  padding: .5em toRem(24px);
   font-size: .875rem;
   color: $white;
   font-weight: 700;
   line-height: normal;
   background-color: $base;
-  border-radius: toRem(100px);
+  border-radius: 100em;
   clip: auto !important;
   clip-path: none;
 }
 
 /*------------------------------ 滚动条 ------------------------------*/
 ::-webkit-scrollbar {
-  width: toRem(8px);
-  height: toRem(4px);
+  width: .5em;
+  height: .25em;
   background: transparent;
 }
 
 ::-webkit-scrollbar-corner,
 ::-webkit-scrollbar-track {
   background: rgba($black, .1);
-  border-radius: toRem(100px);
+  border-radius: 100em;
 }
 
 ::-webkit-scrollbar-thumb {
   background: $base;
-  border-radius: toRem(100px);
+  border-radius: 100em;
 }

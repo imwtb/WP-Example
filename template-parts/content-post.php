@@ -1,7 +1,7 @@
 <?php if (is_singular()) : ?>
   <article id="content">
     <?php
-    $before = '<figure class="posts__thumb">';
+    $before = '<figure class="post__thumb">';
     $after  = '</figure>';
     if (is_singular('video')) {
       switch (get_post_meta(get_the_ID(), 'video_radio', true)) {
@@ -22,8 +22,8 @@
     ?>
     <?php the_title('<h1 class="post__title">', '</h1>'); ?>
     <div class="post__meta">
-      <?php get_template_part('template-parts/posts', 'catmeta'); ?>
-      <?php get_template_part('template-parts/posts', 'share'); ?>
+      <?php get_template_part('template-parts/post', 'catmeta'); ?>
+      <?php get_template_part('template-parts/post', 'share'); ?>
     </div>
     <?php
     $excerpt = preg_replace('/( |　|\s)*/', '', wp_strip_all_tags(get_the_excerpt()));

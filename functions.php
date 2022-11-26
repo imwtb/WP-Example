@@ -130,7 +130,7 @@ function get_the_content_thumbnail($number = 1)
 
 // 摘要字数
 add_filter('excerpt_length', function ($length) {
-  return 64;
+  return get_option('post_excerpt', 64);
 }, 999);
 
 // 归档标题
@@ -436,15 +436,10 @@ $theme_option->fields([
       'returnvalue' => 'url',
     ],
     [
-      'label'    => __('首页显示视频分类', 'imwtb'),
-      'id'       => 'home_video',
-      'type'     => 'categories',
-      'taxonomy' => ['videos']
-    ],
-    [
-      'label'    => __('首页显示文章分类', 'imwtb'),
-      'id'       => 'home_post',
-      'type'     => 'categories',
+      'label'   => __('文章摘要字数', 'imwtb'),
+      'default' => 64,
+      'id'      => 'post_excerpt',
+      'type'    => 'text',
     ],
     [
       'label'       => __('文章阅读量 Cookie', 'imwtb'),

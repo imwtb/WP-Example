@@ -9,11 +9,11 @@
     the_archive_description();
 
     $args = [
-      'post_type'           => !empty(get_post_type()) ? get_post_type() : 'imwtb',
-      'fields'              => 'ids',
-      'ignore_sticky_posts' => true,
-      'posts_per_page'      => get_option('posts_per_page'),
-      'paged'               => (get_query_var('paged')) ? get_query_var('paged') : 1,
+      'post_type'          => !empty(get_post_type()) ? get_post_type() : 'imwtb',
+      'fields'             => 'ids',
+      'ignore_sticky_post' => true,
+      'post_per_page'      => get_option('post_per_page'),
+      'paged'              => (get_query_var('paged')) ? get_query_var('paged') : 1,
     ];
     if (is_tax()) {
       $args['tax_query'] = [[
@@ -23,11 +23,11 @@
       ]];
     }
     $main_query = new WP_Query($args);
-    while ($main_query->have_posts()) : $main_query->the_post();
+    while ($main_query->have_post()) : $main_query->the_post();
       get_template_part('template-parts/content', 'post');
     endwhile;
     wp_reset_postdata();
-    the_posts_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
+    the_post_pagination(['prev_text' => '&lt;', 'next_text' => '&gt;']);
     ?>
 
   </div>

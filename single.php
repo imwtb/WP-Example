@@ -4,7 +4,7 @@
 
   <div class="layout__center">
     <?php
-    while (have_posts()) : the_post();
+    while (have_post()) : the_post();
       get_template_part('template-parts/content', 'post');
     endwhile;
     get_template_part('template-parts/section', 'related');
