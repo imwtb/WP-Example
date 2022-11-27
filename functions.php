@@ -140,7 +140,7 @@ add_filter('get_the_archive_title', function ($title) {
   } elseif (is_tag()) {
     $title = single_tag_title('', false);
   } elseif (is_search()) {
-    $title = sprintf(__('搜索%s结果如下', 'imwtb'), '<span>' . get_search_query() . '</span>');
+    $title = sprintf(__('搜索%s结果如下', 'imwtb'), '<span>“' . get_search_query() . '”</span>');
   } elseif (is_author()) {
     $title = get_the_author();
   } elseif (is_year()) {
@@ -269,14 +269,15 @@ function post_share_url($shara_name)
 }
 
 // Ajax点赞
-function post_likes_list($class = '', $icon = '<i class="iconoir-heart"></i>')
+function post_likes_list($icon = '')
 {
   global $post;
   $id     = is_singular() ? get_the_ID() : $post;
   $done   = isset($_COOKIE['likes_' . $id]) ? 'done' : '';
   $count  = get_post_meta($id, 'likes', true);
   $counts = $count ? $count : '0';
-  return '<a class="' . $class . ' like-it ' . $done . '" data-action="likeit" data-id="' . $id . '"><span>' . $counts . '</span> | ' . $icon . '</a>';
+  $icon   = !empty($icon) ? $icon : '<svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M22 8.862a5.95 5.95 0 01-1.654 4.13c-2.441 2.531-4.809 5.17-7.34 7.608-.581.55-1.502.53-2.057-.045l-7.295-7.562c-2.205-2.286-2.205-5.976 0-8.261a5.58 5.58 0 018.08 0l.266.274.265-.274A5.612 5.612 0 0116.305 3c1.52 0 2.973.624 4.04 1.732A5.95 5.95 0 0122 8.862z" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"></path></svg>';
+  return '<a class="like-it ' . $done . '" data-action="likeit" data-id="' . $id . '"><span>' . $counts . '</span> | ' . $icon . '</a>';
 }
 
 function post_likes()
@@ -346,6 +347,15 @@ add_filter('bbp_get_tiny_mce_plugins', function ($plugins = []) {
   return $plugins;
 });
 
+// 是否设置静态页面
+$front_page    = get_theme_file_path('front-page.php');
+$no_front_page = get_theme_file_path('no-front-page.php');
+
+if (get_option('show_on_front') == 'page' && file_exists($no_front_page)) {
+  rename($no_front_page, $front_page);
+} elseif (get_option('show_on_front') == 'posts' && file_exists($front_page)) {
+  rename($front_page, $no_front_page);
+}
 
 // 添加维护模式
 /* add_action('get_header', function () {

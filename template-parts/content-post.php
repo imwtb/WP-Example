@@ -1,4 +1,5 @@
 <?php if (is_singular()) : ?>
+
   <article id="content">
     <?php
     $before = '<figure class="post__thumb">';
@@ -35,6 +36,9 @@
       wp_link_pages(['before' => '<nav class="navigation post__nav"><div class="nav-links">', 'after'  => '</div></nav>', 'nextpagelink' => '&gt;', 'previouspagelink' => '&lt;']);
       ?>
     </div>
+    <div class="post__like">
+      <?php echo post_likes_list(); ?>
+    </div>
     <div class="post__catag">
       <?php
       foreach (get_post_taxonomies() as $tax) {
@@ -50,7 +54,9 @@
     </div>
   </article>
   <?php if (comments_open() || get_comments_number()) comments_template(); ?>
+
 <?php else : ?>
+
   <article>
     <figure>
       <?php the_post_thumbnail(); ?>
@@ -58,4 +64,5 @@
     </figure>
     <?php the_title('<h3><a href="' . get_the_permalink() . '">', '</a></h3>'); ?>
   </article>
+
 <?php endif; ?>
