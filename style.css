@@ -69,6 +69,8 @@ input[type="radio"] { border-radius: 100em; }
 
 input[type="radio"]::after { top: .4em; left: .4em; width: .675em; height: .675em; background: #ffffff; border-radius: 100em; }
 
+input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
 input[type="submit"], input[type="reset"] { border: none; color: #ffffff; background: #8068f9; cursor: pointer; transition: background .3s ease-in-out; }
 
 input[type="submit"]:hover, input[type="reset"]:hover { background: #00091f; }

@@ -203,6 +203,9 @@ input[type="radio"] {
 }
 
 input {
+  &[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
 
   &[type="submit"],
   &[type="reset"] {
